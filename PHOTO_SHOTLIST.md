@@ -241,3 +241,54 @@ Hardware, Engineering and Measurement pages, where those shots belong. `P-02`, `
 
 Numbers still owed, also amber on the page: membrane cutoff, cost per unit from a real BOM,
 and confirmation of the contained-use classification from a Taiwan regulator rather than from us.
+
+---
+
+# Addendum 2 · homepage v0.5 "THE TURN (輪)" (18 Aug 2026)
+
+The dark instrument build was replaced. The page is now a **work ledger**: a pre-printed
+form on olive drying-yard concrete. Warmth is produced by type, colour, rules and the seal
+rule, so it does not depend on photographs landing. That is deliberate: every slot below can
+stay empty for weeks without the page looking broken.
+
+## Slots this build calls
+
+| ID | Where | Note |
+|---|---|---|
+| **P-H1** | Hero, straw band | **Book this shoot before anything else.** See brief below. |
+| **P-H2** | Hero, top right | The shelf the reactor lives on. Do not tidy the shelf. |
+| P-03 | Ledger section | Perfusion reactor on the bench, mid-run. |
+| P-21 | 輪 Human Practices | Dr. Pak K. Yuet. **Square crop, 72px.** |
+| P-37 | 輪 Human Practices | Verslues / Cheng / Huang / forum. Square crops. |
+| P-38 | 輪 Human Practices | CH Biotech · 源鮮 YesHealth site visits. |
+| P-23, P-24 | Team | Square crops. |
+
+**Every portrait is SQUARE, not round.** Round portraits are Brno's signature and we are
+deliberately not in that lane.
+
+## P-H1 — the most important frame in the project
+
+> Hands only, no faces. Two pairs of hands at the opened reactor on the workbench in the
+> farm's tool shed: one older and calloused holding the fibre cartridge, one younger
+> threading the M4 bolt. Diffuse daylight through the shed's translucent roof panel. Shot
+> down the length of the bench so the spanner set stays in frame. The reactor is open.
+> Nobody looks at the camera. Crop at the wrist.
+>
+> 35 mm · f/2.8 · available light · no flash · 40 frames
+
+If it comes back staged (clean hands, tidied shelf, a student's forearms standing in for a
+farmer's) **reshoot rather than ship it.** A staged frame here turns the page's whole moral
+claim into decoration.
+
+## The drawing is a commissioned asset, not a photo
+
+The exploded reactor elevation in the hero is currently drawn in inline SVG and it is the
+optical centre of the first screen. If a draughtsperson is available, book those hours.
+**Hard fallback:** a single non-exploded orthographic section at the same size with the same
+callouts. It must never become a blob with a green glow.
+
+## Photo slots stay warm
+
+Every slot renders as straw at 35% over the ground with a zinc dash, an index, the full
+typeset brief and a spec line. This is what keeps the page warm before the shoot, and it is
+the first thing that gets quietly dropped under time pressure. **It does not get dropped.**

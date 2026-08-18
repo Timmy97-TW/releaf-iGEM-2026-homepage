@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ReLeaf — first visual, three options</title>
+<style>
+:root{--ink:#1B1714;--paper:#F2EFE7;--mute:#6F675D;--line:#CFC8B9;--seal:#A53327;--leaf:#3E6B43;
+  --serif:"Iowan Old Style",Charter,Georgia,"Noto Serif TC",serif;
+  --sans:"Helvetica Neue",Helvetica,Arial,"Noto Sans TC",sans-serif;
+  --mono:"Courier New",ui-monospace,Menlo,monospace}
+*{box-sizing:border-box;margin:0}
+html{color-scheme:light;-webkit-text-size-adjust:100%}
+body{background:var(--paper);color:var(--ink);font-family:var(--serif);line-height:1.6;
+  padding:clamp(28px,6vw,80px) clamp(20px,5vw,64px)}
+.wrap{max-width:1180px;margin:0 auto}
+img{display:block;width:100%;height:auto;aspect-ratio:16/10;object-fit:cover}
+a{color:inherit}
+h1{font-size:clamp(1.9rem,4.4vw,3.2rem);font-weight:400;letter-spacing:-.02em;line-height:1.04;
+  max-width:20ch}
+.kick{font-family:var(--mono);font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--leaf);margin-bottom:16px;display:flex;align-items:center;gap:10px}
+.kick::before{content:"";width:26px;height:1px;background:currentColor}
+.lede{font-family:var(--sans);font-size:clamp(15px,1.2vw,16.5px);color:var(--mute);
+  max-width:62ch;margin-top:20px;line-height:1.65}
+.grid{display:grid;gap:clamp(28px,4vw,44px);margin-top:clamp(34px,5vw,56px)}
+@media(min-width:900px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.card{display:flex;flex-direction:column;gap:14px;text-decoration:none}
+.card figure{margin:0;overflow:hidden;border:1px solid var(--line)}
+.card:hover img{opacity:.86}
+.card img{transition:opacity .2s ease}
+.n{font-family:var(--mono);font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;
+  display:flex;align-items:center;gap:9px}
+.n b{color:var(--seal);font-weight:700}
+.card h2{font-size:1.28rem;font-weight:400;letter-spacing:-.01em;line-height:1.2}
+.card p{font-family:var(--sans);font-size:14px;color:var(--mute);line-height:1.6}
+.card .open{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;
+  border-bottom:1px solid var(--line);padding-bottom:4px;align-self:flex-start;margin-top:2px}
+.note{margin-top:clamp(40px,6vw,72px);padding-top:26px;border-top:1px solid var(--line);
+  display:grid;gap:22px}
+@media(min-width:820px){.note{grid-template-columns:repeat(2,minmax(0,1fr));gap:44px}}
+.note h3{font-family:var(--mono);font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;
+  font-weight:700;margin-bottom:8px}
+.note p{font-family:var(--sans);font-size:14px;color:var(--mute);line-height:1.65}
+.note b{color:var(--ink)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <span class="kick">ReLeaf · first visual · 18 Aug 2026</span>
+  <h1>Three ways into the page.</h1>
+  <p class="lede">All three are built on the real photographs from 21 July 2026 at 陳惠雯's
+  farm, and all three are photo-led in the register you asked for. They differ in what the
+  first screen is <b>about</b>, so the choice is a position, not a layout. Open each one
+  full-screen.</p>
+
+  <div class="grid">
+    <a class="card" href="option-a.html">
+      <figure><img src="img/listen-1400.jpg" alt="Option A preview: 陳惠雯 speaking in her field."></figure>
+      <p class="n"><b>A</b> She is talking</p>
+      <h2>Leads with her</h2>
+      <p>Closest to Brno's structure: full-bleed farmer, headline, name. The inversion is the
+      point. Brno's farmer holds the product out to camera; here she is mid-sentence and the
+      students are listening. Uses the frame you marked best.</p>
+      <span class="open">Open full screen →</span>
+    </a>
+
+    <a class="card" href="option-b.html">
+      <figure><img src="img/walk-1400.jpg" alt="Option B preview: the team walking into the field."></figure>
+      <p class="n"><b>B</b> We went to her field first</p>
+      <h2>Leads with the journey</h2>
+      <p>Nobody faces the camera. She is the small figure ahead, and a drawn ring names her,
+      which turns a wide landscape into a portrait of one person. Furthest from Brno while
+      still photo-led, and the biggest sky, so the most 高格局.</p>
+      <span class="open">Open full screen →</span>
+    </a>
+
+    <a class="card" href="option-c.html">
+      <figure><img src="img/kitchen-1400.jpg" alt="Option C preview: cooking in the farm kitchen."></figure>
+      <p class="n"><b>C</b> The visit, in three frames</p>
+      <h2>Leads with the project</h2>
+      <p>A photo essay, not a poster: we went, she taught, we ate at her table. Light ground,
+      so the photographs supply all the warmth. Puts the whole Human Practices arc above the
+      fold, which no other team does.</p>
+      <span class="open">Open full screen →</span>
+    </a>
+  </div>
+
+  <div class="note">
+    <div>
+      <h3>What the filenames gave us</h3>
+      <p>The photo filenames carry <b>20260721</b>, so the interview date is <b>21 July 2026</b>
+      and her name is confirmed as <b>陳惠雯</b>. Both were marked "not on record" on the current
+      site. All three options now state the date and her name as fact.</p>
+    </div>
+    <div>
+      <h3>What is still missing</h3>
+      <p>Her <b>verbatim sentence</b>. Every option leaves a marked slot for it rather than
+      inventing words for her. What each option does say is only what is on record: she caused
+      the dosing schedule to move off a wall clock and onto soil-moisture state.</p>
+    </div>
+    <div>
+      <h3>My pick, if you want one</h3>
+      <p><b>B</b>. It is the only one a judge could not mistake for Brno, the ReLeaf shirts do
+      the branding without a logo lockup, and "we went to her first" is the honest claim your
+      project can actually defend. <b>A</b> is the safer choice and the strongest single
+      portrait. <b>C</b> is the best if the homepage has to carry the argument alone.</p>
+    </div>
+    <div>
+      <h3>Before wiki freeze</h3>
+      <p>These load from <code>img/</code>. The iGEM wiki blocks external hosts, so the finals
+      must be uploaded to <b>static.igem.wiki</b> and the paths swapped. Files are already
+      resized to 1400 and 2400 px with WebP and JPEG, down from 23 MB to under 1 MB each.</p>
+    </div>
+  </div>
+</div>
+</body>
+</html>

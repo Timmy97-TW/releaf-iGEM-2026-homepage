@@ -1,0 +1,109 @@
+:root{
+  --ink:#1B1714;
+  --paper:#F2EFE7;
+  --paper-2:#E4DFD3;
+  --mute:#6F675D;
+  --line:#CFC8B9;
+  --leaf:#3E6B43;        /* the green already in every one of these photographs */
+  --seal:#A53327;
+  --serif:"Iowan Old Style",Charter,"Bitstream Charter",Georgia,"Noto Serif TC","Songti TC",serif;
+  --sans:"Helvetica Neue",Helvetica,Arial,"Noto Sans TC","PingFang TC",sans-serif;
+  --mono:"Courier New",ui-monospace,Menlo,monospace;
+}
+*{box-sizing:border-box;margin:0}
+html,body{overflow-x:clip}
+html{-webkit-text-size-adjust:100%;color-scheme:light}
+body{background:var(--paper);color:var(--ink);font-family:var(--serif);line-height:1.6}
+img{display:block;max-width:100%}
+h1,h2{line-height:1.02;font-weight:400;letter-spacing:-.02em;text-wrap:balance}
+
+/* option label bar, not part of the design */
+.tag{background:var(--ink);color:var(--paper);padding:14px clamp(16px,4vw,48px);
+  font-family:var(--mono);font-size:13px;letter-spacing:.1em;text-transform:uppercase;
+  display:flex;gap:18px;flex-wrap:wrap;align-items:baseline}
+.tag b{color:#E9C46A;font-weight:700}
+.tag span{color:#A9A196;text-transform:none;letter-spacing:.02em;font-size:12.5px}
+
+.hero{position:relative;min-height:100svh;display:flex;overflow:hidden;background:var(--ink)}
+.hero picture,.hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.scrim{position:absolute;inset:0}
+.inner{position:relative;z-index:2;width:100%;display:flex;flex-direction:column;
+  justify-content:flex-end;padding:clamp(24px,5vw,72px);max-width:1440px;margin:0 auto}
+.kicker{font-family:var(--mono);font-size:clamp(11px,1vw,13px);letter-spacing:.16em;
+  text-transform:uppercase;margin-bottom:18px;display:flex;align-items:center;gap:10px}
+.kicker::before{content:"";width:26px;height:1px;background:currentColor;flex:0 0 26px}
+.slogan{font-family:var(--mono);font-size:clamp(11.5px,1vw,13px);letter-spacing:.1em;
+  text-transform:uppercase;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.chop{width:9px;height:9px;background:var(--seal);flex:0 0 9px}
+.cap{font-family:var(--sans);font-size:clamp(13.5px,1.1vw,15px);line-height:1.55;max-width:44ch}
+.pending{font-family:var(--mono);font-size:12px;letter-spacing:.03em;
+  border-bottom:1px dashed currentColor;opacity:.8}
+.credit{position:absolute;right:clamp(16px,4vw,48px);bottom:clamp(16px,4vw,28px);z-index:2;
+  font-family:var(--mono);font-size:11px;letter-spacing:.08em;color:rgba(255,255,255,.62)}
+
+/* ── A ─────────────────────────────────────────────────────────────────── */
+.a .scrim{background:
+  linear-gradient(to top,rgba(20,16,13,.94) 0%,rgba(20,16,13,.88) 22%,rgba(20,16,13,.42) 44%,rgba(20,16,13,0) 62%),
+  linear-gradient(to bottom,rgba(20,16,13,.30) 0%,transparent 22%)}
+.a .inner{color:#fff}
+.a h1{font-size:clamp(1.85rem,3.6vw,3.15rem);max-width:19ch}
+.a .kicker{color:#E9C46A}
+.a .block{margin-top:26px;display:grid;gap:20px;grid-template-columns:1fr}
+@media(min-width:900px){.a .block{grid-template-columns:1.15fr 1fr;align-items:end;gap:56px}}
+.a .name{font-family:var(--mono);font-size:13px;letter-spacing:.12em;text-transform:uppercase;
+  display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.a .cap{color:rgba(255,255,255,.9)}
+.a .slogan{margin-top:30px;color:rgba(255,255,255,.72)}
+
+/* ── B ─────────────────────────────────────────────────────────────────── */
+.b{align-items:flex-start}
+.b .scrim{background:
+  linear-gradient(to bottom,rgba(18,22,16,.62) 0%,rgba(18,22,16,.16) 30%,transparent 48%),
+  linear-gradient(to top,rgba(18,22,16,.72) 0%,transparent 32%)}
+.b .inner{justify-content:space-between;color:#fff;min-height:100svh}
+.b h1{font-family:var(--sans);font-weight:200;font-size:clamp(1.9rem,4.6vw,3.8rem);
+  letter-spacing:-.03em;max-width:24ch}
+.b h1 em{font-style:normal;font-weight:500}
+.b .top{padding-top:clamp(8px,2vw,20px)}
+.b .kicker{color:rgba(255,255,255,.82)}
+.b .foot{display:flex;gap:28px;flex-wrap:wrap;align-items:flex-end;justify-content:space-between}
+.b .cap{color:rgba(255,255,255,.88)}
+.b .slogan{color:rgba(255,255,255,.7)}
+/* the annotation that turns a landscape into a portrait of one person */
+/* The ring is positioned on its own so `top` means the ring's centre, not the
+   centre of ring-plus-label. The label hangs below it, over the darker grass. */
+.mark{position:absolute;z-index:3;right:5.4%;top:64%;transform:translateY(-50%);
+  width:82px;height:82px;pointer-events:none}
+.mark i{display:block;width:100%;height:100%;border:2px solid #fff;border-radius:50%;
+  box-shadow:0 0 0 1px rgba(0,0,0,.45),inset 0 0 0 1px rgba(0,0,0,.35)}
+.mark p{position:absolute;top:calc(100% + 14px);left:50%;transform:translateX(-50%);
+  font-family:var(--mono);font-size:13px;font-weight:700;letter-spacing:.08em;color:#fff;
+  line-height:1.55;white-space:nowrap;text-align:center;
+  text-shadow:0 1px 3px rgba(0,0,0,.95),0 2px 14px rgba(0,0,0,.9),0 0 30px rgba(0,0,0,.7)}
+.mark p span{display:block;font-weight:400;font-size:11.5px;opacity:.92}
+@media(max-width:760px){.mark{right:3%;top:63%;width:52px;height:52px}
+  .mark p{font-size:11px} .mark p span{font-size:10px}}
+ .mark p span{font-size:10px}}
+
+/* ── C ─────────────────────────────────────────────────────────────────── */
+.c{background:var(--paper);min-height:100svh;display:block;padding:clamp(28px,5vw,64px) 0}
+.c .wrap{max-width:1440px;margin:0 auto;padding:0 clamp(20px,4vw,64px)}
+.c .head{display:grid;gap:24px;align-items:end;padding-bottom:clamp(24px,3vw,40px);
+  border-bottom:1px solid var(--line)}
+@media(min-width:980px){.c .head{grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:64px}}
+.c h1{font-size:clamp(2rem,4.8vw,3.9rem);max-width:16ch}
+.c .kicker{color:var(--leaf)}
+.c .cap{color:var(--mute)}
+.c .strip{display:grid;gap:14px;margin-top:clamp(20px,3vw,32px);grid-template-columns:1fr}
+@media(min-width:820px){.c .strip{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.c figure{margin:0;display:flex;flex-direction:column;gap:12px}
+.c figure img{position:static;width:100%;height:auto;aspect-ratio:4/3;object-fit:cover}
+.c figcaption{font-family:var(--mono);font-size:12px;letter-spacing:.06em;color:var(--mute);
+  line-height:1.6;display:flex;gap:9px}
+.c figcaption b{color:var(--ink);font-weight:700;flex:0 0 auto}
+.c .foot{margin-top:clamp(26px,3.5vw,40px);padding-top:22px;border-top:1px solid var(--line);
+  display:flex;gap:26px;flex-wrap:wrap;align-items:baseline;justify-content:space-between}
+.c .slogan{color:var(--mute)}
+.c .say{font-size:clamp(1.1rem,1.7vw,1.45rem);line-height:1.45;max-width:40ch;color:var(--ink)}
+
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition-duration:.01ms!important}}

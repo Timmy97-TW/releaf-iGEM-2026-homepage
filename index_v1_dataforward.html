@@ -1,0 +1,1247 @@
+<!DOCTYPE html>
+<!--
+  =============================================================================
+  ReLeaf — wiki homepage prototype v0.1
+  GEMS-Taiwan 2026 · Biomanufacturing Village
+  -----------------------------------------------------------------------------
+  Built to the homepage blueprint. Self-contained: no external stylesheets,
+  scripts, fonts or images, because the iGEM wiki blocks cross-origin resources.
+
+  HOW TO READ THE PLACEHOLDERS
+  Every number on this page carries a provenance chip. There are four:
+
+    fixed    measured in-house, verified, safe to show a judge
+    lit      literature value (not ours) — MUST be replaced by our own number
+    verify   measurement pending — slot exists, data does not
+    none     not achieved — stated as such, deliberately
+
+  Search this file for  data-prov="lit"  and  data-prov="verify"  to find every
+  slot the wiki team still has to fill. Do not ship with a `lit` chip in the
+  hero row: the blueprint's whole argument is that those are OUR numbers.
+
+  Sources for everything already filled in:
+    Discord/notebook-build/02_MILESTONE_MAP.md      (spec freeze 7/4, DBTL cycles)
+    00_Deliverable_Reports/20_Status_Report_0813/   (clone inventory, His defect)
+    Bioreactor_Calculations_Scaling/TFF_ScaleUp_*   (scaling invariants)
+    Wiki_member/assets/css/                         (brand tokens, reused here)
+
+  Font note: this prototype uses system UI stack. The team page inlines
+  inter-variable.ttf — do the same here at bundle time for visual continuity.
+  =============================================================================
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ReLeaf — an analog biomanufacturing device · GEMS-Taiwan 2026</title>
+<style>
+/* ── brand tokens, lifted from Wiki_member/assets/css ────────────────────── */
+:root{
+  --white:#fff; --gray-100:#f5f5f5; --gray-200:#e5e5e5; --gray-300:#d4d4d4;
+  --gray-500:#737373; --gray-600:#525252; --gray-700:#404040; --black:#171717;
+  --leaf-900:#14402b; --leaf-700:#23684a; --leaf-500:#4f9c6f; --leaf-100:#e3f0e8;
+  --card-bg:#f4f4f2;
+  --nav-h:68px; --max:1280px; --radius:.5rem;
+  --shadow-md:0 4px 6px -1px rgb(0 0 0/.1),0 2px 4px -2px rgb(0 0 0/.1);
+  --shadow-lg:0 10px 15px -3px rgb(0 0 0/.1),0 4px 6px -4px rgb(0 0 0/.1);
+  /* provenance */
+  --p-fixed:#23684a; --p-fixed-bg:#e3f0e8;
+  --p-lit:#3f6ea8;   --p-lit-bg:#e6eef7;
+  --p-verify:#9a6510;--p-verify-bg:#fbf0dc;
+  --p-none:#8a3b3b;  --p-none-bg:#f7e9e9;
+  /* signal colours used by the hero */
+  --sig-green:#3ddc6b; --sig-red:#e2483a; --sig-soil:#b08240;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--white); color:var(--black);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans TC",sans-serif;
+  font-size:16px; line-height:1.6; -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{margin:0; letter-spacing:-.022em; line-height:1.15; font-weight:700}
+p{margin:0}
+a{color:var(--leaf-700); text-decoration:none}
+a:hover{text-decoration:underline}
+.wrap{max-width:var(--max); margin:0 auto; padding:0 clamp(1rem,4vw,2.5rem)}
+.band{padding:clamp(3.5rem,7vw,6rem) 0; border-top:1px solid var(--gray-200)}
+.band--tint{background:var(--gray-100)}
+.eyebrow{
+  font-size:.72rem; font-weight:700; letter-spacing:.13em; text-transform:uppercase;
+  color:var(--leaf-700); margin-bottom:.85rem;
+}
+.h2{font-size:clamp(1.5rem,3.1vw,2.1rem); margin-bottom:1rem}
+.lede{font-size:clamp(1.02rem,1.5vw,1.16rem); color:var(--gray-700); max-width:62ch}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+
+/* ── provenance chip ─────────────────────────────────────────────────────── */
+.prov{
+  display:inline-flex; align-items:center; gap:.3em;
+  font-size:.6rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase;
+  padding:.16em .45em; border-radius:3px; vertical-align:middle; white-space:nowrap;
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+[data-prov="fixed"] >.prov,.prov--fixed {color:var(--p-fixed);  background:var(--p-fixed-bg)}
+[data-prov="lit"]   >.prov,.prov--lit   {color:var(--p-lit);    background:var(--p-lit-bg)}
+[data-prov="verify"]>.prov,.prov--verify{color:var(--p-verify); background:var(--p-verify-bg)}
+[data-prov="none"]  >.prov,.prov--none  {color:var(--p-none);   background:var(--p-none-bg)}
+
+/* ── prototype banner ────────────────────────────────────────────────────── */
+.protobar{
+  background:var(--leaf-900); color:#dceae2; font-size:.78rem; line-height:1.5;
+  padding:.6rem 0;
+}
+.protobar .wrap{display:flex; gap:1rem; align-items:baseline; flex-wrap:wrap}
+.protobar strong{color:#fff}
+.protobar .legend{display:flex; gap:.5rem; flex-wrap:wrap; margin-left:auto}
+
+/* ── nav (68px, mirrors nav.css geometry) ────────────────────────────────── */
+.nav{
+  position:sticky; top:0; z-index:50; height:var(--nav-h);
+  background:rgba(255,255,255,.94); backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--gray-200);
+}
+.nav .wrap{height:100%; display:flex; align-items:center; gap:1.5rem}
+.nav__mark{display:flex; align-items:center; gap:.6rem; font-weight:700; letter-spacing:-.02em}
+.nav__leaf{width:26px; height:26px; flex:0 0 26px}
+.nav__tabs{display:none; gap:1.4rem; margin-left:auto; font-size:.88rem; font-weight:600}
+.nav__tabs a{color:var(--gray-600)}
+.nav__tabs a:hover{color:var(--leaf-700); text-decoration:none}
+.nav__judge{
+  margin-left:auto; font-size:.79rem; font-weight:700;
+  background:var(--leaf-700); color:#fff; padding:.5rem .85rem; border-radius:999px;
+}
+.nav__judge:hover{background:var(--leaf-900); text-decoration:none}
+@media(min-width:1000px){ .nav__tabs{display:flex} .nav__judge{margin-left:0} }
+
+/* ── hero ────────────────────────────────────────────────────────────────── */
+.hero{padding:clamp(2rem,4vw,3.2rem) 0 0}
+.hero__stage{
+  position:relative; background:var(--leaf-900); border-radius:var(--radius);
+  overflow:hidden; box-shadow:var(--shadow-lg);
+}
+.hero__svg{display:block; width:100%; height:auto}
+.hero__copy{padding:clamp(1.4rem,3vw,2.2rem) clamp(1.2rem,3vw,2.2rem) clamp(1.6rem,3vw,2rem)}
+.hero__title{
+  font-size:clamp(2.4rem,6.5vw,4.2rem); color:#fff; line-height:.98; letter-spacing:-.04em;
+}
+.hero__claim{
+  color:#cfe4d8; font-size:clamp(1rem,1.9vw,1.32rem); margin-top:.7rem;
+  max-width:46ch; font-weight:500; line-height:1.4;
+}
+.hero__claim b{color:#fff; font-weight:700}
+.hero__meta{
+  color:#8fb3a0; font-size:.78rem; margin-top:.9rem; letter-spacing:.02em;
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+/* fallback shown only when the animation cannot run */
+.hero__fallback{display:none; padding:1rem clamp(1.2rem,3vw,2.2rem) 1.4rem;
+  color:#8fb3a0; font-size:.78rem; border-top:1px solid rgba(255,255,255,.12)}
+.no-anim .hero__fallback{display:block}
+
+/* ── hero number row ─────────────────────────────────────────────────────── */
+.metrics{
+  display:grid; grid-template-columns:1fr; gap:1px;
+  background:var(--gray-200); border:1px solid var(--gray-200);
+  border-top:none; border-radius:0 0 var(--radius) var(--radius); overflow:hidden;
+}
+@media(min-width:640px){.metrics{grid-template-columns:1fr 1fr}}
+@media(min-width:960px){.metrics{grid-template-columns:repeat(4,1fr)}}
+.metric{background:var(--white); padding:1.15rem 1.2rem 1.05rem}
+.metric__label{
+  font-size:.66rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--gray-500); display:flex; align-items:center; gap:.4rem; margin-bottom:.5rem;
+}
+.metric__val{
+  font-size:clamp(1.45rem,2.6vw,1.9rem); font-weight:700; letter-spacing:-.03em;
+  line-height:1; font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+.metric__val em{font-style:normal; font-size:.6em; color:var(--gray-500); font-weight:600}
+.metric[data-prov="verify"] .metric__val{color:var(--p-verify)}
+.metric[data-prov="lit"]    .metric__val{color:var(--p-lit)}
+.metric__note{font-size:.75rem; color:var(--gray-600); margin-top:.45rem; line-height:1.45}
+
+/* ── two-figure band ─────────────────────────────────────────────────────── */
+.figpair{display:grid; gap:1.5rem; margin-top:2.5rem}
+@media(min-width:900px){.figpair{grid-template-columns:1fr 1fr; gap:2rem}}
+figure{margin:0; background:var(--card-bg); border-radius:var(--radius); padding:1.25rem; border:1px solid var(--gray-200)}
+figure svg{display:block; width:100%; height:auto}
+figcaption{font-size:.82rem; color:var(--gray-600); margin-top:.9rem; line-height:1.5}
+figcaption b{color:var(--black)}
+.fig__head{display:flex; align-items:baseline; gap:.55rem; margin-bottom:.9rem; flex-wrap:wrap}
+.fig__head h3{font-size:.95rem}
+
+/* ── device / exploded view ──────────────────────────────────────────────── */
+.explode{position:relative; background:var(--card-bg); border:1px solid var(--gray-200);
+  border-radius:var(--radius); padding:1.25rem; margin-top:2rem}
+.explode svg{display:block; width:100%; height:auto}
+.photos{display:grid; gap:1rem; margin-top:1.5rem; grid-template-columns:repeat(2,1fr)}
+@media(min-width:820px){.photos{grid-template-columns:repeat(4,1fr)}}
+.slot{
+  aspect-ratio:4/3; border:1px dashed var(--gray-300); border-radius:var(--radius);
+  background:var(--gray-100); display:flex; flex-direction:column; justify-content:center;
+  padding:.9rem; gap:.4rem;
+}
+.slot__k{font-size:.63rem; font-weight:700; letter-spacing:.09em; text-transform:uppercase; color:var(--p-verify)}
+.slot__t{font-size:.8rem; color:var(--gray-600); line-height:1.4}
+.specs{
+  display:grid; gap:1px; background:var(--gray-200); border:1px solid var(--gray-200);
+  border-radius:var(--radius); overflow:hidden; margin-top:1.5rem;
+  grid-template-columns:1fr;
+}
+@media(min-width:700px){.specs{grid-template-columns:1fr 1fr}}
+@media(min-width:1040px){.specs{grid-template-columns:1fr 1fr 1fr}}
+.spec{background:var(--white); padding:.85rem 1rem}
+.spec dt{font-size:.65rem; font-weight:700; letter-spacing:.09em; text-transform:uppercase; color:var(--gray-500)}
+.spec dd{margin:.3rem 0 0; font-size:.82rem; line-height:1.45}
+.spec dd .mono{font-size:.79rem}
+
+/* ── evidence ladder ─────────────────────────────────────────────────────── */
+.ladder{margin-top:2.2rem; border:1px solid var(--gray-200); border-radius:var(--radius); overflow:hidden}
+.rung{
+  display:grid; grid-template-columns:auto 1fr; gap:1rem;
+  padding:1.15rem 1.2rem; background:var(--white); border-top:1px solid var(--gray-200);
+  align-items:start;
+}
+.rung:first-child{border-top:none}
+.rung--none{background:var(--gray-100)}
+.rung--none .rung__t{color:var(--gray-500)}
+.rung__n{
+  width:30px; height:30px; border-radius:50%; display:grid; place-items:center;
+  font-size:.8rem; font-weight:700; font-family:ui-monospace,monospace; flex:0 0 30px;
+}
+.rung--fixed  .rung__n{background:var(--p-fixed-bg);  color:var(--p-fixed)}
+.rung--verify .rung__n{background:var(--p-verify-bg); color:var(--p-verify)}
+.rung--none   .rung__n{background:var(--p-none-bg);   color:var(--p-none)}
+.rung__t{font-size:.98rem; font-weight:700; display:flex; gap:.55rem; align-items:baseline; flex-wrap:wrap}
+.rung__d{font-size:.84rem; color:var(--gray-600); margin-top:.3rem; line-height:1.5}
+
+/* ── funnel ──────────────────────────────────────────────────────────────── */
+.funnel{display:grid; gap:1rem; margin-top:2rem; grid-template-columns:1fr}
+@media(min-width:760px){.funnel{grid-template-columns:repeat(4,1fr)}}
+.track{border:1px solid var(--gray-200); border-radius:var(--radius); padding:1rem; background:var(--white)}
+.track--live{border-color:var(--leaf-500); border-width:2px; background:var(--leaf-100)}
+.track--dead{background:var(--gray-100)}
+.track__h{display:flex; align-items:baseline; gap:.5rem; flex-wrap:wrap; margin-bottom:.5rem}
+.track__h h4{font-size:.92rem}
+.track--dead .track__h h4{color:var(--gray-500); text-decoration:line-through; text-decoration-thickness:1px}
+.track__why{font-size:.8rem; color:var(--gray-600); line-height:1.5}
+
+/* ── HP cards ────────────────────────────────────────────────────────────── */
+.hpcards{display:grid; gap:1.25rem; margin-top:2rem}
+.hpcard{border:1px solid var(--gray-200); border-radius:var(--radius); overflow:hidden; background:var(--white)}
+.hpcard__grid{display:grid; grid-template-columns:1fr; gap:1px; background:var(--gray-200)}
+@media(min-width:840px){.hpcard__grid{grid-template-columns:1fr auto 1fr}}
+.hpcol{background:var(--white); padding:1.1rem 1.2rem}
+.hpcol__k{font-size:.63rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--gray-500); margin-bottom:.4rem}
+.hpcol__t{font-size:.88rem; line-height:1.55}
+.hpcol--was .hpcol__t{color:var(--gray-500)}
+.hparrow{
+  background:var(--leaf-100); padding:1.1rem 1.2rem; display:flex; flex-direction:column;
+  justify-content:center; gap:.25rem; min-width:190px;
+}
+.hparrow__who{font-size:.85rem; font-weight:700; color:var(--leaf-900); line-height:1.35}
+.hparrow__when{font-size:.7rem; color:var(--leaf-700); font-family:ui-monospace,monospace}
+.hpcard__photo{border-top:1px solid var(--gray-200)}
+
+/* ── team ────────────────────────────────────────────────────────────────── */
+.teamphoto{aspect-ratio:21/9; border:1px dashed var(--gray-300); border-radius:var(--radius);
+  background:var(--gray-100); display:grid; place-items:center; padding:1.5rem; text-align:center; margin-top:1.5rem}
+
+/* ── limitations ─────────────────────────────────────────────────────────── */
+.limits{
+  margin-top:2.2rem; background:var(--leaf-900); color:#dceae2;
+  border-radius:var(--radius); padding:clamp(1.3rem,3vw,2rem);
+}
+.limits h3{color:#fff; font-size:1.05rem; margin-bottom:.35rem}
+.limits__sub{font-size:.82rem; color:#8fb3a0; margin-bottom:1.1rem}
+.limits ul{margin:0; padding:0; list-style:none; display:grid; gap:.8rem}
+.limits li{font-size:.88rem; line-height:1.55; padding-left:1.1rem; position:relative}
+.limits li::before{content:"—"; position:absolute; left:0; color:var(--leaf-500)}
+.limits b{color:#fff}
+
+/* ── footer ──────────────────────────────────────────────────────────────── */
+.foot{background:var(--gray-100); border-top:1px solid var(--gray-200); padding:3rem 0 2.5rem}
+.foot__judge{
+  display:block; background:var(--leaf-700); color:#fff; border-radius:var(--radius);
+  padding:1.15rem 1.35rem; margin-bottom:2rem;
+}
+.foot__judge:hover{background:var(--leaf-900); text-decoration:none}
+.foot__judge strong{display:block; font-size:1.02rem}
+.foot__judge span{display:block; font-size:.83rem; color:#cfe4d8; margin-top:.2rem}
+.foot__primary{display:grid; gap:1px; background:var(--gray-200); border:1px solid var(--gray-200);
+  border-radius:var(--radius); overflow:hidden; grid-template-columns:1fr}
+@media(min-width:620px){.foot__primary{grid-template-columns:repeat(3,1fr)}}
+@media(min-width:1000px){.foot__primary{grid-template-columns:repeat(6,1fr)}}
+.foot__primary a{background:var(--white); padding:1rem; display:block}
+.foot__primary a:hover{background:var(--leaf-100); text-decoration:none}
+.foot__n{font-size:.63rem; font-family:ui-monospace,monospace; color:var(--gray-500)}
+.foot__l{font-size:.92rem; font-weight:700; color:var(--black); margin-top:.2rem}
+.foot__secondary{display:flex; flex-wrap:wrap; gap:.4rem 1.5rem; margin-top:1.5rem; font-size:.83rem}
+.foot__legal{margin-top:2rem; font-size:.76rem; color:var(--gray-500); line-height:1.6}
+
+@media(prefers-reduced-motion:reduce){*{animation:none!important; transition:none!important}}
+</style>
+</head>
+<body>
+
+<!-- ══ prototype banner — DELETE BEFORE FREEZE ══════════════════════════ -->
+<div class="protobar">
+  <div class="wrap">
+    <span><strong>Prototype v0.1</strong> — layout is real, numbers are slotted.</span>
+    <span class="legend">
+      <span class="prov prov--fixed">fixed = ours, measured</span>
+      <span class="prov prov--lit">lit = literature, must replace</span>
+      <span class="prov prov--verify">verify = pending</span>
+      <span class="prov prov--none">none = not achieved</span>
+    </span>
+  </div>
+</div>
+
+<!-- ══ nav ══════════════════════════════════════════════════════════════ -->
+<nav class="nav">
+  <div class="wrap">
+    <a class="nav__mark" href="#top">
+      <svg class="nav__leaf" viewBox="0 0 24 24" fill="var(--leaf-700)" aria-hidden="true"><path d="M6.05 8.05c-2.73 2.73-2.73 7.15-.02 9.88 1.47-3.4 4.09-6.24 7.36-7.93-2.77 2.34-4.71 5.61-5.59 9.28 2.6 1.23 5.8.78 7.95-1.37C19.43 14.47 20 4 20 4S9.53 4.57 6.05 8.05z"/></svg>
+      ReLeaf
+    </a>
+    <div class="nav__tabs">
+      <a href="#claim">Project</a><a href="#device">Wetlab</a><a href="#device">Drylab</a>
+      <a href="#hp">Engagement</a><a href="#team">Team</a>
+    </div>
+    <a class="nav__judge" href="#judges">For judges: 5-minute path →</a>
+  </div>
+</nav>
+
+<!-- ══ HERO ═════════════════════════════════════════════════════════════ -->
+<header class="hero" id="top">
+  <div class="wrap">
+    <div class="hero__stage">
+
+      <!-- The control loop, running. sensor → optogenetics → biology → hardware → delivery.
+           Driven by one JS signal so every stage is provably the SAME signal, lagged. -->
+      <svg class="hero__svg" viewBox="0 0 1200 300" role="img"
+           aria-label="Animated control loop: a soil salinity and temperature trace drives a 520 nm green LED intensity, which drives an ACC deaminase expression curve, which drives permeate leaving the tangential-flow filtration module.">
+        <defs>
+          <linearGradient id="gGreen" x1="0" y1="1" x2="0" y2="0">
+            <stop offset="0"   stop-color="#1e7a3c"/><stop offset="1" stop-color="#5cff8f"/>
+          </linearGradient>
+          <linearGradient id="gTrace" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="#b08240" stop-opacity="0"/>
+            <stop offset=".35" stop-color="#d9a95c" stop-opacity="1"/>
+            <stop offset="1" stop-color="#f0cf94" stop-opacity="1"/>
+          </linearGradient>
+          <clipPath id="clipTrace"><rect x="42" y="70" width="336" height="150"/></clipPath>
+          <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+            <feGaussianBlur stdDeviation="7" result="b"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+
+        <!-- stage labels -->
+        <g font-size="10.5" font-weight="700" letter-spacing="1.6" fill="#6f9884"
+           font-family="ui-monospace,Menlo,monospace">
+          <text x="42"  y="46">01 · SENSE</text>
+          <text x="430" y="46">02 · ACTUATE</text>
+          <text x="600" y="46">03 · EXPRESS</text>
+          <text x="900" y="46">04 · DELIVER</text>
+        </g>
+        <!-- connectors -->
+        <g stroke="#2c5c45" stroke-width="1.5" fill="none">
+          <path d="M388 150 H424"/><path d="M560 150 H592"/><path d="M860 150 H892"/>
+        </g>
+        <g fill="#4f9c6f">
+          <path d="M424 150 l-8 -4 v8 z"/><path d="M592 150 l-8 -4 v8 z"/><path d="M892 150 l-8 -4 v8 z"/>
+        </g>
+
+        <!-- ── 01 SENSE: scrolling soil trace ── -->
+        <g>
+          <rect x="42" y="70" width="336" height="150" fill="#0d2e1f" stroke="#2c5c45" rx="3"/>
+          <g stroke="#1c4634" stroke-width=".75">
+            <path d="M42 107H378"/><path d="M42 145H378"/><path d="M42 183H378"/>
+          </g>
+          <g clip-path="url(#clipTrace)">
+            <polyline id="trEC"   fill="none" stroke="url(#gTrace)" stroke-width="2.2" points=""/>
+            <polyline id="trTemp" fill="none" stroke="#7fb0d8" stroke-width="1.3"
+                      stroke-dasharray="3 3" opacity=".8" points=""/>
+          </g>
+          <line x1="378" y1="70" x2="378" y2="220" stroke="var(--sig-green)" stroke-width="1" opacity=".6"/>
+          <g font-family="ui-monospace,Menlo,monospace" font-size="9.5">
+            <text x="52" y="86" fill="#d9a95c">EC <tspan id="roEC" font-size="12" font-weight="700">—</tspan> dS/m</text>
+            <text x="52" y="212" fill="#7fb0d8">T <tspan id="roT" font-size="12" font-weight="700">—</tspan> °C</text>
+          </g>
+          <text x="42" y="238" font-size="9" fill="#6f9884" font-family="ui-monospace,Menlo,monospace">
+            soil probe · 60 s log
+          </text>
+        </g>
+
+        <!-- ── 02 ACTUATE: proportional green bar + idle red reset channel ── -->
+        <g>
+          <rect x="430" y="70" width="120" height="150" fill="#0d2e1f" stroke="#2c5c45" rx="3"/>
+          <g stroke="#2c5c45" stroke-width=".75">
+            <path d="M430 108H550"/><path d="M430 145H550"/><path d="M430 183H550"/>
+          </g>
+          <!-- bar grows from the bottom; y and height are set by JS -->
+          <rect id="ledBar" x="440" y="212" width="62" height="0" fill="url(#gGreen)" rx="2"/>
+          <g id="ledGlow" filter="url(#glow)" opacity="0">
+            <rect x="440" y="204" width="62" height="8" fill="#7dffab" rx="2"/>
+          </g>
+          <!-- 660 nm reset channel: present, idle. Not making a claim about it here. -->
+          <g opacity=".4">
+            <rect x="514" y="196" width="26" height="16" fill="var(--sig-red)" rx="2"/>
+          </g>
+          <text x="430" y="238" font-size="9" fill="#6f9884" font-family="ui-monospace,Menlo,monospace">
+            520 nm PWM · 660 nm idle
+          </text>
+          <g font-family="ui-monospace,Menlo,monospace" font-size="9.5" text-anchor="middle">
+            <text x="490" y="258" fill="#3ddc6b">
+              <tspan id="roPPFD" font-size="13" font-weight="700">—</tspan> µmol m⁻² s⁻¹
+            </text>
+          </g>
+        </g>
+
+        <!-- ── 03 EXPRESS: rising expression curve ── -->
+        <g>
+          <rect x="600" y="70" width="250" height="150" fill="#0d2e1f" stroke="#2c5c45" rx="3"/>
+          <g stroke="#1c4634" stroke-width=".75">
+            <path d="M600 107H850"/><path d="M600 145H850"/><path d="M600 183H850"/>
+          </g>
+          <polyline id="trExpr" fill="none" stroke="var(--sig-green)" stroke-width="2.4" points=""/>
+          <polygon id="trExprFill" fill="var(--sig-green)" opacity=".14" points=""/>
+          <g font-family="ui-monospace,Menlo,monospace" font-size="9.5">
+            <text x="610" y="86" fill="#3ddc6b">
+              ACCD <tspan id="roExpr" font-size="12" font-weight="700">—</tspan> % max
+            </text>
+          </g>
+          <text x="600" y="238" font-size="9" fill="#6f9884" font-family="ui-monospace,Menlo,monospace">
+            P<tspan font-size="7" dy="2">cpcG2-veg</tspan><tspan dy="-2"> · B. subtilis</tspan>
+          </text>
+        </g>
+
+        <!-- ── 04 DELIVER: TFF module + permeate droplets ── -->
+        <g>
+          <!-- module body -->
+          <rect x="900" y="84" width="250" height="46" rx="10" fill="#123527" stroke="#2c5c45"/>
+          <g stroke="#4f9c6f" stroke-width="1" opacity=".65">
+            <path d="M908 94H1142"/><path d="M908 102H1142"/>
+            <path d="M908 112H1142"/><path d="M908 120H1142"/>
+          </g>
+          <!-- retained cells, sitting on the lumen side -->
+          <g fill="#7dffab" opacity=".55">
+            <ellipse cx="944" cy="98"  rx="3.4" ry="1.7"/><ellipse cx="1002" cy="107" rx="3.4" ry="1.7"/>
+            <ellipse cx="1064" cy="98" rx="3.4" ry="1.7"/><ellipse cx="1108" cy="116" rx="3.4" ry="1.7"/>
+            <ellipse cx="972" cy="117" rx="3.4" ry="1.7"/><ellipse cx="1040" cy="121" rx="3.4" ry="1.7"/>
+          </g>
+          <text x="900" y="78" font-size="9" fill="#6f9884" font-family="ui-monospace,Menlo,monospace">
+            0.2 µm mPES · 8 fibres · cells retained
+          </text>
+          <!-- permeate port -->
+          <path d="M1025 130 v16" stroke="#2c5c45" stroke-width="1.5" fill="none"/>
+          <!-- droplets: y + opacity driven by JS -->
+          <g id="drops" fill="#8fe3ff">
+            <circle class="drop" cx="1025" cy="150" r="4"/>
+            <circle class="drop" cx="1025" cy="150" r="4"/>
+            <circle class="drop" cx="1025" cy="150" r="4"/>
+          </g>
+          <!-- rhizosphere -->
+          <path d="M900 214 h250" stroke="var(--sig-soil)" stroke-width="2" opacity=".55"/>
+          <g stroke="var(--sig-soil)" stroke-width="1.2" opacity=".45" fill="none">
+            <path d="M1025 214 v20 M1025 223 l-10 11 M1025 223 l10 11"/>
+          </g>
+          <text x="900" y="250" font-size="9" fill="#6f9884" font-family="ui-monospace,Menlo,monospace">
+            permeate → root zone
+          </text>
+        </g>
+
+        <!-- return path: the dose changes the soil, the probe reads it again. -->
+        <path d="M1025 236 V264 a6 6 0 0 1 -6 6 H40 a6 6 0 0 1 -6 -6 V152 a6 6 0 0 1 6 -6 h8"
+              stroke="#2c5c45" stroke-width="1.2" fill="none" stroke-dasharray="4 4" opacity=".75"/>
+        <path d="M42 146 l-8 -4 v8 z" fill="#4f9c6f" opacity=".8"/>
+        <text x="600" y="290" font-size="9.5" fill="#6f9884" text-anchor="middle"
+              font-family="ui-monospace,Menlo,monospace" letter-spacing="1">
+          CLOSED LOOP · stress falls → light dims → expression decays → dose tapers
+        </text>
+      </svg>
+
+      <div class="hero__copy">
+        <h1 class="hero__title">ReLeaf</h1>
+        <p class="hero__claim">
+          An analog biomanufacturing device. Soil stress in, protective enzyme out —
+          <b>dose-proportional, not on/off.</b>
+        </p>
+        <p class="hero__meta">GEMS Taiwan · Biomanufacturing Village · High School</p>
+      </div>
+
+      <div class="hero__fallback">
+        Animation unavailable — see the device photograph and the transfer function below.
+        <!-- TODO at freeze: put the soil-inserted device photo here as the <noscript> fallback,
+             per blueprint. NOT a CAD render. -->
+      </div>
+    </div>
+
+    <!-- ══ hero numbers. Four slots. Latency is deliberately shown. ══ -->
+    <div class="metrics">
+      <div class="metric" data-prov="verify">
+        <div class="metric__label">Reporter fold-change <span class="prov">verify</span></div>
+        <div class="metric__val">—<em>×</em></div>
+        <div class="metric__note">
+          Our CcaSR reporter, dark → saturating 520 nm. Construct sequence-verified
+          2026‑07‑28; characterisation is the 8/25 milestone.
+        </div>
+      </div>
+      <div class="metric" data-prov="lit">
+        <div class="metric__label">Hill n · K½ <span class="prov">lit</span></div>
+        <div class="metric__val">1.88<em> · 4.66</em></div>
+        <div class="metric__note">
+          <b>Not ours yet.</b> Castillo‑Hair 2019, <i>E. coli</i>, 526 nm
+          (µmol m⁻² s⁻¹). Replace with our fit in <i>B. subtilis</i>.
+        </div>
+      </div>
+      <div class="metric" data-prov="verify">
+        <div class="metric__label">ACCD activity <span class="prov">verify</span></div>
+        <div class="metric__val">—<em> U/mg</em></div>
+        <div class="metric__note">
+          α‑ketobutyrate assay, P<sub>cpcG2‑veg</sub> vs. constitutive P<sub>veg</sub>.
+          Assay not yet run.
+        </div>
+      </div>
+      <div class="metric" data-prov="verify">
+        <div class="metric__label">Detect → deliver latency <span class="prov">verify</span></div>
+        <div class="metric__val">—<em> h</em></div>
+        <div class="metric__note">
+          End‑to‑end, measured. Floor is set by CcaSR t½<sub>ON</sub> ≈ 105 min
+          (literature). <b>This is our weakest number and it leads the row on purpose.</b>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- ══ 1 · THE CLAIM ════════════════════════════════════════════════════ -->
+<section class="band" id="claim">
+  <div class="wrap">
+    <p class="eyebrow">The claim</p>
+    <h2 class="h2">Most engineered biological systems are switches. ReLeaf is a dial.</h2>
+    <p class="lede">
+      We used the CcaSR green/red optogenetic system to make <i>Bacillus subtilis</i> express
+      ACC deaminase in proportion to green light intensity, and we drive that light from a
+      microcontroller reading soil salinity and temperature — so the amount of protein
+      manufactured tracks the severity of the stress, continuously. The 0.2 µm hollow-fibre
+      membrane retains the bacteria inside the device; only the permeate reaches the root zone.
+    </p>
+
+    <div class="figpair">
+      <!-- ── transfer function ── -->
+      <figure>
+        <div class="fig__head">
+          <h3>Transfer function — expression vs. 520 nm intensity</h3>
+          <span class="prov prov--verify">verify</span>
+        </div>
+        <svg viewBox="0 0 480 300" role="img" aria-label="Hill transfer function plot. A dashed literature prior curve is drawn; open circles mark the eight measurement slots our own data will fill.">
+          <!-- frame -->
+          <g stroke="var(--gray-300)" stroke-width="1" fill="none">
+            <path d="M56 250 H448"/><path d="M56 250 V28"/>
+          </g>
+          <g stroke="var(--gray-200)" stroke-width="1">
+            <path d="M56 195H448"/><path d="M56 139H448"/><path d="M56 83H448"/>
+          </g>
+          <!-- literature prior: c(I) = y0 + dy * I^n/(I^n + K^n), n=1.88, K=4.66 -->
+          <path d="M56 244 L86 242 L116 236 L146 224 L176 205 L206 181 L236 156 L266 133 L296 114 L326 99 L356 88 L386 79 L416 73 L448 68"
+                fill="none" stroke="var(--p-lit)" stroke-width="2" stroke-dasharray="5 4" opacity=".85"/>
+          <!-- our data slots: eight empty circles on the prior -->
+          <g fill="var(--white)" stroke="var(--p-verify)" stroke-width="1.8">
+            <circle cx="70"  cy="243" r="4.5"/><circle cx="131" cy="230" r="4.5"/>
+            <circle cx="176" cy="205" r="4.5"/><circle cx="221" cy="168" r="4.5"/>
+            <circle cx="266" cy="133" r="4.5"/><circle cx="326" cy="99"  r="4.5"/>
+            <circle cx="386" cy="79"  r="4.5"/><circle cx="440" cy="70"  r="4.5"/>
+          </g>
+          <!-- K-half marker -->
+          <g stroke="var(--p-lit)" stroke-width="1" stroke-dasharray="2 3" opacity=".7">
+            <path d="M176 250 V205"/><path d="M56 205 H176"/>
+          </g>
+          <text x="181" y="222" font-size="10" fill="var(--p-lit)" font-family="ui-monospace,monospace">K½</text>
+          <!-- axes text -->
+          <text x="252" y="284" font-size="11" fill="var(--gray-600)" text-anchor="middle">
+            520 nm photon flux density (µmol m⁻² s⁻¹)
+          </text>
+          <text x="16" y="139" font-size="11" fill="var(--gray-600)" text-anchor="middle"
+                transform="rotate(-90 16 139)">reporter output (a.u.)</text>
+          <g font-size="9.5" fill="var(--gray-500)" font-family="ui-monospace,monospace">
+            <text x="56"  y="266" text-anchor="middle">0</text>
+            <text x="176" y="266" text-anchor="middle">4.7</text>
+            <text x="296" y="266" text-anchor="middle">12</text>
+            <text x="416" y="266" text-anchor="middle">24</text>
+          </g>
+          <!-- legend -->
+          <g font-size="10">
+            <path d="M300 44 h22" stroke="var(--p-lit)" stroke-width="2" stroke-dasharray="5 4"/>
+            <text x="328" y="48" fill="var(--gray-600)">literature prior</text>
+            <circle cx="311" cy="64" r="4.5" fill="var(--white)" stroke="var(--p-verify)" stroke-width="1.8"/>
+            <text x="328" y="68" fill="var(--gray-600)">our slots (n=8)</text>
+          </g>
+        </svg>
+        <figcaption>
+          <b>The most important figure on this wiki, and it is empty.</b>
+          Dashed line is the prior we designed against (Castillo‑Hair 2019: n = 1.88 ± 0.16,
+          K½ = 4.66 ± 0.63 µmol m⁻² s⁻¹, <i>E. coli</i>, 526 nm). Circles are the eight
+          intensity points our own fit will occupy. Different chassis, different
+          wavelength — we expect it to move.
+        </figcaption>
+      </figure>
+
+      <!-- ── kinetics ── -->
+      <figure>
+        <div class="fig__head">
+          <h3>Step‑ON / step‑OFF kinetics</h3>
+          <span class="prov prov--lit">lit</span>
+        </div>
+        <svg viewBox="0 0 480 300" role="img" aria-label="Step response plot. Light steps on then off; the output rises with a half-time of about 105 minutes and falls with a half-time of about 75 minutes.">
+          <g stroke="var(--gray-300)" stroke-width="1" fill="none">
+            <path d="M56 250 H448"/><path d="M56 250 V28"/>
+          </g>
+          <g stroke="var(--gray-200)" stroke-width="1">
+            <path d="M56 195H448"/><path d="M56 139H448"/><path d="M56 83H448"/>
+          </g>
+          <!-- light command: square -->
+          <path d="M56 240 H140 V56 H300 V240 H448" fill="none" stroke="var(--sig-green)"
+                stroke-width="1.6" stroke-dasharray="4 3" opacity=".8"/>
+          <!-- response: first-order rise then fall -->
+          <path d="M56 240 H140 C176 240 190 150 226 120 C258 96 274 84 300 78
+                   C330 78 344 150 372 186 C400 218 420 232 448 236"
+                fill="none" stroke="var(--leaf-700)" stroke-width="2.6"/>
+          <!-- t-half markers -->
+          <g stroke="var(--gray-500)" stroke-width="1" stroke-dasharray="2 3">
+            <path d="M197 250 V139"/><path d="M56 139 H197"/>
+            <path d="M355 250 V139"/>
+          </g>
+          <g font-size="10" font-family="ui-monospace,monospace">
+            <text x="202" y="134" fill="var(--gray-700)">t½ ON ≈ 105 min</text>
+            <text x="360" y="134" fill="var(--gray-700)">t½ OFF ≈ 75 min</text>
+          </g>
+          <text x="252" y="284" font-size="11" fill="var(--gray-600)" text-anchor="middle">time (h)</text>
+          <text x="16" y="139" font-size="11" fill="var(--gray-600)" text-anchor="middle"
+                transform="rotate(-90 16 139)">output (fraction of steady state)</text>
+          <g font-size="10">
+            <path d="M300 44 h22" stroke="var(--sig-green)" stroke-width="1.6" stroke-dasharray="4 3"/>
+            <text x="328" y="48" fill="var(--gray-600)">light command</text>
+            <path d="M300 62 h22" stroke="var(--leaf-700)" stroke-width="2.6"/>
+            <text x="328" y="68" fill="var(--gray-600)">ACCD output</text>
+          </g>
+        </svg>
+        <figcaption>
+          <b>A design constraint, not an apology.</b> A 105‑minute rise half‑time means
+          ReLeaf targets chronic stress — salinization, progressive drought — not acute shock.
+          We designed to this timescale. We have not yet measured it ourselves:
+          t½<sub>ON</sub> 105.1 ± 1.5 min and t½<sub>OFF</sub> 74.97 ± 0.39 min are
+          literature. Our own step response replaces this figure before freeze.
+        </figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 2 · THE DEVICE ═══════════════════════════════════════════════════ -->
+<section class="band band--tint" id="device">
+  <div class="wrap">
+    <p class="eyebrow">The device, physically</p>
+    <h2 class="h2">Eleven subsystems, sourced and built</h2>
+    <p class="lede">
+      Scroll to separate the stack. Everything below the diagram is a photograph, because a
+      render proves nothing.
+    </p>
+
+    <!-- exploded view; JS translates each layer on scroll -->
+    <div class="explode" id="explode">
+      <svg viewBox="0 0 900 420" role="img" aria-label="Exploded view of the ReLeaf device: solar panel and IP67 housing, LED array, bioreactor chamber, tangential-flow filtration module, pumps, Arduino controller, and soil probes.">
+        <g id="ex-layers" font-size="11" font-family="ui-monospace,Menlo,monospace">
+
+          <g class="ex-l" data-dz="-64">
+            <rect x="300" y="34" width="300" height="18" rx="3" fill="#2f4858" stroke="#1e2f3a"/>
+            <text x="620" y="47" fill="var(--gray-600)">solar panel · IP67 lid</text>
+          </g>
+
+          <g class="ex-l" data-dz="-40">
+            <rect x="300" y="82" width="300" height="22" rx="3" fill="#123527" stroke="#0b2419"/>
+            <g fill="var(--sig-green)">
+              <circle cx="330" cy="93" r="4"/><circle cx="375" cy="93" r="4"/>
+              <circle cx="420" cy="93" r="4"/><circle cx="465" cy="93" r="4"/>
+              <circle cx="510" cy="93" r="4"/><circle cx="555" cy="93" r="4"/>
+            </g>
+            <text x="620" y="97" fill="var(--gray-600)">LED array · 520 / 660 nm</text>
+          </g>
+
+          <g class="ex-l" data-dz="-18">
+            <rect x="300" y="132" width="300" height="54" rx="4" fill="var(--leaf-100)" stroke="var(--leaf-500)"/>
+            <g stroke="var(--leaf-700)" stroke-width="1" opacity=".5">
+              <path d="M312 148H588"/><path d="M312 160H588"/><path d="M312 172H588"/>
+            </g>
+            <text x="620" y="163" fill="var(--gray-600)">bioreactor chamber · <i>B. subtilis</i> 168</text>
+          </g>
+
+          <g class="ex-l" data-dz="6">
+            <rect x="300" y="214" width="300" height="34" rx="16" fill="#e8eef1" stroke="#9fb4bf"/>
+            <g stroke="#6d8b99" stroke-width="1.2">
+              <path d="M312 224H588"/><path d="M312 231H588"/><path d="M312 238H588"/>
+            </g>
+            <text x="620" y="235" fill="var(--gray-600)">TFF hollow fibre · 0.2 µm · 150 cm²</text>
+          </g>
+
+          <g class="ex-l" data-dz="28">
+            <circle cx="352" cy="292" r="20" fill="var(--gray-200)" stroke="var(--gray-500)"/>
+            <circle cx="352" cy="292" r="8"  fill="var(--gray-300)"/>
+            <circle cx="410" cy="292" r="14" fill="var(--gray-200)" stroke="var(--gray-500)"/>
+            <circle cx="410" cy="292" r="6"  fill="var(--gray-300)"/>
+            <rect x="452" y="278" width="52" height="28" rx="3" fill="#c9d6cf" stroke="#7d968a"/>
+            <text x="620" y="297" fill="var(--gray-600)">cross-flow pump · permeate pump · servo pinch valve</text>
+          </g>
+
+          <g class="ex-l" data-dz="50">
+            <rect x="300" y="336" width="120" height="34" rx="3" fill="#0f6a8f" stroke="#0a4a63"/>
+            <text x="308" y="357" fill="#cfe9f4" font-size="10">UNO R4</text>
+            <rect x="436" y="336" width="164" height="34" rx="3" fill="var(--gray-200)" stroke="var(--gray-500)"/>
+            <text x="444" y="357" fill="var(--gray-700)" font-size="10">EC · temp · DO · pH · TMP</text>
+            <text x="620" y="357" fill="var(--gray-600)">controller + probes</text>
+          </g>
+
+          <!-- soil line: static datum -->
+          <path d="M60 396 H840" stroke="var(--sig-soil)" stroke-width="2" opacity=".5"/>
+          <text x="60" y="412" fill="var(--gray-500)" font-size="10">soil line</text>
+        </g>
+      </svg>
+    </div>
+
+    <!-- real photographs. Unglamorous is the point. -->
+    <div class="photos">
+      <div class="slot"><span class="slot__k">photo needed</span>
+        <span class="slot__t">Bench build, wide. Whole device on the table, cables and all.</span></div>
+      <div class="slot"><span class="slot__k">photo needed</span>
+        <span class="slot__t">Breadboard with a multimeter probe on it. This one does the most work.</span></div>
+      <div class="slot"><span class="slot__k">photo needed</span>
+        <span class="slot__t">A hand holding the TFF module. Gives scale instantly.</span></div>
+      <div class="slot"><span class="slot__k">photo needed</span>
+        <span class="slot__t">Device half-buried in soil, outdoors, solar panel visible.</span></div>
+    </div>
+
+    <!-- spec strip: real part numbers, from the 2026-07-04 spec freeze -->
+    <dl class="specs">
+      <div class="spec"><dt>Membrane</dt><dd>
+        Biophsep™ mPES <span class="mono">HF-E-MI-M020-10-60-P</span> · 0.2 µm · 150 cm² ·
+        8 fibres · lumen ID 1.0 mm · 60 cm effective</dd></div>
+      <div class="spec"><dt>Controller</dt><dd>
+        Arduino Uno R4 (Renesas RA4M1) · <span class="mono">14-bit</span> ADC · 3.3 V logic</dd></div>
+      <div class="spec"><dt>LED driver</dt><dd>
+        <span class="mono">IRLZ44N</span> logic-level MOSFET · PWM · 520 nm ON / 660 nm OFF</dd></div>
+      <div class="spec"><dt>Pressure</dt><dd>
+        <span class="mono">BP8G-AGA</span> · 0–1 MPa gauge · 0–5 V 3-wire · 1.0 % FS combined</dd></div>
+      <div class="spec"><dt>Cross-flow pump</dt><dd>
+        雷熔 <span class="mono">ZP4000-N79H</span> peristaltic · 7.9 × 12.7 mm · 230–2600 mL/min</dd></div>
+      <div class="spec"><dt>In-line photometer</dt><dd>
+        2 mm-path flow cuvette · quartz plano-convex ⌀12.7 mm, f = 40 mm · OD600</dd></div>
+    </dl>
+    <p class="lede" style="margin-top:1.25rem;font-size:.88rem">
+      Biocontainment: the 0.2 µm membrane is a <b>cell-retention barrier</b> — <i>B. subtilis</i>
+      at 1–2 µm never leaves the device. It is not protein-selective: ACC deaminase (≈36 kDa)
+      passes, and so do small vesicles and debris. A second containment layer is
+      <span class="prov prov--none">open</span> — see Safety.
+    </p>
+  </div>
+</section>
+
+<!-- ══ 3 · THE EVIDENCE LADDER ══════════════════════════════════════════ -->
+<section class="band" id="evidence">
+  <div class="wrap">
+    <p class="eyebrow">Proof it works, layered</p>
+    <h2 class="h2">Five rungs. Two are standing.</h2>
+    <p class="lede">
+      Each rung has to be true for the rung above it to mean anything. Status as of
+      <span class="mono">2026‑08‑13</span>, not as we hope it will be.
+    </p>
+
+    <div class="ladder">
+      <div class="rung rung--verify">
+        <div class="rung__n">1</div>
+        <div>
+          <div class="rung__t">Light controls expression <span class="prov prov--verify">partial</span></div>
+          <p class="rung__d">
+            CcaS, CcaR and the P<sub>cpcG2</sub> output are all sequence-verified. Reporter
+            fluorescence vs. calibrated light intensity is the 8/25 milestone —
+            <b>built, not yet characterised.</b> → Measurement
+          </p>
+        </div>
+      </div>
+      <div class="rung rung--verify">
+        <div class="rung__n">2</div>
+        <div>
+          <div class="rung__t">Light controls ACC deaminase <span class="prov prov--verify">partial</span></div>
+          <p class="rung__d">
+            Construct I — light-gated ACCD — positive since <span class="mono">2026‑07‑28</span>.
+            The α-ketobutyrate activity assay against a constitutive P<sub>veg</sub> control has
+            <b>not been run.</b> → Results
+          </p>
+        </div>
+      </div>
+      <div class="rung rung--none">
+        <div class="rung__n">3</div>
+        <div>
+          <div class="rung__t">ACCD crosses the membrane, cells do not
+            <span class="prov prov--none">not achieved</span></div>
+          <p class="rung__d">
+            Blocked upstream. <i>B. subtilis</i> showed <b>no net growth inside the fibre
+            lumen</b> on 2026‑06‑10: lumen OD600 flat and noisy at 0.10–0.19 against a flask
+            control of 0.172 → 0.377. Root cause not established. → Results
+          </p>
+        </div>
+      </div>
+      <div class="rung rung--none">
+        <div class="rung__n">4</div>
+        <div>
+          <div class="rung__t">The permeate does something to a plant
+            <span class="prov prov--none">not achieved</span></div>
+          <p class="rung__d">
+            Root elongation / fresh weight under NaCl, permeate vs. mock. Depends on rung 3.
+            → Results, for what we learned instead
+          </p>
+        </div>
+      </div>
+      <div class="rung rung--verify">
+        <div class="rung__n">5</div>
+        <div>
+          <div class="rung__t">Closed loop, end to end <span class="prov prov--verify">partial</span></div>
+          <p class="rung__d">
+            <b>The sensing half is closed.</b> Stress → light has run since 2026‑06‑20
+            (SHT31 → PWM green); the in-line photometer then logged for three weeks and
+            <b>detected the cross-flow pump dying</b> — our own instrument catching a hardware
+            failure. The biology half is open. → Hardware
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="h2" style="font-size:1.2rem;margin:3rem 0 0">What we killed, and why</h3>
+    <p class="lede" style="font-size:.95rem;margin-top:.5rem">
+      Four payloads entered, one is alive. The kills are on the homepage because the reasoning
+      <i>is</i> the engineering.
+    </p>
+    <div class="funnel">
+      <div class="track track--live">
+        <div class="track__h"><h4>ACC deaminase</h4><span class="prov prov--fixed">advanced</span></div>
+        <p class="track__why">
+          Light-gated construct sequence-verified 07‑28. ≈36 kDa, passes the 0.2 µm membrane.
+          Lowers ethylene stress signalling in the root zone. <b>This is the payload.</b>
+        </p>
+      </div>
+      <div class="track track--dead">
+        <div class="track__h"><h4>LEA14</h4><span class="prov prov--none">killed</span></div>
+        <p class="track__why">
+          Constructs G and H failed in <b>both</b> the light-driven and the constitutive
+          version. Because the constitutive control failed too, the fault is the
+          payload/junction — not the promoter. That distinction is why we stopped rather
+          than re-tuning.
+        </p>
+      </div>
+      <div class="track track--dead">
+        <div class="track__h"><h4>BoPep4</h4><span class="prov prov--none">deprioritised</span></div>
+        <p class="track__why">
+          All seven constructs carry a C-terminal 6×His on Asn23, no protease site. In 5GR8,
+          Asn23's free carboxylate salt-bridges PEPR1 Arg487 at 2.40 / 2.80 Å — the tag
+          removes that contact. Valid <b>secretion reporters</b>, not bioactivity constructs.
+        </p>
+      </div>
+      <div class="track track--dead">
+        <div class="track__h"><h4>GanA-Gala</h4><span class="prov prov--none">killed</span></div>
+        <p class="track__why">
+          Constructs L and M failed in both versions, same signature as LEA14.
+          Retired at the same decision point.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 4 · HUMAN PRACTICES AS CAUSALITY ═════════════════════════════════ -->
+<section class="band band--tint" id="hp">
+  <div class="wrap">
+    <p class="eyebrow">Human practices</p>
+    <h2 class="h2">Three conversations that changed the build</h2>
+    <p class="lede">
+      Not a photo grid. Each card is what we were going to build, who changed our mind,
+      and what we build now.
+    </p>
+
+    <div class="hpcards">
+
+      <article class="hpcard">
+        <div class="hpcard__grid">
+          <div class="hpcol hpcol--was">
+            <div class="hpcol__k">We were going to build</div>
+            <p class="hpcol__t">
+              <span class="prov prov--verify">draft</span>
+              A continuous-dosing device on a fixed schedule, sized to a single plant's root zone.
+            </p>
+          </div>
+          <div class="hparrow">
+            <span class="hparrow__who">陳惠雯 — dew-mulch farm</span>
+            <span class="hparrow__when">date needed</span>
+          </div>
+          <div class="hpcol">
+            <div class="hpcol__k">We build now</div>
+            <p class="hpcol__t">
+              <span class="prov prov--verify">draft</span>
+              Dosing keyed to the farm's own soil-moisture clock rather than to wall time —
+              <b>2–3 sentences of the actual causal chain go here.</b>
+            </p>
+          </div>
+        </div>
+        <div class="hpcard__photo">
+          <div class="slot" style="aspect-ratio:21/6;border:none;border-top:1px solid var(--gray-200)">
+            <span class="slot__k">photo needed — the farm itself, not stock</span>
+            <span class="slot__t">This is the load-bearing card. It needs a real photograph.</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="hpcard">
+        <div class="hpcard__grid">
+          <div class="hpcol hpcol--was">
+            <div class="hpcol__k">We were going to build</div>
+            <p class="hpcol__t"><span class="prov prov--verify">draft</span>
+              A device positioned as a replacement for commercial plant-protection inputs.</p>
+          </div>
+          <div class="hparrow">
+            <span class="hparrow__who">正瀚生技 (Gaia Agritech)</span>
+            <span class="hparrow__when">date needed</span>
+          </div>
+          <div class="hpcol">
+            <div class="hpcol__k">We build now</div>
+            <p class="hpcol__t"><span class="prov prov--verify">draft</span>
+              ReLeaf positioned as <b>orthogonal and complementary</b> to Homeostasis Systemin™
+              — different mechanism, different failure mode, stackable.</p>
+          </div>
+        </div>
+      </article>
+
+      <article class="hpcard">
+        <div class="hpcard__grid">
+          <div class="hpcol hpcol--was">
+            <div class="hpcol__k">We were going to build</div>
+            <p class="hpcol__t"><span class="prov prov--verify">draft</span>
+              Permeate delivered straight to a single plant's root through a perforated ring.</p>
+          </div>
+          <div class="hparrow">
+            <span class="hparrow__who">YesHealth 源鮮農業</span>
+            <span class="hparrow__when">date needed</span>
+          </div>
+          <div class="hpcol">
+            <div class="hpcol__k">We build now</div>
+            <p class="hpcol__t">
+              Permeate routes to the <b>hydroponics reservoir first</b>, not to a single root.
+              The rhizosphere perforated-ring interface is deferred. This constraint is in the
+              2026‑07‑04 spec freeze. <span class="prov prov--fixed">in spec</span>
+            </p>
+          </div>
+        </div>
+      </article>
+
+      <article class="hpcard">
+        <div class="hpcard__grid">
+          <div class="hpcol hpcol--was">
+            <div class="hpcol__k">We were going to build</div>
+            <p class="hpcol__t"><span class="prov prov--verify">card pending</span>
+              Reserved: five-party forum, 2026‑09‑05.</p>
+          </div>
+          <div class="hparrow">
+            <span class="hparrow__who">Five-party forum</span>
+            <span class="hparrow__when">2026-09-05 · scheduled</span>
+          </div>
+          <div class="hpcol">
+            <div class="hpcol__k">We build now</div>
+            <p class="hpcol__t"><span class="prov prov--verify">card pending</span>
+              Fill this card only once the evidence is captured. An empty card is better than
+              an invented one.</p>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <p style="margin-top:1.5rem"><a href="#">The full record — transcripts, dates, and what each
+      stakeholder actually said →</a></p>
+  </div>
+</section>
+
+<!-- ══ 5 · WHO WE ARE ═══════════════════════════════════════════════════ -->
+<section class="band" id="team">
+  <div class="wrap">
+    <p class="eyebrow">Who we are</p>
+    <h2 class="h2">
+      <span class="prov prov--verify">verify</span>
+      —&nbsp;students, —&nbsp;schools, Taiwan.
+    </h2>
+    <p class="lede" style="font-size:.95rem">
+      Shared lab time on weekends, and every device moved between sites in a car boot.
+      <!-- NOTE: the roster file says 47 people / 31 students; design.md says 31 students;
+           the blueprint says 32 students / 7 schools. Reconcile against
+           Wiki_member/assets/data/roster.js before freeze and pick ONE number. -->
+    </p>
+    <div class="teamphoto">
+      <div>
+        <div class="slot__k">photo needed</div>
+        <div class="slot__t" style="max-width:44ch;margin:.4rem auto 0">
+          One wide, well-lit group photograph — in the lab or at the forum. Not a collage.
+          <span class="mono">Wiki_member/assets/img/group.jpg</span> already exists at 2400 px;
+          check whether it is the right frame for the homepage.
+        </div>
+      </div>
+    </div>
+    <p style="margin-top:1.25rem"><a href="#">Roster, roles and attributions →</a></p>
+  </div>
+</section>
+
+<!-- ══ 6 · THE BIG PICTURE ══════════════════════════════════════════════ -->
+<section class="band band--tint" id="next">
+  <div class="wrap">
+    <p class="eyebrow">What would have to be true</p>
+    <h2 class="h2">From one device to one row</h2>
+
+    <figure style="margin-top:1.75rem;background:var(--white)">
+      <svg viewBox="0 0 900 220" role="img" aria-label="Scale diagram: one device serving one plant, then a row of devices, then a field, with the constraints that gate each step.">
+        <!-- plant scale -->
+        <g>
+          <rect x="40" y="60" width="150" height="90" rx="6" fill="var(--leaf-100)" stroke="var(--leaf-500)"/>
+          <text x="115" y="94" font-size="13" font-weight="700" text-anchor="middle" fill="var(--leaf-900)">1 device</text>
+          <text x="115" y="114" font-size="11" text-anchor="middle" fill="var(--gray-600)">1 plant · built</text>
+          <text x="115" y="132" font-size="10" text-anchor="middle" fill="var(--p-verify)"
+                font-family="ui-monospace,monospace">150 cm² · 8 fibres</text>
+        </g>
+        <path d="M198 105 H244" stroke="var(--gray-500)" stroke-width="1.5"/>
+        <path d="M244 105 l-9 -5 v10 z" fill="var(--gray-500)"/>
+        <!-- row scale -->
+        <g>
+          <rect x="252" y="60" width="150" height="90" rx="6" fill="var(--white)" stroke="var(--gray-300)"/>
+          <text x="327" y="94" font-size="13" font-weight="700" text-anchor="middle">1 row</text>
+          <text x="327" y="114" font-size="11" text-anchor="middle" fill="var(--gray-600)">replicate modules</text>
+          <text x="327" y="132" font-size="10" text-anchor="middle" fill="var(--gray-500)"
+                font-family="ui-monospace,monospace">constant γ̇w, J &lt; Jcrit</text>
+        </g>
+        <path d="M410 105 H456" stroke="var(--gray-300)" stroke-width="1.5" stroke-dasharray="4 4"/>
+        <path d="M456 105 l-9 -5 v10 z" fill="var(--gray-300)"/>
+        <!-- field scale -->
+        <g>
+          <rect x="464" y="60" width="150" height="90" rx="6" fill="var(--gray-100)" stroke="var(--gray-300)" stroke-dasharray="5 4"/>
+          <text x="539" y="94" font-size="13" font-weight="700" text-anchor="middle" fill="var(--gray-500)">1 field</text>
+          <text x="539" y="114" font-size="11" text-anchor="middle" fill="var(--gray-500)">not attempted</text>
+          <text x="539" y="132" font-size="10" text-anchor="middle" fill="var(--gray-500)"
+                font-family="ui-monospace,monospace">cost · regulation</text>
+        </g>
+        <!-- gates -->
+        <g font-size="10.5" font-family="ui-monospace,Menlo,monospace" fill="var(--gray-600)">
+          <text x="656" y="76">gates, in order:</text>
+          <text x="656" y="98">1 · containment beyond the membrane</text>
+          <text x="656" y="118">2 · GMO field-release track</text>
+          <text x="656" y="138">3 · cost per device (BOM open)</text>
+        </g>
+      </svg>
+      <figcaption>
+        We scale by <b>replicating the fixed-geometry 8-fibre module</b> at constant wall shear
+        and constant flux below critical flux — van Reis linear scale-up. What we knowingly
+        give up is whole-system geometric similarity: mixing time and control dead-time drift
+        as area grows. Acceptable only because ReLeaf targets slow-onset stress. The same
+        105-minute constraint that limits us is what makes the sacrifice safe.
+      </figcaption>
+    </figure>
+
+    <!-- ── limitations: the differentiator ── -->
+    <div class="limits">
+      <h3>What is not true yet</h3>
+      <p class="limits__sub">As of 2026‑08‑13. This block is maintained, not decorative.</p>
+      <ul>
+        <li><b>No transfer function measured in-house.</b> Every Hill parameter on this page is
+          Castillo‑Hair 2019, different chassis, different wavelength.</li>
+        <li><b>Cells do not grow inside the fibre lumen.</b> Candidate causes — O₂ limitation,
+          no fed-batch feed, shear, temperature — and no root cause yet.</li>
+        <li><b>Second containment layer is open.</b> Membrane retention is net one. Net two was
+          called necessary on 2026‑07‑16 and has no design.</li>
+        <li><b>Permeate pump not selected;</b> root-zone delivery deferred to a reservoir
+          hand-off.</li>
+        <li><b>The BoPep4 constructs cannot answer a bioactivity question,</b> and we will not
+          present them as though they can.</li>
+      </ul>
+      <p style="margin-top:1.2rem;font-size:.85rem;color:#8fb3a0">
+        Four more open items — photometer linearity and limit of detection, LPA photon flux
+        per duty cycle, the lux→PPFD conversion factor, and per-device bill of materials —
+        are tracked on <a href="#" style="color:#cfe4d8;text-decoration:underline">Results</a>.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ═══════════════════════════════════════════════════════════ -->
+<footer class="foot" id="judges">
+  <div class="wrap">
+    <a class="foot__judge" href="#">
+      <strong>For judges: the 5-minute path →</strong>
+      <span>The fastest route through our best evidence, in order, with the weak spots marked.</span>
+    </a>
+
+    <nav class="foot__primary">
+      <a href="#"><span class="foot__n">01</span><span class="foot__l">Measurement</span></a>
+      <a href="#"><span class="foot__n">02</span><span class="foot__l">Hardware</span></a>
+      <a href="#"><span class="foot__n">03</span><span class="foot__l">Engineering</span></a>
+      <a href="#"><span class="foot__n">04</span><span class="foot__l">Integrated HP</span></a>
+      <a href="#"><span class="foot__n">05</span><span class="foot__l">Parts</span></a>
+      <a href="#"><span class="foot__n">06</span><span class="foot__l">Safety</span></a>
+    </nav>
+
+    <div class="foot__secondary">
+      <a href="#">Team</a><a href="#">Attributions</a><a href="#">Model</a>
+      <a href="#">Notebook</a><a href="#">Contact</a><a href="#">Data archive</a>
+    </div>
+
+    <p class="foot__legal">
+      ReLeaf · GEMS Taiwan · iGEM 2026 Biomanufacturing Village.
+      <br>Prototype homepage. Figures marked <span class="prov prov--lit">lit</span> are
+      literature values and are not our results.
+    </p>
+  </div>
+</footer>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════════════
+   HERO CONTROL LOOP
+   One driver signal, four consumers, each lagged. The lag is the point: the
+   green bar tracks the soil trace almost instantly (it is a microcontroller),
+   expression lags it by the CcaSR rise time, and permeate lags expression.
+   A judge sees the delay without reading the word "latency".
+
+   Everything is one periodic function of p in [0,1), so the loop is seamless.
+   Replace driver() with the real Arduino EC/temp log before freeze — that is
+   the blueprint's requirement and this is the single hook to change.
+   ═══════════════════════════════════════════════════════════════════════════ */
+(function () {
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var svg = document.querySelector('.hero__svg');
+  if (!svg) { document.body.classList.add('no-anim'); return; }
+
+  var PERIOD = 12000;           // ms per loop
+  var N = 110;                  // samples across each trace window
+  var LAG_LED = 0.008, LAG_EXPR = 0.13, LAG_PERM = 0.19;
+
+  /* the stress signal. Periodic in p, so s(0) === s(1) and the loop is seamless. */
+  function driver(p) {
+    p = p - Math.floor(p);
+    var base = Math.pow(Math.sin(Math.PI * p), 3);      // one broad event per period
+    var ripple = 0.028 * Math.sin(2 * Math.PI * 5 * p); // periodic, keeps it alive
+    return Math.max(0, Math.min(1, 0.14 + 0.78 * base + ripple));
+  }
+  /* first-order lag, integrated over the window so the curve has real shape */
+  function lagged(p, tau) {
+    var y = driver(p - 0.5), step = 0.5 / 40, a = step / (tau + step);
+    for (var q = p - 0.5; q <= p; q += step) y += a * (driver(q) - y);
+    return y;
+  }
+
+  var el = {
+    trEC:   document.getElementById('trEC'),
+    trTemp: document.getElementById('trTemp'),
+    trExpr: document.getElementById('trExpr'),
+    trExprFill: document.getElementById('trExprFill'),
+    ledBar: document.getElementById('ledBar'),
+    ledGlow:document.getElementById('ledGlow'),
+    roEC:   document.getElementById('roEC'),
+    roT:    document.getElementById('roT'),
+    roPPFD: document.getElementById('roPPFD'),
+    roExpr: document.getElementById('roExpr'),
+    drops:  document.querySelectorAll('#drops .drop')
+  };
+
+  /* trace geometry, matching the SVG rects above */
+  var EC = { x: 42, w: 336, top: 78, bot: 212 };
+  var EX = { x: 600, w: 250, top: 80, bot: 212 };
+
+  function pts(box, p, fn, win) {
+    var out = [], i, ph, v, x, y;
+    for (i = 0; i <= N; i++) {
+      ph = p - win * (1 - i / N);
+      v  = fn(ph);
+      x  = box.x + box.w * (i / N);
+      y  = box.bot - (box.bot - box.top) * v;
+      out.push(x.toFixed(1) + ',' + y.toFixed(1));
+    }
+    return out.join(' ');
+  }
+
+  function frame(now) {
+    var p = (now % PERIOD) / PERIOD;
+
+    /* 01 sense */
+    el.trEC.setAttribute('points',   pts(EC, p, driver, 1));
+    el.trTemp.setAttribute('points', pts(EC, p, function (q) { return 0.18 + 0.52 * driver(q - 0.03); }, 1));
+    var s = driver(p);
+    el.roEC.textContent = (0.8 + 7.7 * s).toFixed(1);
+    el.roT.textContent  = (24 + 13 * driver(p - 0.03)).toFixed(1);
+
+    /* 02 actuate — proportional, never binary */
+    var g = driver(p - LAG_LED);
+    var h = 134 * g;
+    el.ledBar.setAttribute('y', (212 - h).toFixed(1));
+    el.ledBar.setAttribute('height', h.toFixed(1));
+    el.ledGlow.setAttribute('opacity', (0.15 + 0.85 * g).toFixed(2));
+    el.ledGlow.setAttribute('transform', 'translate(0,' + (-h).toFixed(1) + ')');
+    el.roPPFD.textContent = (12 * g).toFixed(1);
+
+    /* 03 express — lagged and smoothed */
+    var ep = pts(EX, p, function (q) { return lagged(q, LAG_EXPR); }, 1);
+    el.trExpr.setAttribute('points', ep);
+    el.trExprFill.setAttribute('points', EX.x + ',' + EX.bot + ' ' + ep + ' ' + (EX.x + EX.w) + ',' + EX.bot);
+    var e = lagged(p, LAG_EXPR);
+    el.roExpr.textContent = Math.round(100 * e);
+
+    /* 04 deliver — droplet rate and opacity both scale with expression */
+    var perm = lagged(p - LAG_PERM, LAG_PERM);
+    for (var i = 0; i < el.drops.length; i++) {
+      var ph = ((now / 1400) + i / el.drops.length) % 1;
+      el.drops[i].setAttribute('cy', (146 + 64 * ph).toFixed(1));
+      el.drops[i].setAttribute('opacity', (perm * (1 - ph) * 1.1).toFixed(2));
+      el.drops[i].setAttribute('r', (2.2 + 2.4 * perm).toFixed(1));
+    }
+  }
+
+  if (reduce) { frame(PERIOD * 0.42); return; }   /* one representative frame, held */
+
+  var running = true;
+  new IntersectionObserver(function (es) { running = es[0].isIntersecting; })
+    .observe(svg);
+  (function loop(t) { if (running) frame(t); requestAnimationFrame(loop); })(0);
+})();
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   EXPLODED VIEW — scroll-linked separation.
+   The one place scroll animation earns its cost: it teaches spatial order.
+   Transform only, so it stays cheap. Collapses to a plain diagram when the
+   viewer prefers reduced motion.
+   ═══════════════════════════════════════════════════════════════════════════ */
+(function () {
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var host = document.getElementById('explode');
+  if (!host) return;
+  var layers = host.querySelectorAll('.ex-l');
+  var raf = null;
+
+  function apply() {
+    raf = null;
+    var r = host.getBoundingClientRect(), vh = window.innerHeight;
+    /* 0 when the block is entering, 1 when it is centred */
+    var t = 1 - Math.min(1, Math.max(0, (r.top - vh * 0.1) / (vh * 0.75)));
+    for (var i = 0; i < layers.length; i++) {
+      var dz = parseFloat(layers[i].getAttribute('data-dz')) || 0;
+      layers[i].setAttribute('transform', 'translate(0,' + (dz * (1 - t)).toFixed(1) + ')');
+      layers[i].setAttribute('opacity', (0.35 + 0.65 * t).toFixed(2));
+    }
+  }
+  function onScroll() { if (raf === null) raf = requestAnimationFrame(apply); }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll, { passive: true });
+  apply();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,1261 @@
+<!DOCTYPE html>
+<!--
+  =============================================================================
+  ReLeaf — wiki homepage prototype v0.2  ·  GEMS-Taiwan 2026
+  -----------------------------------------------------------------------------
+  Rebuilt after studying iGEM Brno 2025 and iGEM Marburg 2024.
+
+  WHAT CHANGED FROM v0.1 (kept as index_v1_dataforward.html)
+    · Photo-dominant, not diagram-dominant. 34 numbered photo slots (P-01…P-34),
+      each mapping 1:1 to an entry in PHOTO_SHOTLIST.md.
+    · Hero is a full-bleed photograph with a headline sentence carrying inline
+      hover-reveal icons, plus a real stakeholder face + quote.   [Brno]
+    · Alternating image|text split views that flip side each section. [Marburg]
+    · Big-number fact slab.                                          [Marburg]
+    · Draggable before/after compare slider.                         [Marburg]
+    · Overlapping two-photo collages.                                [Marburg]
+    · Human Practices as an animated chat with real named people who push back
+      and a team that concedes.                                     [Brno]
+    · Every section ends with a link out. The homepage is a hub, not a document.
+    · Provenance chips REMOVED from the page surface — they were handoff
+      scaffolding. Data status now lives in ASSETS_NEEDED.md. The honest
+      limitations block survives, because the blueprint is right that it is a
+      differentiator; it is just styled as a considered statement now, not as a
+      wall of shame.
+
+  FONTS. Brno uses Space Grotesk + Urbanist; Marburg uses Inter. The iGEM wiki
+  blocks cross-origin resources, so self-host and swap --font-display /
+  --font-body below. Until then this falls back to the system UI stack.
+
+  PHOTO SLOTS. Every dashed box is `<div class="ph" data-shot="P-nn">`. Replace
+  with `<img src="https://static.igem.wiki/teams/XXXX/...">` keeping the same
+  wrapper classes. Search `data-shot=` to find all of them.
+  =============================================================================
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ReLeaf — soil stress in, protective enzyme out · GEMS-Taiwan 2026</title>
+<style>
+/* ── tokens ──────────────────────────────────────────────────────────────── */
+:root{
+  /* brand greens, carried over from the team page */
+  --leaf-900:#14402b; --leaf-800:#1a5238; --leaf-700:#23684a; --leaf-500:#4f9c6f;
+  --leaf-300:#9ccbb0; --leaf-100:#e3f0e8;
+  /* warm accents — the thing v0.1 was missing */
+  --soil:#c87f3a; --amber:#e9a93d; --signal:#6fd34a; --clay:#b4553f; --sky:#4e8fbf;
+  /* neutrals, warmed */
+  --paper:#fbfaf7; --paper-2:#f4f2ec; --line:#e4e1d8;
+  --ink:#14181a; --ink-2:#4a5451; --ink-3:#7d8783;
+  --radius:1.5rem; --radius-sm:.75rem;
+  --max:1280px;
+  --font-display:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --font-body:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans TC",sans-serif;
+  --shadow:0 4px 24px rgb(20 24 26 / .10);
+  --shadow-lg:0 18px 50px -12px rgb(20 24 26 / .28);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%; scroll-behavior:smooth}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:var(--font-body); font-size:17px; line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{margin:0; font-family:var(--font-display); font-weight:700; line-height:1.08; letter-spacing:-.03em}
+p{margin:0}
+img{display:block; max-width:100%}
+a{color:var(--leaf-700); text-decoration:none}
+
+.wrap{max-width:var(--max); margin:0 auto; padding:0 clamp(1rem,4vw,3rem)}
+.slide{padding:clamp(4.5rem,10vw,9rem) 0}
+.slide--tint{background:var(--paper-2)}
+.slide--dark{background:var(--leaf-900); color:#eaf3ee}
+
+.kicker{
+  font-size:.7rem; font-weight:700; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--leaf-700); margin-bottom:1rem;
+}
+.slide--dark .kicker{color:var(--leaf-300)}
+.h-big{font-size:clamp(1.9rem,4.4vw,3.1rem)}
+.h-mid{font-size:clamp(1.45rem,2.8vw,2.05rem)}
+.body{font-size:clamp(1rem,1.35vw,1.12rem); color:var(--ink-2); max-width:60ch}
+.slide--dark .body{color:#b9cfc4}
+.body b,.body strong{color:var(--ink); font-weight:700}
+.slide--dark .body b{color:#fff}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+
+/* link-out, on every section — Marburg's habit */
+.out{
+  display:inline-flex; align-items:center; gap:.5rem; margin-top:1.75rem;
+  font-weight:700; font-size:.95rem; color:var(--leaf-700);
+  border-bottom:2px solid var(--leaf-300); padding-bottom:.15rem;
+  transition:gap .18s ease, border-color .18s ease;
+}
+.out:hover{gap:.85rem; border-color:var(--leaf-700)}
+.slide--dark .out{color:#eaf3ee; border-color:var(--leaf-500)}
+
+/* ── photo slot ──────────────────────────────────────────────────────────── */
+.ph{
+  position:relative; overflow:hidden; border-radius:var(--radius-sm);
+  background:
+    repeating-linear-gradient(45deg,#efece3 0 12px,#e9e5da 12px 24px);
+  border:1.5px dashed #c9c3b2;
+  display:flex; flex-direction:column; justify-content:flex-end;
+  padding:1rem; gap:.35rem; min-height:150px;
+}
+.ph__id{
+  position:absolute; top:.7rem; left:.7rem;
+  font-family:ui-monospace,Menlo,monospace; font-size:.68rem; font-weight:700;
+  letter-spacing:.06em; color:#fff; background:var(--clay);
+  padding:.22rem .5rem; border-radius:4px;
+}
+.ph__t{font-size:.8rem; line-height:1.42; color:#6d6656; font-weight:500}
+.ph--dark{background:repeating-linear-gradient(45deg,#1c3b2c 0 12px,#193425 12px 24px); border-color:#3c6450}
+.ph--dark .ph__t{color:#9fbdac}
+.ph--round{border-radius:50%; min-height:0; aspect-ratio:1; padding:0; justify-content:center; align-items:center}
+.ph--round .ph__id{position:static}
+.ph--round .ph__t{display:none}
+
+/* ── nav ─────────────────────────────────────────────────────────────────── */
+.nav{
+  position:fixed; inset:0 0 auto 0; z-index:60; height:72px;
+  display:flex; align-items:center;
+  transition:background .25s ease, box-shadow .25s ease;
+}
+.nav.is-stuck{background:rgba(251,250,247,.92); backdrop-filter:blur(10px); box-shadow:0 1px 0 var(--line)}
+.nav .wrap{display:flex; align-items:center; gap:1.5rem; width:100%}
+.nav__mark{display:flex; align-items:center; gap:.55rem; font-family:var(--font-display);
+  font-weight:700; font-size:1.15rem; letter-spacing:-.03em; color:#fff}
+.nav.is-stuck .nav__mark{color:var(--leaf-900)}
+.nav__leaf{width:28px; height:28px; fill:#fff}
+.nav.is-stuck .nav__leaf{fill:var(--leaf-700)}
+.nav__links{display:none; gap:1.6rem; margin-left:auto; font-size:.92rem; font-weight:600}
+.nav__links a{color:rgba(255,255,255,.85)}
+.nav.is-stuck .nav__links a{color:var(--ink-2)}
+.nav__links a:hover{color:#fff}
+.nav.is-stuck .nav__links a:hover{color:var(--leaf-700)}
+.nav__cta{
+  margin-left:auto; font-size:.85rem; font-weight:700; white-space:nowrap;
+  background:var(--leaf-500); color:#0d2b1d; padding:.6rem 1.05rem; border-radius:999px;
+}
+.nav__cta:hover{background:var(--signal)}
+@media(min-width:1060px){ .nav__links{display:flex} .nav__cta{margin-left:0} }
+
+/* ── HERO ────────────────────────────────────────────────────────────────── */
+.hero{padding:.75rem .75rem 0}
+@media(min-width:768px){.hero{padding:1rem 1rem 0}}
+.hero__frame{
+  position:relative; border-radius:var(--radius); overflow:hidden;
+  min-height:min(88svh,780px); display:flex; align-items:flex-end;
+  background:var(--leaf-900);
+}
+/* P-01 lives here as a background image at ship time.
+   Its slot label is parked top-right so it clears both the navbar and the headline. */
+.hero__bg{
+  position:absolute; inset:0; border:none; border-radius:0; min-height:0; z-index:0;
+  justify-content:flex-start; align-items:flex-end; padding:5.5rem 1.5rem 0;
+}
+.hero__bg .ph__id{position:static; margin-bottom:.4rem}
+.hero__bg .ph__t{max-width:32ch; text-align:right; opacity:.75}
+/* no room for the slot caption once the headline wraps — keep just the ID chip */
+@media(max-width:900px){ .hero__bg .ph__t{display:none} }
+.hero__scrim{
+  position:absolute; inset:0; z-index:1; pointer-events:none;
+  background:
+    linear-gradient(to top,rgba(8,22,15,.94) 0%,rgba(8,22,15,.55) 38%,rgba(8,22,15,.15) 68%,rgba(8,22,15,.45) 100%);
+}
+.hero__inner{position:relative; z-index:2; width:100%; padding:clamp(1.5rem,4vw,3.5rem)}
+.hero__grid{display:grid; gap:2rem; align-items:end}
+@media(min-width:1000px){.hero__grid{grid-template-columns:minmax(0,1fr) 340px; gap:3rem}}
+
+.hero__eyebrow{
+  display:inline-flex; align-items:center; gap:.55rem; margin-bottom:1.35rem;
+  font-size:.72rem; font-weight:700; letter-spacing:.14em; text-transform:uppercase;
+  color:#bfe0cd; background:rgba(255,255,255,.1); backdrop-filter:blur(6px);
+  padding:.42rem .8rem; border-radius:999px; border:1px solid rgba(255,255,255,.16);
+}
+.hero__h1{
+  color:#fff; font-size:clamp(2.1rem,5.6vw,4.4rem); line-height:1.02; letter-spacing:-.042em;
+  display:flex; flex-wrap:wrap; align-items:center; gap:.1em .28em; max-width:22ch;
+}
+.hero__h1 .w{display:inline-flex; align-items:center; gap:.16em}
+/* the inline hover-reveal icon — Brno's device */
+.tip{
+  display:inline-block; width:.44em; height:.44em; border-radius:50%; flex:0 0 auto;
+  cursor:pointer; border:.09em solid rgba(255,255,255,.55); position:relative; top:-.28em;
+  margin-left:.1em; transition:transform .18s ease, box-shadow .18s ease;
+}
+.tip:hover,.tip:focus-visible{transform:scale(1.28); outline:none; box-shadow:0 0 0 .12em rgba(255,255,255,.28)}
+/* the dot in the sub-line would inherit a much smaller em, so pin it to a tappable size */
+.hero__sub .tip{width:14px; height:14px; border-width:2px; top:-1px; margin-left:.25em}
+.hero__sub{color:#cfe4d8; font-size:clamp(1rem,1.6vw,1.22rem); margin-top:1.5rem; max-width:44ch; font-weight:500}
+.hero__sub b{color:#fff}
+.hero__meta{
+  margin-top:1.6rem; font-family:ui-monospace,Menlo,monospace; font-size:.76rem;
+  color:#8fb3a0; letter-spacing:.04em;
+}
+
+/* stakeholder quote card over the hero — Brno */
+.quote{
+  background:rgba(24,38,30,.82); backdrop-filter:blur(14px);
+  border:1px solid rgba(255,255,255,.14); border-radius:var(--radius-sm);
+  padding:1.35rem; box-shadow:var(--shadow-lg);
+}
+.quote__t{color:#fff; font-family:var(--font-display); font-size:1.02rem; font-weight:700; line-height:1.3; margin-bottom:.6rem}
+.quote__q{color:rgba(255,255,255,.9); font-size:.9rem; line-height:1.55}
+.quote__who{display:flex; align-items:center; gap:.7rem; margin-top:1rem}
+.quote__pic{width:44px; height:44px; flex:0 0 44px; border-radius:50%; overflow:hidden; border:2px solid rgba(255,255,255,.5)}
+.quote__n{color:#fff; font-weight:700; font-size:.88rem; line-height:1.25}
+.quote__r{color:rgba(255,255,255,.65); font-size:.78rem; line-height:1.25}
+
+/* hover-reveal card */
+.reveal{
+  position:fixed; z-index:80; width:min(20rem,80vw); pointer-events:none;
+  background:#fff; border-radius:var(--radius-sm); padding:.85rem;
+  box-shadow:0 22px 60px -12px rgb(0 0 0/.45); opacity:0; transform:translateY(6px);
+  transition:opacity .16s ease, transform .16s ease; border:2.5px solid var(--leaf-500);
+}
+.reveal.on{opacity:1; transform:translateY(0)}
+.reveal .ph{min-height:104px; margin-bottom:.7rem}
+.reveal__h{font-family:var(--font-display); font-weight:700; font-size:1.02rem; margin-bottom:.3rem}
+.reveal__b{font-size:.83rem; line-height:1.5; color:var(--ink-2)}
+
+.scrollcue{
+  position:absolute; z-index:2; left:50%; bottom:1rem; transform:translateX(-50%);
+  font-size:.68rem; letter-spacing:.18em; text-transform:uppercase; color:rgba(255,255,255,.5);
+  font-family:ui-monospace,Menlo,monospace; display:flex; flex-direction:column; align-items:center; gap:.4rem;
+}
+.scrollcue::after{content:""; width:1px; height:26px; background:linear-gradient(to bottom,rgba(255,255,255,.5),transparent);
+  animation:cue 2.1s ease-in-out infinite}
+@keyframes cue{0%,100%{opacity:.25; transform:scaleY(.6)}50%{opacity:1; transform:scaleY(1)}}
+/* must come after the .scrollcue rule above to win at equal specificity */
+@media(max-width:900px){ .scrollcue{display:none} }
+
+/* ── big number slab — Marburg ────────────────────────────────────────────── */
+.slab{background:var(--leaf-900); color:#eaf3ee; padding:clamp(2.5rem,6vw,4.5rem) 0}
+.slab__grid{display:grid; gap:2.5rem 2rem; grid-template-columns:repeat(2,1fr)}
+@media(min-width:900px){.slab__grid{grid-template-columns:repeat(4,1fr)}}
+.stat__n{font-family:var(--font-display); font-size:clamp(2.1rem,4.6vw,3.3rem); font-weight:700;
+  letter-spacing:-.04em; line-height:1; color:#fff}
+.stat__n em{font-style:normal; font-size:.42em; color:var(--leaf-300); font-weight:600; letter-spacing:0}
+.stat__l{font-size:.86rem; color:#a9c6b6; margin-top:.6rem; line-height:1.45; max-width:24ch}
+
+/* ── split view — Marburg ─────────────────────────────────────────────────── */
+.split{display:grid; gap:clamp(2rem,5vw,4.5rem); align-items:center}
+@media(min-width:1000px){
+  .split{grid-template-columns:3fr 2fr}
+  .split--flip{grid-template-columns:2fr 3fr}
+  .split--flip .split__media{order:-1}
+}
+/* overlapping two-photo collage — Marburg */
+.collage{position:relative; width:100%; aspect-ratio:1/1; max-width:34rem; margin-inline:auto}
+.collage .ph{position:absolute; box-shadow:var(--shadow-lg); border-radius:var(--radius-sm)}
+.collage .ph:nth-child(1){top:0; right:0; width:72%; aspect-ratio:4/3}
+.collage .ph:nth-child(2){bottom:0; left:0; width:66%; aspect-ratio:1/1}
+.solo{width:100%; max-width:34rem; margin-inline:auto; aspect-ratio:4/3; box-shadow:var(--shadow-lg)}
+
+/* ── compare slider — Marburg ─────────────────────────────────────────────── */
+.cmp{position:relative; width:100%; aspect-ratio:16/10; border-radius:var(--radius-sm);
+  overflow:hidden; box-shadow:var(--shadow-lg); cursor:ew-resize; user-select:none; touch-action:none}
+.cmp .ph{position:absolute; inset:0; border-radius:0; min-height:0; border:none}
+.cmp__after{clip-path:inset(0 0 0 var(--sp,50%))}
+.cmp__before{clip-path:inset(0 calc(100% - var(--sp,50%)) 0 0)}
+/* the after-half is clipped from the left, so park its slot label on the right */
+.cmp__after .ph__id{left:auto; right:.7rem}
+.cmp__after .ph__t{text-align:right}
+.cmp__handle{position:absolute; top:0; bottom:0; left:var(--sp,50%); width:2px; background:#fff;
+  box-shadow:0 0 0 1px rgba(0,0,0,.25); z-index:5; pointer-events:none}
+.cmp__grip{position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+  width:42px; height:42px; border-radius:50%; background:#fff; box-shadow:0 4px 14px rgb(0 0 0/.3);
+  display:grid; place-items:center; font-size:.8rem; color:var(--leaf-900); font-weight:700}
+.cmp__tag{position:absolute; bottom:.8rem; z-index:6; font-family:ui-monospace,Menlo,monospace;
+  font-size:.7rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase;
+  background:rgba(8,22,15,.78); color:#fff; padding:.3rem .6rem; border-radius:4px; pointer-events:none}
+.cmp__tag--l{left:.8rem} .cmp__tag--r{right:.8rem}
+
+/* ── control loop card ───────────────────────────────────────────────────── */
+.loop{background:var(--leaf-900); border-radius:var(--radius-sm); padding:1.1rem; box-shadow:var(--shadow-lg)}
+.loop svg{display:block; width:100%; height:auto}
+.loop__cap{color:#8fb3a0; font-size:.75rem; margin-top:.7rem; font-family:ui-monospace,Menlo,monospace}
+
+/* ── evidence cards — Marburg 4-up ───────────────────────────────────────── */
+.cards{display:grid; gap:1.35rem; grid-template-columns:1fr}
+@media(min-width:600px){.cards{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:1040px){.cards{grid-template-columns:repeat(4,1fr)}}
+.card{background:#fff; border-radius:var(--radius-sm); overflow:hidden; box-shadow:var(--shadow);
+  display:flex; flex-direction:column}
+.card .ph{border-radius:0; border:none; aspect-ratio:4/3; min-height:0}
+.card__b{padding:1.05rem 1.15rem 1.25rem; display:flex; flex-direction:column; gap:.45rem; flex:1}
+.card__h{font-family:var(--font-display); font-weight:700; font-size:1rem; line-height:1.25}
+.card__t{font-size:.82rem; color:var(--ink-2); line-height:1.5}
+.card__s{
+  margin-top:auto; font-size:.68rem; font-weight:700; letter-spacing:.08em; text-transform:uppercase;
+  font-family:ui-monospace,Menlo,monospace; padding-top:.7rem; border-top:1px solid var(--line);
+}
+.s--done{color:var(--leaf-700)} .s--part{color:var(--soil)} .s--open{color:var(--ink-3)}
+
+/* ── chat — Brno ─────────────────────────────────────────────────────────── */
+.chat{max-width:52rem; margin:0 auto; display:flex; flex-direction:column; gap:1.15rem}
+.msg{display:flex; gap:.85rem; align-items:flex-start; opacity:0; transform:translateY(14px);
+  transition:opacity .5s ease, transform .5s ease}
+.msg.in{opacity:1; transform:none}
+.msg--r{flex-direction:row-reverse}
+/* nudge the avatar down past the name label so it sits level with the bubble */
+.msg__pic{width:44px; height:44px; flex:0 0 44px; border-radius:50%; overflow:hidden;
+  margin-top:1.3rem; box-shadow:0 2px 8px rgb(0 0 0/.18)}
+.msg__pic .ph{border-radius:50%; min-height:0; aspect-ratio:1; padding:0; border-width:1px;
+  align-items:center; justify-content:center}
+.msg__pic .ph__id{position:static; font-size:.52rem; padding:.1rem .25rem}
+.msg__pic .ph__t{display:none}
+.msg__body{max-width:78%}
+.msg__who{font-size:.72rem; font-weight:700; color:var(--ink-3); margin-bottom:.3rem; padding:0 .3rem}
+.msg--r .msg__who{text-align:right}
+.msg__bub{padding:.8rem 1.05rem; border-radius:1.15rem; font-size:.95rem; line-height:1.52}
+.msg--l .msg__bub{background:#fff; color:var(--ink); border-bottom-left-radius:.35rem; box-shadow:var(--shadow)}
+.msg--r .msg__bub{background:linear-gradient(135deg,var(--leaf-700),var(--leaf-500)); color:#fff;
+  border-bottom-right-radius:.35rem}
+.msg__bub mark{background:rgba(233,169,61,.34); color:inherit; padding:0 .15em; border-radius:3px; font-weight:600}
+.msg--r .msg__bub mark{background:rgba(255,255,255,.26)}
+.msg__src{font-size:.68rem; color:var(--ink-3); margin-top:.35rem; padding:0 .3rem;
+  font-family:ui-monospace,Menlo,monospace}
+.msg--r .msg__src{text-align:right}
+
+/* ── team ────────────────────────────────────────────────────────────────── */
+.team__photo{aspect-ratio:21/9; border-radius:var(--radius-sm); box-shadow:var(--shadow-lg)}
+.faces{display:flex; flex-wrap:wrap; gap:.5rem; margin-top:1.5rem}
+.faces .ph{width:52px; flex:0 0 52px}
+
+/* ── limitations ─────────────────────────────────────────────────────────── */
+.limits{border-top:1px solid rgba(255,255,255,.14); margin-top:clamp(2.5rem,6vw,4rem); padding-top:clamp(2rem,5vw,3rem)}
+.limits__grid{display:grid; gap:1.5rem 2.5rem; margin-top:1.75rem}
+@media(min-width:820px){.limits__grid{grid-template-columns:repeat(2,1fr)}}
+.lim{display:flex; gap:.85rem}
+.lim__n{font-family:ui-monospace,Menlo,monospace; font-size:.72rem; font-weight:700;
+  color:var(--amber); padding-top:.28rem; flex:0 0 auto}
+.lim__t{font-size:.92rem; line-height:1.55; color:#b9cfc4}
+.lim__t b{color:#fff}
+
+/* ── video ───────────────────────────────────────────────────────────────── */
+.video{max-width:64rem; margin:0 auto; aspect-ratio:16/9; border-radius:var(--radius-sm);
+  box-shadow:var(--shadow-lg)}
+
+/* ── footer ──────────────────────────────────────────────────────────────── */
+.foot{background:var(--leaf-900); color:#eaf3ee; padding:clamp(3rem,7vw,5rem) 0 3rem;
+  border-top:1px solid rgba(255,255,255,.1)}
+.foot__cta{display:flex; align-items:center; justify-content:space-between; gap:1.5rem; flex-wrap:wrap;
+  background:linear-gradient(120deg,var(--leaf-700),var(--leaf-500)); border-radius:var(--radius-sm);
+  padding:1.5rem 1.75rem; margin-bottom:3rem}
+.foot__cta strong{display:block; font-family:var(--font-display); font-size:1.2rem; color:#fff}
+.foot__cta span{display:block; font-size:.88rem; color:rgba(255,255,255,.82); margin-top:.25rem}
+.foot__cta i{font-style:normal; font-size:1.4rem; color:#fff}
+.foot__six{display:grid; gap:1px; background:rgba(255,255,255,.13); border-radius:var(--radius-sm);
+  overflow:hidden; grid-template-columns:1fr}
+@media(min-width:620px){.foot__six{grid-template-columns:repeat(3,1fr)}}
+@media(min-width:1040px){.foot__six{grid-template-columns:repeat(6,1fr)}}
+.foot__six a{background:var(--leaf-900); padding:1.15rem 1.1rem; display:block; transition:background .16s}
+.foot__six a:hover{background:var(--leaf-800)}
+.foot__six .n{display:block; font-family:ui-monospace,Menlo,monospace; font-size:.66rem; color:var(--leaf-300)}
+.foot__six .l{display:block; font-family:var(--font-display); font-weight:700; font-size:.98rem; color:#fff; margin-top:.25rem}
+.foot__rest{display:flex; flex-wrap:wrap; gap:.5rem 1.6rem; margin-top:1.6rem; font-size:.85rem}
+.foot__rest a{color:#a9c6b6}
+.foot__rest a:hover{color:#fff}
+.foot__legal{margin-top:2.5rem; font-size:.78rem; color:#7f9b8b; line-height:1.6}
+
+@media(prefers-reduced-motion:reduce){
+  *{animation:none!important; transition-duration:.01ms!important}
+  .msg{opacity:1; transform:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ nav ══════════════════════════════════════════════════════════════ -->
+<nav class="nav" id="nav">
+  <div class="wrap">
+    <a class="nav__mark" href="#top">
+      <svg class="nav__leaf" viewBox="0 0 24 24" aria-hidden="true"><path d="M6.05 8.05c-2.73 2.73-2.73 7.15-.02 9.88 1.47-3.4 4.09-6.24 7.36-7.93-2.77 2.34-4.71 5.61-5.59 9.28 2.6 1.23 5.8.78 7.95-1.37C19.43 14.47 20 4 20 4S9.53 4.57 6.05 8.05z"/></svg>
+      ReLeaf
+    </a>
+    <div class="nav__links">
+      <a href="#dial">Project</a><a href="#device">Hardware</a>
+      <a href="#evidence">Results</a><a href="#voices">Human Practices</a><a href="#team">Team</a>
+    </div>
+    <a class="nav__cta" href="#judges">5-minute path →</a>
+  </div>
+</nav>
+
+<!-- ══ HERO ═════════════════════════════════════════════════════════════ -->
+<header class="hero" id="top">
+  <div class="hero__frame">
+
+    <!-- P-01 · the one photograph the whole page rests on -->
+    <div class="ph ph--dark hero__bg" data-shot="P-01">
+      <span class="ph__id">P-01</span>
+      <span class="ph__t">HERO. The device half-buried in soil at dusk, green LED visibly glowing
+        through the chamber, solar panel catching the last light. Shot low, close, landscape.</span>
+    </div>
+    <div class="hero__scrim"></div>
+
+    <div class="hero__inner">
+      <div class="hero__grid">
+        <div>
+          <span class="hero__eyebrow">GEMS Taiwan · Biomanufacturing Village</span>
+
+          <!-- headline as a sentence with inline hover-reveals — Brno's device -->
+          <h1 class="hero__h1">
+            <span class="w">Soil</span>
+            <span class="w">stress<span class="tip" tabindex="0" style="border-color:var(--soil)"
+              data-rv="0"></span></span>
+            <span class="w">in.</span>
+            <span class="w">Protective</span>
+            <span class="w">enzyme<span class="tip" tabindex="0" style="border-color:var(--signal)"
+              data-rv="1"></span></span>
+            <span class="w">out.</span>
+          </h1>
+
+          <p class="hero__sub">
+            An analog biomanufacturing device. The amount of protein it makes tracks the
+            severity of the stress it reads — <b>dose-proportional, not on/off<span class="tip"
+              tabindex="0" style="border-color:var(--amber);top:-.2em" data-rv="2"></span></b>
+          </p>
+
+          <p class="hero__meta">B. subtilis · CcaSR optogenetics · 0.2 µm hollow-fibre TFF</p>
+        </div>
+
+        <!-- stakeholder voice, on the hero — Brno -->
+        <aside class="quote">
+          <p class="quote__t">Salt is arriving before the season does</p>
+          <p class="quote__q">
+            &ldquo;<span data-fill="quote-farm">Verbatim quote needed — one or two sentences, in
+            her words, about what salinity is doing to the beds.</span>&rdquo;
+          </p>
+          <div class="quote__who">
+            <div class="quote__pic">
+              <div class="ph ph--round" data-shot="P-02"><span class="ph__id">P-02</span></div>
+            </div>
+            <div>
+              <div class="quote__n">陳惠雯</div>
+              <div class="quote__r">dew-mulch farmer, Taiwan</div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <span class="scrollcue">Scroll</span>
+  </div>
+</header>
+
+<!-- ══ big-number slab — Marburg ═══════════════════════════════════════ -->
+<section class="slab">
+  <div class="wrap">
+    <div class="slab__grid">
+      <div class="stat">
+        <div class="stat__n">3<em> weeks</em></div>
+        <p class="stat__l">of uninterrupted OD600 logging inside the reactor, by an instrument we built</p>
+      </div>
+      <div class="stat">
+        <div class="stat__n">15<em> DBTL</em></div>
+        <p class="stat__l">design–build–test–learn cycles across the bioreactor, photometer and LED array</p>
+      </div>
+      <div class="stat">
+        <div class="stat__n">3<em> devices</em></div>
+        <p class="stat__l">built from scratch: perfusion bioreactor, in-line photometer, dual-wavelength array</p>
+      </div>
+      <div class="stat">
+        <div class="stat__n">1<em> pump death</em></div>
+        <p class="stat__l">caught by our own photometer before anyone noticed by eye</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 1 · THE DIAL ═════════════════════════════════════════════════════ -->
+<section class="slide" id="dial">
+  <div class="wrap">
+    <div class="split">
+      <div>
+        <p class="kicker">The claim</p>
+        <h2 class="h-big">Most engineered cells are switches.<br>Ours is a dial.</h2>
+        <p class="body" style="margin-top:1.35rem">
+          A microcontroller reads soil salinity and temperature, and drives a 520 nm green LED at
+          an intensity <b>proportional</b> to what it read. Inside the chamber, <i>B. subtilis</i>
+          carrying the CcaSR optogenetic system makes ACC deaminase in proportion to that light.
+          The 0.2 µm membrane keeps the bacteria in; only the permeate reaches the roots.
+        </p>
+        <p class="body" style="margin-top:1rem">
+          Turn the stress up and the dose rises smoothly. Turn it down and the dose tapers.
+          <b>Nothing in the loop is a threshold.</b>
+        </p>
+        <a class="out" href="#">See how we modelled and measured it <span aria-hidden="true">→</span></a>
+      </div>
+
+      <!-- the control loop, kept from v0.1 but demoted from hero to explainer -->
+      <div class="split__media">
+        <div class="loop">
+          <svg viewBox="0 0 560 300" role="img"
+               aria-label="Animated control loop: a soil salinity trace drives a 520 nm green LED intensity, which drives an ACC deaminase expression curve that lags behind it, which drives permeate leaving the filtration module.">
+            <defs>
+              <linearGradient id="gG" x1="0" y1="1" x2="0" y2="0">
+                <stop offset="0" stop-color="#1e7a3c"/><stop offset="1" stop-color="#5cff8f"/>
+              </linearGradient>
+              <linearGradient id="gT" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0" stop-color="#c87f3a" stop-opacity="0"/>
+                <stop offset=".4" stop-color="#d9a95c"/><stop offset="1" stop-color="#f0cf94"/>
+              </linearGradient>
+              <clipPath id="cT"><rect x="26" y="54" width="212" height="120"/></clipPath>
+              <clipPath id="cE"><rect x="322" y="54" width="212" height="120"/></clipPath>
+            </defs>
+
+            <g font-size="9" font-weight="700" letter-spacing="1.3" fill="#6f9884"
+               font-family="ui-monospace,Menlo,monospace">
+              <text x="26"  y="40">SOIL PROBE</text>
+              <text x="258" y="40">520 nm</text>
+              <text x="322" y="40">ACCD</text>
+            </g>
+
+            <!-- soil trace -->
+            <rect x="26" y="54" width="212" height="120" fill="#0d2e1f" stroke="#2c5c45" rx="3"/>
+            <g stroke="#1c4634" stroke-width=".7"><path d="M26 94h212"/><path d="M26 134h212"/></g>
+            <g clip-path="url(#cT)">
+              <polyline id="trEC" fill="none" stroke="url(#gT)" stroke-width="2.1" points=""/>
+              <polyline id="trTemp" fill="none" stroke="#7fb0d8" stroke-width="1.2"
+                        stroke-dasharray="3 3" opacity=".75" points=""/>
+            </g>
+            <line x1="238" y1="54" x2="238" y2="174" stroke="#6fd34a" stroke-width="1" opacity=".55"/>
+            <text x="34" y="70" font-size="8.5" fill="#d9a95c" font-family="ui-monospace,Menlo,monospace">
+              EC <tspan id="roEC" font-size="11" font-weight="700">—</tspan> dS/m
+            </text>
+            <text x="34" y="168" font-size="8.5" fill="#7fb0d8" font-family="ui-monospace,Menlo,monospace">
+              T <tspan id="roT" font-size="11" font-weight="700">—</tspan> °C
+            </text>
+
+            <!-- LED bar -->
+            <rect x="258" y="54" width="46" height="120" fill="#0d2e1f" stroke="#2c5c45" rx="3"/>
+            <rect id="ledBar" x="265" y="167" width="32" height="0" fill="url(#gG)" rx="2"/>
+            <text x="258" y="190" font-size="8.5" fill="#6fd34a" font-family="ui-monospace,Menlo,monospace">
+              <tspan id="roPPFD" font-size="11" font-weight="700">—</tspan> µmol
+            </text>
+
+            <!-- expression -->
+            <rect x="322" y="54" width="212" height="120" fill="#0d2e1f" stroke="#2c5c45" rx="3"/>
+            <g stroke="#1c4634" stroke-width=".7"><path d="M322 94h212"/><path d="M322 134h212"/></g>
+            <g clip-path="url(#cE)">
+              <polygon id="trExprFill" fill="#6fd34a" opacity=".15" points=""/>
+              <polyline id="trExpr" fill="none" stroke="#6fd34a" stroke-width="2.3" points=""/>
+            </g>
+            <text x="330" y="70" font-size="8.5" fill="#6fd34a" font-family="ui-monospace,Menlo,monospace">
+              <tspan id="roExpr" font-size="11" font-weight="700">—</tspan> % of max
+            </text>
+
+            <!-- connectors -->
+            <g stroke="#2c5c45" stroke-width="1.4" fill="none">
+              <path d="M240 114h12"/><path d="M306 114h12"/>
+            </g>
+            <g fill="#4f9c6f"><path d="M252 114l-7-3.5v7z"/><path d="M318 114l-7-3.5v7z"/></g>
+
+            <!-- permeate out -->
+            <rect x="322" y="196" width="212" height="26" rx="7" fill="#123527" stroke="#2c5c45"/>
+            <g stroke="#4f9c6f" stroke-width=".9" opacity=".6">
+              <path d="M330 204h196"/><path d="M330 213h196"/>
+            </g>
+            <g id="drops" fill="#8fe3ff">
+              <circle class="drop" cx="428" cy="226" r="3"/>
+              <circle class="drop" cx="428" cy="226" r="3"/>
+              <circle class="drop" cx="428" cy="226" r="3"/>
+            </g>
+            <path d="M322 262h212" stroke="#c87f3a" stroke-width="1.8" opacity=".5"/>
+            <text x="322" y="282" font-size="8.5" fill="#6f9884" font-family="ui-monospace,Menlo,monospace">
+              0.2 µm · cells stay in · permeate to the roots
+            </text>
+            <path d="M26 200v56a5 5 0 005 5h280" stroke="#2c5c45" stroke-width="1.1" fill="none"
+                  stroke-dasharray="4 4" opacity=".6"/>
+            <text x="26" y="196" font-size="8" fill="#6f9884"
+                  font-family="ui-monospace,Menlo,monospace">the dose changes the soil</text>
+          </svg>
+          <p class="loop__cap">Live loop · watch the green bar modulate, and the enzyme curve lag it</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 2 · COMPARE SLIDER — Marburg ═════════════════════════════════════ -->
+<section class="slide slide--tint">
+  <div class="wrap">
+    <div style="max-width:46rem; margin:0 auto 2.5rem; text-align:center">
+      <p class="kicker" style="justify-content:center">Dark, then 520 nm</p>
+      <h2 class="h-mid">The same culture, two minutes apart</h2>
+      <p class="body" style="margin:1rem auto 0">
+        Drag the handle. Left is the chamber dark; right is the array at full duty. Everything
+        between those two states is a dose we can ask for.
+      </p>
+    </div>
+
+    <div class="cmp" id="cmp">
+      <div class="ph ph--dark cmp__after" data-shot="P-04">
+        <span class="ph__id">P-04</span>
+        <span class="ph__t">Same frame, array ON: chamber flooded green.</span>
+      </div>
+      <div class="ph ph--dark cmp__before" data-shot="P-03">
+        <span class="ph__id">P-03</span>
+        <span class="ph__t">Locked-off tripod frame, array OFF: chamber dark.</span>
+      </div>
+      <span class="cmp__tag cmp__tag--l">Dark</span>
+      <span class="cmp__tag cmp__tag--r">520 nm · full duty</span>
+      <div class="cmp__handle"><span class="cmp__grip">↔</span></div>
+    </div>
+    <p class="body" style="margin:1.25rem auto 0; text-align:center; font-size:.86rem">
+      Shoot both on a locked-off tripod so only the light changes between frames.
+    </p>
+  </div>
+</section>
+
+<!-- ══ 3 · THE DEVICE ═══════════════════════════════════════════════════ -->
+<section class="slide" id="device">
+  <div class="wrap">
+    <div class="split split--flip">
+      <div class="split__media">
+        <div class="collage">
+          <div class="ph" data-shot="P-05"><span class="ph__id">P-05</span>
+            <span class="ph__t">Whole device on the bench, wide, cables and all.</span></div>
+          <div class="ph" data-shot="P-06"><span class="ph__id">P-06</span>
+            <span class="ph__t">Hand holding the TFF module — gives instant scale.</span></div>
+        </div>
+      </div>
+      <div>
+        <p class="kicker">The machine</p>
+        <h2 class="h-big">We built three instruments to make one device honest</h2>
+        <p class="body" style="margin-top:1.35rem">
+          A perfusion bioreactor around a 0.2 µm hollow-fibre module. An in-line photometer that
+          reads cell density without pulling a sample. A dual-wavelength LED array that can hold
+          a set intensity rather than blink. None of them were bought.
+        </p>
+        <p class="body" style="margin-top:1rem">
+          <b>Real part numbers, because anyone can write &ldquo;peristaltic pump&rdquo;:</b>
+          Biophsep&trade; mPES <span class="mono">HF-E-MI-M020-10-60-P</span>, 0.2 µm, 150 cm², 8
+          fibres, 1.0 mm lumen · Arduino Uno R4 with a <span class="mono">14-bit</span> ADC ·
+          <span class="mono">IRLZ44N</span> logic-level MOSFET · <span class="mono">BP8G-AGA</span>
+          0–1 MPa pressure transducer.
+        </p>
+        <a class="out" href="#">Every spec, every revision, every failure <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+
+    <!-- unglamorous proof strip -->
+    <div class="cards" style="margin-top:clamp(2.5rem,6vw,4rem)">
+      <div class="card">
+        <div class="ph" data-shot="P-07"><span class="ph__id">P-07</span>
+          <span class="ph__t">Breadboard with a multimeter probe on it.</span></div>
+        <div class="card__b">
+          <h3 class="card__h">We measured it</h3>
+          <p class="card__t">Probe on the rail, meter in frame. This photo does more work than any diagram.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="ph" data-shot="P-08"><span class="ph__id">P-08</span>
+          <span class="ph__t">Wiring loom mid-build, messy, unstyled.</span></div>
+        <div class="card__b">
+          <h3 class="card__h">We wired it</h3>
+          <p class="card__t">Unglamorous is better than polished. It reads as built rather than rendered.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="ph" data-shot="P-09"><span class="ph__id">P-09</span>
+          <span class="ph__t">3D printer mid-print on the pinch-valve body.</span></div>
+        <div class="card__b">
+          <h3 class="card__h">We printed it</h3>
+          <p class="card__t">Stepper pinch valve, then a servo one that stays shut when power dies.</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="ph" data-shot="P-10"><span class="ph__id">P-10</span>
+          <span class="ph__t">Device outdoors, in soil, solar panel up.</span></div>
+        <div class="card__b">
+          <h3 class="card__h">We put it in dirt</h3>
+          <p class="card__t">A real object in a real place beats any render, and judges know it.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 4 · EVIDENCE ═════════════════════════════════════════════════════ -->
+<section class="slide slide--tint" id="evidence">
+  <div class="wrap">
+    <div style="max-width:48rem; margin:0 auto 2.75rem; text-align:center">
+      <p class="kicker">Where we actually are</p>
+      <h2 class="h-big">Five things have to be true. Two of them are.</h2>
+      <p class="body" style="margin:1.15rem auto 0">
+        Each step has to hold for the next one to mean anything. This is the state on
+        <span class="mono">13 August 2026</span> — and we would rather show you the gaps than
+        have you find them at the poster.
+      </p>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <div class="ph" data-shot="P-11"><span class="ph__id">P-11</span>
+          <span class="ph__t">Plate reader / cytometer screen with the reporter run on it.</span></div>
+        <div class="card__b">
+          <h3 class="card__h">Light controls expression</h3>
+          <p class="card__t">CcaS, CcaR and the P<sub>cpcG2</sub> output are all sequence-verified.
+            The dose–response curve is being run now.</p>
+          <p class="card__s s--part">Built · characterising</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="ph" data-shot="P-12"><span class="ph__id">P-12</span>
+          <span class="ph__t">Colorimetric assay tubes in a rack, gradient visible.</span></div>
+        <div class="card__b">
+          <h3 class="card__h">Light controls the enzyme</h3>
+          <p class="card__t">Our light-gated ACC deaminase construct has been positive since
+            28 July. The activity assay against a constitutive control is next.</p>
+          <p class="card__s s--part">Built · assay pending</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="ph" data-shot="P-13"><span class="ph__id">P-13</span>
+          <span class="ph__t">Permeate collection vessel + a blank agar plate beside it.</span></div>
+        <div class="card__b">
+          <h3 class="card__h">Enzyme out, cells in</h3>
+          <p class="card__t">Blocked upstream: the cells did not grow inside the fibre lumen on
+            10 June. We are still chasing why.</p>
+          <p class="card__s s--open">Blocked · see Results</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="ph" data-shot="P-14"><span class="ph__id">P-14</span>
+          <span class="ph__t">Seedling trays under salt stress, ruler laid alongside.</span></div>
+        <div class="card__b">
+          <h3 class="card__h">It helps a plant</h3>
+          <p class="card__t">Root elongation under NaCl, permeate against mock. Waiting on the
+            step above.</p>
+          <p class="card__s s--open">Not reached</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- the one rung that IS ours, given its own band -->
+    <div class="split" style="margin-top:clamp(3rem,7vw,5rem)">
+      <div>
+        <p class="kicker">The part that worked</p>
+        <h2 class="h-mid">Our photometer noticed the pump die</h2>
+        <p class="body" style="margin-top:1.15rem">
+          Stress&nbsp;→&nbsp;light has been running since 20 June. Transmembrane pressure has been
+          instrumented since 12 July. Then the in-line photometer logged for three straight weeks
+          and caught a sharp terminal drop that turned out to be the cross-flow pump failing —
+          <b>an instrument we built detecting a fault in the machine it was watching.</b>
+        </p>
+        <p class="body" style="margin-top:1rem">
+          The sensing half of the loop is closed. The biology half is not, and we say so.
+        </p>
+        <a class="out" href="#">The three-week log, annotated <span aria-hidden="true">→</span></a>
+      </div>
+      <div class="split__media">
+        <div class="ph solo" data-shot="P-15"><span class="ph__id">P-15</span>
+          <span class="ph__t">SCREENSHOT, not a photo: the three-week OD600 trace with the
+            pump-death event marked. Export at 2× from your plotting tool.</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 5 · WHAT WE KILLED ═══════════════════════════════════════════════ -->
+<section class="slide">
+  <div class="wrap">
+    <div style="max-width:46rem; margin:0 auto 2.5rem">
+      <p class="kicker">Engineering judgement</p>
+      <h2 class="h-big">Four payloads went in. One came out.</h2>
+      <p class="body" style="margin-top:1.15rem">
+        Most wikis show you what worked. The reasoning behind what we dropped is the part we are
+        actually proud of.
+      </p>
+    </div>
+    <div class="cards">
+      <div class="card" style="outline:2.5px solid var(--leaf-500); outline-offset:-2.5px">
+        <div class="ph" data-shot="P-16"><span class="ph__id">P-16</span>
+          <span class="ph__t">Gel photo of the verified ACCD construct.</span></div>
+        <div class="card__b">
+          <h3 class="card__h">ACC deaminase</h3>
+          <p class="card__t">≈36 kDa, passes the membrane, lowers ethylene stress signalling at
+            the root. Sequence-verified. <b>This is the payload.</b></p>
+          <p class="card__s s--done">Advanced</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="ph" data-shot="P-17"><span class="ph__id">P-17</span>
+          <span class="ph__t">Failed-transformation plate, or the blank gel lane.</span></div>
+        <div class="card__b">
+          <h3 class="card__h">LEA14</h3>
+          <p class="card__t">Failed in <b>both</b> the light-driven and constitutive versions. The
+            control failing too is what told us the fault was the payload, not the promoter.</p>
+          <p class="card__s s--open">Killed</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="ph" data-shot="P-18"><span class="ph__id">P-18</span>
+          <span class="ph__t">SCREENSHOT: 5GR8 structure, Asn23–Arg487 contact highlighted.</span></div>
+        <div class="card__b">
+          <h3 class="card__h">BoPep4</h3>
+          <p class="card__t">All seven constructs carry a His tag welded to the residue that makes
+            the receptor contact. Good secretion reporters, useless for bioactivity.</p>
+          <p class="card__s s--open">Deprioritised</p>
+        </div>
+      </div>
+      <div class="card">
+        <div class="ph" data-shot="P-19"><span class="ph__id">P-19</span>
+          <span class="ph__t">Whiteboard with the go / no-go decision written on it.</span></div>
+        <div class="card__b">
+          <h3 class="card__h">GanA-Gala</h3>
+          <p class="card__t">Same failure signature as LEA14. Retired at the same meeting rather
+            than re-tuned for another month.</p>
+          <p class="card__s s--open">Killed</p>
+        </div>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:2.25rem">
+      <a class="out" href="#">Every design cycle, including the fluorometer we never built
+        <span aria-hidden="true">→</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 6 · VOICES — Brno's chat ═════════════════════════════════════════ -->
+<section class="slide slide--tint" id="voices">
+  <div class="wrap">
+    <div style="max-width:46rem; margin:0 auto 3rem; text-align:center">
+      <p class="kicker" style="justify-content:center">Human practices</p>
+      <h2 class="h-big">The people who told us we were wrong</h2>
+      <p class="body" style="margin:1.15rem auto 0">
+        Photographs of meetings prove attendance. Here is what was actually said, and what we
+        changed because of it.
+      </p>
+    </div>
+
+    <div class="chat" id="chat">
+
+      <div class="msg msg--r">
+        <div class="msg__pic"><div class="ph ph--round" data-shot="P-20"><span class="ph__id">P-20</span></div></div>
+        <div class="msg__body">
+          <div class="msg__who">ReLeaf</div>
+          <div class="msg__bub">Coastal farmland in Taiwan is salting up. We want to put a machine
+            in the soil that makes a protective enzyme on demand.</div>
+        </div>
+      </div>
+
+      <div class="msg msg--l">
+        <div class="msg__pic"><div class="ph ph--round" data-shot="P-02"><span class="ph__id">P-02</span></div></div>
+        <div class="msg__body">
+          <div class="msg__who">陳惠雯 · dew-mulch farmer</div>
+          <div class="msg__bub"><span data-fill="chat-farm">Her actual objection goes here — the
+            soil-moisture-clock point, in her words. <mark>Needs the real quote.</mark></span></div>
+          <div class="msg__src">visit · date needed</div>
+        </div>
+      </div>
+
+      <div class="msg msg--r">
+        <div class="msg__pic"><div class="ph ph--round" data-shot="P-20"><span class="ph__id">P-20</span></div></div>
+        <div class="msg__body">
+          <div class="msg__who">ReLeaf</div>
+          <div class="msg__bub">So we stopped dosing on a timer. <mark>Dosing now follows the
+            soil's own moisture clock</mark>, not ours.</div>
+        </div>
+      </div>
+
+      <div class="msg msg--l">
+        <div class="msg__pic"><div class="ph ph--round" data-shot="P-21"><span class="ph__id">P-21</span></div></div>
+        <div class="msg__body">
+          <div class="msg__who">Dr. Pak K. Yuet · Dean of Research</div>
+          <div class="msg__bub">&ldquo;Bioreactor design is a huge topic, so there is probably
+            <mark>no need to come up with something revolutionary</mark>… if we can focus on how to
+            adapt the common, existing designs to our specific needs — light signal transmission,
+            protectant release — that itself would be an impressive achievement.&rdquo;</div>
+          <div class="msg__src">18 Apr 2026</div>
+        </div>
+      </div>
+
+      <div class="msg msg--r">
+        <div class="msg__pic"><div class="ph ph--round" data-shot="P-20"><span class="ph__id">P-20</span></div></div>
+        <div class="msg__body">
+          <div class="msg__who">ReLeaf</div>
+          <div class="msg__bub">He recommended a packed-bed reactor. <mark>We did not take
+            it</mark> — we took hollow-fibre, because it hands you containment and
+            protectant separation in the same part. Overruling your own expert means you own
+            the justification.</div>
+        </div>
+      </div>
+
+      <div class="msg msg--l">
+        <div class="msg__pic"><div class="ph ph--round" data-shot="P-21"><span class="ph__id">P-21</span></div></div>
+        <div class="msg__body">
+          <div class="msg__who">Dr. Pak K. Yuet</div>
+          <div class="msg__bub">Scale on Reynolds number and the tube gets wider, velocity drops,
+            wall shear falls — and fouling gets worse. You cannot hold every group at once.
+            &ldquo;<mark>This is in fact a challenging engineering problem, and that's what
+            research is about.</mark>&rdquo;</div>
+          <div class="msg__src">16 Jul 2026</div>
+        </div>
+      </div>
+
+      <div class="msg msg--r">
+        <div class="msg__pic"><div class="ph ph--round" data-shot="P-20"><span class="ph__id">P-20</span></div></div>
+        <div class="msg__body">
+          <div class="msg__who">ReLeaf</div>
+          <div class="msg__bub">We built the invariant explorer that afternoon. We hold wall shear
+            and flux, and we <mark>state out loud which group we sacrifice</mark>: whole-system
+            geometric similarity.</div>
+        </div>
+      </div>
+
+      <div class="msg msg--l">
+        <div class="msg__pic"><div class="ph ph--round" data-shot="P-22"><span class="ph__id">P-22</span></div></div>
+        <div class="msg__body">
+          <div class="msg__who">Our instructors</div>
+          <div class="msg__bub">&ldquo;We <mark>NEED a 2nd safety net</mark>… even with B. sub going
+            through the hollow fibre membrane, we still need something to catch B. sub.&rdquo;</div>
+          <div class="msg__src">16 Jul 2026</div>
+        </div>
+      </div>
+
+      <div class="msg msg--r">
+        <div class="msg__pic"><div class="ph ph--round" data-shot="P-20"><span class="ph__id">P-20</span></div></div>
+        <div class="msg__body">
+          <div class="msg__who">ReLeaf</div>
+          <div class="msg__bub">They are right, and <mark>we have not solved it yet.</mark> It is
+            the first thing on our open-problems list, not a footnote.</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-top:2.75rem">
+      <a class="out" href="#">Full transcripts, and the two industry visits that changed our
+        delivery spec <span aria-hidden="true">→</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 7 · TEAM ═════════════════════════════════════════════════════════ -->
+<section class="slide" id="team">
+  <div class="wrap">
+    <div class="ph team__photo" data-shot="P-23"><span class="ph__id">P-23</span>
+      <span class="ph__t">One wide, well-lit group photograph — in the lab or at the forum, whole
+        team, faces readable. Not a Canva collage.</span></div>
+
+    <div class="split" style="margin-top:2.5rem">
+      <div>
+        <h2 class="h-big"><span data-fill="team-n">47</span> of us,
+          <span data-fill="school-n">7</span> schools, one island.</h2>
+        <p class="body" style="margin-top:1.15rem">
+          Shared bench time on weekends, and three instruments that travelled between campuses in
+          the boot of a car.
+        </p>
+        <a class="out" href="#">Who did what <span aria-hidden="true">→</span></a>
+      </div>
+      <div class="split__media">
+        <div class="faces">
+          <div class="ph ph--round" data-shot="P-24"><span class="ph__id">P-24</span></div>
+          <div class="ph ph--round" data-shot="P-24"><span class="ph__id">·</span></div>
+          <div class="ph ph--round" data-shot="P-24"><span class="ph__id">·</span></div>
+          <div class="ph ph--round" data-shot="P-24"><span class="ph__id">·</span></div>
+          <div class="ph ph--round" data-shot="P-24"><span class="ph__id">·</span></div>
+          <div class="ph ph--round" data-shot="P-24"><span class="ph__id">·</span></div>
+          <div class="ph ph--round" data-shot="P-24"><span class="ph__id">·</span></div>
+          <div class="ph ph--round" data-shot="P-24"><span class="ph__id">·</span></div>
+        </div>
+        <p class="body" style="font-size:.82rem;margin-top:.85rem">
+          Portraits already exist in the team page repo — reuse them.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 8 · NEXT + LIMITATIONS ═══════════════════════════════════════════ -->
+<section class="slide slide--dark" id="next">
+  <div class="wrap">
+    <div class="split">
+      <div>
+        <p class="kicker">What would have to be true</p>
+        <h2 class="h-big">One device, then one row</h2>
+        <p class="body" style="margin-top:1.35rem">
+          Scaling means <b>replicating the 8-fibre module</b> at constant wall shear and constant
+          flux — the same linear scale-up rule that carried a published process 400-fold without a
+          pilot stage. We keep the physics at the membrane identical and let only the area grow.
+        </p>
+        <p class="body" style="margin-top:1rem">
+          Three gates stand between us and a field, in this order: a second containment layer, a
+          GMO release pathway, and a cost per device we have not yet totalled.
+        </p>
+        <a class="out" href="#">Our regulatory and containment work <span aria-hidden="true">→</span></a>
+      </div>
+      <div class="split__media">
+        <div class="ph ph--dark solo" data-shot="P-25"><span class="ph__id">P-25</span>
+          <span class="ph__t">DIAGRAM, made by you: one device → one row → one field, with the
+            three gates labelled. Keep it flat and simple.</span></div>
+      </div>
+    </div>
+
+    <!-- limitations: honest, but composed -->
+    <div class="limits">
+      <p class="kicker">Open problems, as of 13 August 2026</p>
+      <h3 class="h-mid" style="color:#fff">What is not true yet</h3>
+      <div class="limits__grid">
+        <div class="lim"><span class="lim__n">01</span><p class="lim__t">
+          <b>We have not measured our own transfer function.</b> The Hill parameters we designed
+          against are published values from a different organism at a different wavelength.</p></div>
+        <div class="lim"><span class="lim__n">02</span><p class="lim__t">
+          <b>Cells do not grow inside the fibre lumen.</b> Oxygen, feed, shear and temperature are
+          all still on the table. We have candidates and no answer.</p></div>
+        <div class="lim"><span class="lim__n">03</span><p class="lim__t">
+          <b>The second containment layer does not exist.</b> The membrane retains cells; that is
+          one net. We were told in July to build a second and we have not.</p></div>
+        <div class="lim"><span class="lim__n">04</span><p class="lim__t">
+          <b>Delivery stops at a reservoir.</b> The permeate pump is unspecified and the
+          root-zone interface is deferred.</p></div>
+        <div class="lim"><span class="lim__n">05</span><p class="lim__t">
+          <b>Latency is hours, not minutes.</b> The optogenetic switch takes about 105 minutes to
+          half-maximum, so this device is for creeping salinity, not for a shock.</p></div>
+        <div class="lim"><span class="lim__n">06</span><p class="lim__t">
+          <b>Our photometer has one calibration point.</b> No linearity curve, no limit of
+          detection, no repeatability figure yet.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ 9 · VIDEO ════════════════════════════════════════════════════════ -->
+<section class="slide">
+  <div class="wrap">
+    <div style="max-width:44rem;margin:0 auto 2.25rem;text-align:center">
+      <p class="kicker" style="justify-content:center">Four minutes</p>
+      <h2 class="h-mid">Watch the thing run</h2>
+    </div>
+    <div class="ph video" data-shot="P-26"><span class="ph__id">P-26</span>
+      <span class="ph__t">Project video — embed from video.igem.org once uploaded. Until then,
+        a still frame with a play button works.</span></div>
+  </div>
+</section>
+
+<!-- ══ FOOTER ═══════════════════════════════════════════════════════════ -->
+<footer class="foot" id="judges">
+  <div class="wrap">
+    <a class="foot__cta" href="#">
+      <span>
+        <strong>For judges: the 5-minute path</strong>
+        <span>The fastest route through our best evidence, in order, with the weak spots marked.</span>
+      </span>
+      <i aria-hidden="true">→</i>
+    </a>
+
+    <nav class="foot__six">
+      <a href="#"><span class="n">01</span><span class="l">Measurement</span></a>
+      <a href="#"><span class="n">02</span><span class="l">Hardware</span></a>
+      <a href="#"><span class="n">03</span><span class="l">Engineering</span></a>
+      <a href="#"><span class="n">04</span><span class="l">Human Practices</span></a>
+      <a href="#"><span class="n">05</span><span class="l">Parts</span></a>
+      <a href="#"><span class="n">06</span><span class="l">Safety</span></a>
+    </nav>
+
+    <div class="foot__rest">
+      <a href="#">Team</a><a href="#">Attributions</a><a href="#">Model</a>
+      <a href="#">Notebook</a><a href="#">Contact</a><a href="#">Data archive</a>
+    </div>
+
+    <p class="foot__legal">
+      ReLeaf · GEMS Taiwan · iGEM 2026 Biomanufacturing Village.<br>
+      Prototype homepage — dashed boxes are photo slots, see PHOTO_SHOTLIST.md.
+    </p>
+  </div>
+</footer>
+
+<!-- hover-reveal card, populated by JS -->
+<div class="reveal" id="reveal" aria-hidden="true">
+  <div class="ph" data-shot=""><span class="ph__id" id="rvId"></span><span class="ph__t" id="rvShot"></span></div>
+  <h4 class="reveal__h" id="rvH"></h4>
+  <p class="reveal__b" id="rvB"></p>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════════════
+   1 · NAV — solid background once past the hero
+   ═══════════════════════════════════════════════════════════════════════════ */
+(function () {
+  var nav = document.getElementById('nav'), hero = document.querySelector('.hero__frame');
+  if (!nav || !hero) return;
+  new IntersectionObserver(function (e) {
+    nav.classList.toggle('is-stuck', !e[0].isIntersecting);
+  }, { rootMargin: '-70px 0px 0px 0px' }).observe(hero);
+})();
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   2 · HERO HOVER-REVEALS  [Brno]
+   Progressive disclosure: the headline stays a sentence, the numbers hide
+   behind the dots. Replace `shot` with a real <img> at ship time.
+   ═══════════════════════════════════════════════════════════════════════════ */
+(function () {
+  var DATA = [
+    { h: 'Salinity is the stress we chose',
+      b: 'Coastal and irrigated farmland salts up slowly, over seasons. That is a stress a slow device can actually meet — unlike a heat shock.',
+      id: 'P-27', shot: 'Salt-crusted soil in a real bed, close and low.' },
+    { h: 'ACC deaminase',
+      b: 'A ~36 kDa enzyme that intercepts the plant\'s ethylene stress signal at the root. Small enough to pass our 0.2 µm membrane while the bacteria stay behind.',
+      id: 'P-28', shot: 'Culture flask held to the light, or the enzyme assay colour gradient.' },
+    { h: 'Proportional, not binary',
+      b: 'The green LED is driven by PWM, so it holds an intensity rather than blinking. Expression follows that intensity, so the dose follows the stress.',
+      id: 'P-29', shot: 'Close macro of the LED array at partial duty, individual emitters visible.' }
+  ];
+  var rv = document.getElementById('reveal');
+  var els = { id: document.getElementById('rvId'), shot: document.getElementById('rvShot'),
+              h: document.getElementById('rvH'), b: document.getElementById('rvB') };
+  var open = false;
+
+  function show(i, x, y) {
+    var d = DATA[i]; if (!d) return;
+    els.id.textContent = d.id; els.shot.textContent = d.shot;
+    els.h.textContent = d.h; els.b.textContent = d.b;
+    var w = Math.min(320, window.innerWidth * 0.8);
+    rv.style.left = Math.max(12, Math.min(x - w / 2, window.innerWidth - w - 12)) + 'px';
+    rv.style.top = Math.min(y + 22, window.innerHeight - 260) + 'px';
+    rv.classList.add('on'); open = true;
+  }
+  function hide() { rv.classList.remove('on'); open = false; }
+
+  document.querySelectorAll('.tip').forEach(function (t) {
+    var i = +t.getAttribute('data-rv');
+    t.addEventListener('mouseenter', function (e) { show(i, e.clientX, e.clientY); });
+    t.addEventListener('mouseleave', hide);
+    t.addEventListener('focus', function () {
+      var r = t.getBoundingClientRect(); show(i, r.left + r.width / 2, r.bottom);
+    });
+    t.addEventListener('blur', hide);
+    /* touch: tap to toggle */
+    t.addEventListener('click', function (e) {
+      e.preventDefault();
+      var r = t.getBoundingClientRect();
+      if (open) hide(); else show(i, r.left + r.width / 2, r.bottom);
+    });
+  });
+  document.addEventListener('touchstart', function (e) {
+    if (open && !rv.contains(e.target) && !e.target.classList.contains('tip')) hide();
+  }, { passive: true });
+})();
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   3 · COMPARE SLIDER  [Marburg]
+   ═══════════════════════════════════════════════════════════════════════════ */
+(function () {
+  var c = document.getElementById('cmp'); if (!c) return;
+  var dragging = false;
+  function set(clientX) {
+    var r = c.getBoundingClientRect();
+    var pct = Math.max(2, Math.min(98, ((clientX - r.left) / r.width) * 100));
+    c.style.setProperty('--sp', pct + '%');
+  }
+  c.addEventListener('pointerdown', function (e) { dragging = true; c.setPointerCapture(e.pointerId); set(e.clientX); });
+  c.addEventListener('pointermove', function (e) { if (dragging) set(e.clientX); });
+  c.addEventListener('pointerup', function () { dragging = false; });
+  c.addEventListener('pointercancel', function () { dragging = false; });
+  /* a gentle nudge on first view so it reads as draggable */
+  new IntersectionObserver(function (es, obs) {
+    if (!es[0].isIntersecting) return;
+    obs.disconnect();
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var t0 = null;
+    requestAnimationFrame(function step(t) {
+      if (!t0) t0 = t;
+      var k = Math.min(1, (t - t0) / 1400);
+      c.style.setProperty('--sp', (50 + 16 * Math.sin(k * Math.PI * 2)) + '%');
+      if (k < 1) requestAnimationFrame(step); else c.style.setProperty('--sp', '50%');
+    });
+  }, { threshold: .45 }).observe(c);
+})();
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   4 · CHAT REVEAL  [Brno]
+   ═══════════════════════════════════════════════════════════════════════════ */
+(function () {
+  var msgs = document.querySelectorAll('#chat .msg'); if (!msgs.length) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    msgs.forEach(function (m) { m.classList.add('in'); }); return;
+  }
+  new IntersectionObserver(function (es, obs) {
+    if (!es[0].isIntersecting) return;
+    obs.disconnect();
+    msgs.forEach(function (m, i) { setTimeout(function () { m.classList.add('in'); }, i * 520); });
+  }, { threshold: .12 }).observe(document.getElementById('chat'));
+})();
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   5 · CONTROL LOOP — one signal, three consumers, each lagged.
+   The lag is the point: the LED tracks the soil almost instantly, expression
+   lags it by the switch's rise time, permeate lags that. A judge sees the
+   delay without reading the word "latency".
+   Swap driver() for the real Arduino EC/temp log — that is the only hook.
+   ═══════════════════════════════════════════════════════════════════════════ */
+(function () {
+  var svg = document.querySelector('.loop svg'); if (!svg) return;
+  var PERIOD = 12000, N = 100, LAG_LED = .008, LAG_EXPR = .13, LAG_PERM = .19;
+
+  function driver(p) {
+    p = p - Math.floor(p);
+    return Math.max(0, Math.min(1,
+      .14 + .78 * Math.pow(Math.sin(Math.PI * p), 3) + .028 * Math.sin(2 * Math.PI * 5 * p)));
+  }
+  function lagged(p, tau) {
+    var y = driver(p - .5), step = .5 / 40, a = step / (tau + step);
+    for (var q = p - .5; q <= p; q += step) y += a * (driver(q) - y);
+    return y;
+  }
+  var el = {
+    trEC: document.getElementById('trEC'), trTemp: document.getElementById('trTemp'),
+    trExpr: document.getElementById('trExpr'), trExprFill: document.getElementById('trExprFill'),
+    ledBar: document.getElementById('ledBar'),
+    roEC: document.getElementById('roEC'), roT: document.getElementById('roT'),
+    roPPFD: document.getElementById('roPPFD'), roExpr: document.getElementById('roExpr'),
+    drops: document.querySelectorAll('#drops .drop')
+  };
+  var EC = { x: 26, w: 212, top: 62, bot: 168 }, EX = { x: 322, w: 212, top: 62, bot: 168 };
+
+  function pts(box, p, fn) {
+    var o = [];
+    for (var i = 0; i <= N; i++) {
+      var v = fn(p - (1 - i / N));
+      o.push((box.x + box.w * i / N).toFixed(1) + ',' + (box.bot - (box.bot - box.top) * v).toFixed(1));
+    }
+    return o.join(' ');
+  }
+  function frame(now) {
+    var p = (now % PERIOD) / PERIOD;
+    el.trEC.setAttribute('points', pts(EC, p, driver));
+    el.trTemp.setAttribute('points', pts(EC, p, function (q) { return .18 + .52 * driver(q - .03); }));
+    el.roEC.textContent = (0.8 + 7.7 * driver(p)).toFixed(1);
+    el.roT.textContent = (24 + 13 * driver(p - .03)).toFixed(1);
+
+    var g = driver(p - LAG_LED), h = 106 * g;
+    el.ledBar.setAttribute('y', (167 - h).toFixed(1));
+    el.ledBar.setAttribute('height', h.toFixed(1));
+    el.roPPFD.textContent = (12 * g).toFixed(1);
+
+    var ep = pts(EX, p, function (q) { return lagged(q, LAG_EXPR); });
+    el.trExpr.setAttribute('points', ep);
+    el.trExprFill.setAttribute('points', EX.x + ',' + EX.bot + ' ' + ep + ' ' + (EX.x + EX.w) + ',' + EX.bot);
+    el.roExpr.textContent = Math.round(100 * lagged(p, LAG_EXPR));
+
+    var perm = lagged(p - LAG_PERM, LAG_PERM);
+    for (var i = 0; i < el.drops.length; i++) {
+      var ph = ((now / 1400) + i / el.drops.length) % 1;
+      el.drops[i].setAttribute('cy', (226 + 32 * ph).toFixed(1));
+      el.drops[i].setAttribute('opacity', (perm * (1 - ph) * 1.1).toFixed(2));
+      el.drops[i].setAttribute('r', (1.8 + 1.8 * perm).toFixed(1));
+    }
+  }
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { frame(PERIOD * .42); return; }
+  var running = false;
+  new IntersectionObserver(function (e) { running = e[0].isIntersecting; }).observe(svg);
+  (function loop(t) { if (running) frame(t); requestAnimationFrame(loop); })(0);
+})();
+</script>
+</body>
+</html>

@@ -59,10 +59,29 @@
   --lead-body:    1.65;
   --lead-cjk:     1.78;  --track-cjk:      .02em;
 
-  /* ── 4pt spacing scale ── */
-  --space-3xs: 4px;  --space-2xs: 8px;  --space-xs: 12px;
-  --space-sm: 16px;  --space-md: 24px;  --space-lg: 40px;
-  --space-xl: 64px;  --space-2xl: 96px; --space-3xl: 144px;
+  /* ── space ──────────────────────────────────────────────────────────────
+     Every rung is fluid, so the space INSIDE a section scales at the same rate
+     as the space around it. The previous build had fixed internal spacing
+     (16/24/40/64) sitting inside fluid band padding (64→144), so at 1400px the
+     content sat cramped inside a generous frame and at 375px it was the
+     reverse. Interpolated 375px → 1400px, 4pt-aligned at both ends.
+     The px+vw form is deliberate: pure vw ignores the user's font size.        */
+  --space-3xs: 4px;
+  --space-2xs: 8px;
+  --space-xs:  12px;
+  --space-sm:  clamp(14px, 12.5px + .39vw, 18px);
+  --space-md:  clamp(20px, 17px + .78vw, 28px);
+  --space-me:  clamp(24px, 18px + 1.56vw, 40px);   /* new rung: the old 24→40
+                                                      jump was the widest in the
+                                                      scale and sat exactly where
+                                                      most layout decisions land */
+  --space-lg:  clamp(32px, 23px + 2.34vw, 56px);
+  --space-xl:  clamp(44px, 29px + 3.9vw, 84px);
+  --space-2xl: clamp(60px, 38px + 5.85vw, 120px);
+  --space-3xl: clamp(80px, 48px + 8.6vw, 168px);
+
+  --gutter:    clamp(20px, 4px + 4.29vw, 64px);    /* page margin */
+  --rule-len:  clamp(72px, 10vw, 132px);           /* the drawn rule, not space */
 
   --rule-hair: 1px;
   --rule-bold: 3px;

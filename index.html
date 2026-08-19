@@ -88,10 +88,29 @@
   --lead-body:    1.65;
   --lead-cjk:     1.78;  --track-cjk:      .02em;
 
-  /* ── 4pt spacing scale ── */
-  --space-3xs: 4px;  --space-2xs: 8px;  --space-xs: 12px;
-  --space-sm: 16px;  --space-md: 24px;  --space-lg: 40px;
-  --space-xl: 64px;  --space-2xl: 96px; --space-3xl: 144px;
+  /* ── space ──────────────────────────────────────────────────────────────
+     Every rung is fluid, so the space INSIDE a section scales at the same rate
+     as the space around it. The previous build had fixed internal spacing
+     (16/24/40/64) sitting inside fluid band padding (64→144), so at 1400px the
+     content sat cramped inside a generous frame and at 375px it was the
+     reverse. Interpolated 375px → 1400px, 4pt-aligned at both ends.
+     The px+vw form is deliberate: pure vw ignores the user's font size.        */
+  --space-3xs: 4px;
+  --space-2xs: 8px;
+  --space-xs:  12px;
+  --space-sm:  clamp(14px, 12.5px + .39vw, 18px);
+  --space-md:  clamp(20px, 17px + .78vw, 28px);
+  --space-me:  clamp(24px, 18px + 1.56vw, 40px);   /* new rung: the old 24→40
+                                                      jump was the widest in the
+                                                      scale and sat exactly where
+                                                      most layout decisions land */
+  --space-lg:  clamp(32px, 23px + 2.34vw, 56px);
+  --space-xl:  clamp(44px, 29px + 3.9vw, 84px);
+  --space-2xl: clamp(60px, 38px + 5.85vw, 120px);
+  --space-3xl: clamp(80px, 48px + 8.6vw, 168px);
+
+  --gutter:    clamp(20px, 4px + 4.29vw, 64px);    /* page margin */
+  --rule-len:  clamp(72px, 10vw, 132px);           /* the drawn rule, not space */
 
   --rule-hair: 1px;
   --rule-bold: 3px;
@@ -125,14 +144,26 @@ img{display:block;max-width:100%}
 a{color:inherit;text-decoration:none}
 :focus-visible{outline:2px solid var(--color-focus);outline-offset:3px}
 
-.wrap{max-width:var(--max);margin:0 auto;padding-inline:clamp(20px,4.4vw,64px)}
-.band{padding-block:clamp(64px,9vw,144px)}
+.wrap{max-width:var(--max);margin:0 auto;padding-inline:var(--gutter)}
+.band{padding-block:var(--space-3xl)}
+.band--dense{padding-block:var(--space-2xl)}
 .band--tint{background:var(--color-paper-2)}
 .band--ink{background:var(--color-ink);color:var(--color-inverse)}
 
 .lede{font-size:var(--text-lede);line-height:var(--lead-lede);max-width:var(--measure-lede)}
 .body{font-size:var(--text-base);line-height:var(--lead-body);max-width:var(--measure)}
 .body + .body{margin-top:var(--space-md)}
+
+/* ── vertical rhythm ──────────────────────────────────────────────────────
+   A heading binds to what follows and separates from what precedes, so the
+   space above it runs roughly double the space below. Declared once here
+   instead of as margin-top attributes sprinkled through the HTML, which is
+   how the previous build decided spacing.                                   */
+.flow > * + *{margin-block-start:var(--flow, var(--space-md))}
+.flow > * + .claim,.flow > * + h2,.flow > * + h3{margin-block-start:var(--space-xl)}
+.flow > .claim + *,.flow > h2 + *,.flow > h3 + *{margin-block-start:var(--space-me)}
+.flow > .label + *{margin-block-start:0}
+.flow > .rule + *{margin-block-start:0}
 .dim{color:var(--color-ink-2)}
 .band--ink .dim{color:var(--color-paper-3)}
 
@@ -170,7 +201,7 @@ a{color:inherit;text-decoration:none}
   oklch(18% .012 62 / .06) 62%),
   linear-gradient(to bottom,oklch(18% .012 62 / .34) 0%,transparent 24%)}
 .hero__in{position:relative;z-index:2;width:100%;color:var(--color-inverse);
-  padding-block:clamp(40px,6vw,80px)}
+  padding-block:var(--space-xl)}
 .hero h1{font-size:var(--text-display);line-height:var(--lead-display);
   letter-spacing:var(--track-display);max-width:15ch}
 .hero .lede{margin-top:var(--space-md);color:var(--color-paper-2);
@@ -180,7 +211,7 @@ a{color:inherit;text-decoration:none}
   display:flex;align-items:center;gap:var(--space-xs);flex-wrap:wrap}
 .hero__slug::before{content:"";width:32px;height:var(--rule-hair);
   background:currentColor;flex:0 0 32px}
-.hero__credit{position:absolute;right:clamp(20px,4.4vw,64px);
+.hero__credit{position:absolute;right:var(--gutter);
   bottom:var(--space-sm);z-index:2;font-family:var(--font-util);
   font-size:var(--text-xs);color:oklch(97% .008 95 / .58)}
 
@@ -189,7 +220,7 @@ a{color:inherit;text-decoration:none}
   line-height:var(--lead-claim);letter-spacing:var(--track-claim);max-width:19ch;
   text-wrap:balance}
 .claim--wide{max-width:26ch}
-.rule{height:var(--rule-bold);background:var(--color-ink);width:clamp(72px,10vw,132px);
+.rule{height:var(--rule-bold);background:var(--color-ink);width:var(--rule-len);
   margin-bottom:var(--space-lg)}
 .band--ink .rule{background:var(--color-accent-2)}
 
@@ -199,7 +230,7 @@ a{color:inherit;text-decoration:none}
 .fig--bleed{margin-inline:calc(50% - 50vw);width:100vw;max-width:100vw}
 .fig--tall{display:grid;gap:var(--space-md)}
 @media(min-width:900px){.fig--tall{grid-template-columns:minmax(0,46%) minmax(0,1fr);
-  gap:clamp(32px,5vw,72px);align-items:end}
+  gap:var(--space-lg);align-items:end}
   .fig--tall figcaption{margin-top:0;max-width:44ch;font-size:var(--text-base);
     line-height:1.6}}
 .fig--bleed img{aspect-ratio:21/9;object-fit:cover}
@@ -207,7 +238,7 @@ a{color:inherit;text-decoration:none}
 .fig figcaption{margin-top:var(--space-sm);font-size:var(--text-sm);
   line-height:1.6;color:var(--color-ink-2);max-width:56ch}
 .fig--bleed figcaption{max-width:var(--max);margin-inline:auto;
-  padding-inline:clamp(20px,4.4vw,64px)}
+  padding-inline:var(--gutter)}
 .band--ink figcaption{color:var(--color-paper-3)}
 .fig b{font-weight:700;color:var(--color-ink)}
 .band--ink .fig b{color:var(--color-inverse)}
@@ -217,7 +248,7 @@ a{color:inherit;text-decoration:none}
 /* ── two-column argument ─────────────────────────────────────────────── */
 .duo{display:grid;gap:var(--space-lg)}
 @media(min-width:900px){.duo{grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);
-  gap:clamp(40px,6vw,96px);align-items:start}}
+  gap:var(--space-xl);align-items:start}}
 .duo--tight{align-items:center}
 
 /* ── list of consequences ────────────────────────────────────────────── */
@@ -227,7 +258,7 @@ a{color:inherit;text-decoration:none}
   padding-block:var(--space-lg);display:grid;gap:var(--space-sm)}
 .band--ink .beat{border-color:oklch(97% .008 95 / .22)}
 @media(min-width:820px){.beat{grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);
-  gap:clamp(32px,5vw,80px);align-items:baseline}}
+  gap:var(--space-lg);align-items:baseline}}
 .beat h3{font-size:var(--text-4xl);line-height:var(--lead-head);max-width:14ch}
 .beat p{font-size:var(--text-base);line-height:1.6;color:var(--color-ink-2);
   max-width:52ch}
@@ -254,7 +285,7 @@ a{color:inherit;text-decoration:none}
 
 /* ── Ft5 statement footer ────────────────────────────────────────────── */
 .foot{background:var(--color-ink);color:var(--color-inverse);
-  padding-block:clamp(64px,9vw,128px)}
+  padding-block:var(--space-2xl)}
 .foot__claim{font-family:var(--font-display);font-size:var(--text-display-s);
   line-height:var(--lead-claim);letter-spacing:var(--track-claim);max-width:16ch}
 .foot__links{margin-top:var(--space-xl);display:flex;gap:var(--space-md);
@@ -308,7 +339,7 @@ a{color:inherit;text-decoration:none}
   <div class="wrap">
     <div class="rule"></div>
     <div class="duo">
-      <div>
+      <div class="flow">
         <span class="label">The problem is not the science</span>
         <h2 class="claim">Today you cannot make a protein. You can only buy one.</h2>
       </div>
@@ -329,13 +360,13 @@ a{color:inherit;text-decoration:none}
 
 <!-- ══ THE FACTORY ════════════════════════════════════════════════════ -->
 <section class="band band--tint" id="factory">
-  <div class="wrap">
+  <div class="wrap flow">
     <div class="rule"></div>
     <span class="label">The handover</span>
     <h2 class="claim claim--wide">So we stopped designing a product and started designing a factory small enough to give away.</h2>
   </div>
 
-  <div class="wrap" style="margin-top:var(--space-xl)">
+  <div class="wrap">
     <figure class="fig fig--tall">
       <picture>
         <source type="image/webp" srcset="img/bench-1400.webp 1400w, img/bench-2400.webp 2400w"
@@ -350,7 +381,7 @@ a{color:inherit;text-decoration:none}
     </figure>
   </div>
 
-  <div class="wrap" style="margin-top:var(--space-2xl)">
+  <div class="wrap">
     <div class="duo">
       <div>
         <p class="body">A reactor assembled from parts a workshop can source is a reactor that
@@ -382,10 +413,10 @@ a{color:inherit;text-decoration:none}
   <div class="wrap">
     <div class="rule"></div>
     <div class="duo duo--tight">
-      <div>
+      <div class="flow">
         <span class="label">The point of a factory</span>
         <h2 class="claim">You choose what it makes.</h2>
-        <p class="body" style="margin-top:var(--space-md)">A product decides for you. A factory
+        <p class="body">A product decides for you. A factory
         does not. The chassis is <i>B. subtilis</i>, the input is 520 nm light, and the
         expression cassette is a slot rather than a rebuild, so any gene the chassis can express
         drops into the same architecture.</p>
@@ -409,7 +440,7 @@ a{color:inherit;text-decoration:none}
 
 <!-- ══ WHAT STOPS MATTERING ═══════════════════════════════════════════ -->
 <section class="band band--ink">
-  <div class="wrap">
+  <div class="wrap flow">
     <div class="rule"></div>
     <span class="label">Move the factory and these stop existing</span>
     <h2 class="claim claim--wide">Three problems that only exist because the protein has to travel.</h2>
@@ -440,15 +471,15 @@ a{color:inherit;text-decoration:none}
 
 <!-- ══ WHO DECIDES ════════════════════════════════════════════════════ -->
 <section class="band" id="people">
-  <div class="wrap">
+  <div class="wrap flow">
     <div class="rule"></div>
     <span class="label">Who decides what it makes</span>
     <h2 class="claim claim--wide">A factory is only handed over if somebody else gets to set it running.</h2>
-    <p class="body" style="margin-top:var(--space-md)">We did not design this and then go
+    <p class="body">We did not design this and then go
     looking for farmers to approve it. The order was the other way round, and the design still
     carries their fingerprints.</p>
 
-    <div class="duo" style="margin-top:var(--space-xl)">
+    <div class="duo">
       <figure class="fig">
         <picture>
           <source type="image/webp" srcset="img/listen-1400.webp" sizes="(min-width:900px) 52vw, 100vw">
@@ -473,8 +504,8 @@ a{color:inherit;text-decoration:none}
 </section>
 
 <!-- ══ EVIDENCE ═══════════════════════════════════════════════════════ -->
-<section class="band band--tint" id="evidence">
-  <div class="wrap">
+<section class="band band--dense band--tint" id="evidence">
+  <div class="wrap flow">
     <div class="rule"></div>
     <span class="label">What is already true</span>
     <h2 class="claim claim--wide">None of this is worth anything without instruments, so we built those first.</h2>
@@ -498,7 +529,7 @@ a{color:inherit;text-decoration:none}
       </div>
     </div>
 
-    <figure class="fig" style="margin-top:var(--space-2xl);max-width:820px">
+    <figure class="fig" style="max-width:820px">
       <picture>
         <source type="image/webp" srcset="img/firmware-1400.webp" sizes="(min-width:900px) 64vw, 100vw">
         <img src="img/firmware-1400.jpg" alt="A student writing Arduino firmware for the spectrophotometer, the code displayed on a large screen in a warmly lit room after school.">
@@ -519,7 +550,7 @@ a{color:inherit;text-decoration:none}
         <span class="label">What we do not claim</span>
         <h2 class="claim">The honest size of this.</h2>
       </div>
-      <div>
+      <div class="flow">
         <p class="body">ReLeaf does not solve hunger. Hunger is mostly a failure of distribution
         and politics, not of yield, and a page that implies otherwise should not be trusted on
         anything else it says.</p>
@@ -542,14 +573,14 @@ a{color:inherit;text-decoration:none}
 </section>
 
 <!-- ══ TEAM ═══════════════════════════════════════════════════════════ -->
-<section class="band band--tint">
+<section class="band band--dense band--tint">
   <div class="wrap">
     <div class="rule"></div>
     <div class="duo duo--tight">
-      <div>
+      <div class="flow">
         <span class="label">Who built it</span>
         <h2 class="claim">A high-school team in Taiwan.</h2>
-        <p class="body" style="margin-top:var(--space-md)">We are not a company and we are not
+        <p class="body">We are not a company and we are not
         a lab with a budget. That turns out to matter, because a machine designed by people who
         had to source every part themselves ends up being a machine other people can source too.</p>
       </div>

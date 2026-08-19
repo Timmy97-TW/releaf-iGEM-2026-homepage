@@ -47,19 +47,46 @@
   --color-accent-2:   oklch(62.0% 0.155 145);
   --color-focus:      oklch(44.0% 0.098 150);
 
-  /* ── type ── */
-  --font-display: "Didot","Bodoni 72",Georgia,"Iowan Old Style","Noto Serif TC",serif;
-  --font-body:    "Helvetica Neue",Helvetica,Arial,"Noto Sans TC","PingFang TC",sans-serif;
-  --font-util:    ui-monospace,"SF Mono","Courier New",monospace;
+  /* ── type ───────────────────────────────────────────────────────────────
+     THE SOURCE SUPERFAMILY, chosen for one reason no other pairing solves:
+     Source Han Serif TC (<span lang="zh-Hant">思源宋體</span>) embeds Source Serif as its own Latin, and
+     Source Han Sans TC (<span lang="zh-Hant">思源黑體</span>) embeds Source Sans. So <span lang="zh-Hant">陳惠雯</span> and
+     "biomanufacturer" are set in faces drawn to sit together, and the fallback
+     chain degrades into harmony instead of into a seam.
+     Register: agricultural bulletin, not fashion magazine. Sturdy old-style
+     serif with real weight, humanist sans beneath it.                       */
+  --font-display: "Source Serif 4","Source Serif Pro","Source Han Serif TC",
+                  "Noto Serif TC","Songti TC",Georgia,serif;
+  --font-body:    "Source Sans 3","Source Sans Pro","Source Han Sans TC",
+                  "Noto Sans TC","PingFang TC",-apple-system,"Helvetica Neue",Arial,sans-serif;
+  --font-util:    "Source Code Pro",ui-monospace,"SF Mono","Courier New",monospace;
 
-  --text-display:   clamp(2.6rem, 7.2vw, 6.4rem);
-  --text-display-s: clamp(2.1rem, 4.6vw, 3.6rem);
-  --text-4xl:       clamp(1.7rem, 3.0vw, 2.5rem);
-  --text-2xl:       clamp(1.28rem, 1.9vw, 1.6rem);
-  --text-lede:      clamp(1.15rem, 1.25vw + .78rem, 1.42rem);
-  --text-base:      clamp(1.02rem, .28vw + .96rem, 1.12rem);
-  --text-sm:        .875rem;
-  --text-xs:        .75rem;
+  /* display runs SemiBold: a 400 serif goes weak over photographs */
+  --weight-display: 600;
+  --weight-body:    400;
+  --weight-bold:    700;
+
+  /* ── scale ──────────────────────────────────────────────────────────────
+     Display caps at 92px, not 102px. "biomanufacturer" is fifteen characters;
+     past ~92px it stops being a headline and starts being a wall, and the
+     photograph underneath it loses.                                         */
+  --text-display:   clamp(2.75rem, 6.4vw, 5.75rem);   /* 44 → 92 */
+  --text-display-s: clamp(1.95rem, 3.6vw, 3.25rem);   /* 31 → 52 */
+  --text-4xl:       clamp(1.5rem, 2.4vw, 2.1rem);     /* 24 → 34 */
+  --text-2xl:       clamp(1.25rem, 1.7vw, 1.5rem);
+  --text-lede:      clamp(1.1875rem, 1.05vw + .8rem, 1.4375rem); /* 19 → 23 */
+  --text-base:      clamp(1.0625rem, .3vw + 1rem, 1.1875rem);    /* 17 → 19 */
+  --text-sm:        .9375rem;                          /* 15 captions */
+  --text-xs:        .75rem;                            /* 12 labels   */
+
+  /* leading + tracking. Latin display wants negative tracking; CJK wants
+     slightly positive and much more leading, because the glyphs are denser. */
+  --lead-display: .98;   --track-display: -.025em;
+  --lead-claim:   1.06;  --track-claim:   -.018em;
+  --lead-head:    1.15;  --track-head:    -.012em;
+  --lead-lede:    1.5;
+  --lead-body:    1.65;
+  --lead-cjk:     1.78;  --track-cjk:      .02em;
 
   /* ── 4pt spacing scale ── */
   --space-3xs: 4px;  --space-2xs: 8px;  --space-xs: 12px;
@@ -84,11 +111,15 @@
 html,body{overflow-x:clip}
 html{-webkit-text-size-adjust:100%;color-scheme:light;scroll-behavior:smooth}
 body{background:var(--color-paper);color:var(--color-ink);
-  font-family:var(--font-body);font-size:var(--text-base);line-height:1.62;
+  font-family:var(--font-body);font-size:var(--text-base);
+  font-weight:var(--weight-body);line-height:var(--lead-body);
   -webkit-font-smoothing:antialiased}
-h1,h2,h3{font-family:var(--font-display);font-weight:400;font-style:normal;
-  line-height:1.03;letter-spacing:-.018em;overflow-wrap:anywhere;min-width:0;
-  text-wrap:balance}
+h1,h2,h3{font-family:var(--font-display);font-weight:var(--weight-display);
+  font-style:normal;line-height:var(--lead-head);letter-spacing:var(--track-head);
+  overflow-wrap:anywhere;min-width:0;text-wrap:balance}
+/* CJK carries its own leading and tracking. Latin display is tightened; Chinese
+   is opened up, because dense glyphs at a tight leading close the page in. */
+:lang(zh),.cjk{line-height:var(--lead-cjk);letter-spacing:var(--track-cjk)}
 p{margin:0}
 img{display:block;max-width:100%}
 a{color:inherit;text-decoration:none}
@@ -99,8 +130,8 @@ a{color:inherit;text-decoration:none}
 .band--tint{background:var(--color-paper-2)}
 .band--ink{background:var(--color-ink);color:var(--color-inverse)}
 
-.lede{font-size:var(--text-lede);line-height:1.5;max-width:var(--measure-lede)}
-.body{font-size:var(--text-base);line-height:1.65;max-width:var(--measure)}
+.lede{font-size:var(--text-lede);line-height:var(--lead-lede);max-width:var(--measure-lede)}
+.body{font-size:var(--text-base);line-height:var(--lead-body);max-width:var(--measure)}
 .body + .body{margin-top:var(--space-md)}
 .dim{color:var(--color-ink-2)}
 .band--ink .dim{color:var(--color-paper-3)}
@@ -118,7 +149,7 @@ a{color:inherit;text-decoration:none}
 .mast .wrap{display:flex;align-items:baseline;gap:var(--space-md);
   padding-block:var(--space-sm);flex-wrap:wrap}
 .mast__id{font-family:var(--font-display);font-size:var(--text-2xl);
-  letter-spacing:-.02em}
+  font-weight:var(--weight-display);letter-spacing:-.015em}
 .mast__id b{font-weight:400}
 .mast__sub{font-size:var(--text-xs);letter-spacing:.14em;text-transform:uppercase;
   color:var(--color-ink-2)}
@@ -140,7 +171,8 @@ a{color:inherit;text-decoration:none}
   linear-gradient(to bottom,oklch(18% .012 62 / .34) 0%,transparent 24%)}
 .hero__in{position:relative;z-index:2;width:100%;color:var(--color-inverse);
   padding-block:clamp(40px,6vw,80px)}
-.hero h1{font-size:var(--text-display);max-width:15ch}
+.hero h1{font-size:var(--text-display);line-height:var(--lead-display);
+  letter-spacing:var(--track-display);max-width:15ch}
 .hero .lede{margin-top:var(--space-md);color:var(--color-paper-2);
   max-width:52ch}
 .hero__slug{margin-top:var(--space-lg);font-size:var(--text-xs);font-weight:700;
@@ -154,7 +186,8 @@ a{color:inherit;text-decoration:none}
 
 /* ── manifesto statement ─────────────────────────────────────────────── */
 .claim{font-family:var(--font-display);font-size:var(--text-display-s);
-  line-height:1.06;letter-spacing:-.02em;max-width:19ch;text-wrap:balance}
+  line-height:var(--lead-claim);letter-spacing:var(--track-claim);max-width:19ch;
+  text-wrap:balance}
 .claim--wide{max-width:26ch}
 .rule{height:var(--rule-bold);background:var(--color-ink);width:clamp(72px,10vw,132px);
   margin-bottom:var(--space-lg)}
@@ -172,7 +205,7 @@ a{color:inherit;text-decoration:none}
 .fig--bleed img{aspect-ratio:21/9;object-fit:cover}
 @media(max-width:760px){.fig--bleed img{aspect-ratio:4/3}}
 .fig figcaption{margin-top:var(--space-sm);font-size:var(--text-sm);
-  line-height:1.55;color:var(--color-ink-2);max-width:56ch}
+  line-height:1.6;color:var(--color-ink-2);max-width:56ch}
 .fig--bleed figcaption{max-width:var(--max);margin-inline:auto;
   padding-inline:clamp(20px,4.4vw,64px)}
 .band--ink figcaption{color:var(--color-paper-3)}
@@ -195,7 +228,7 @@ a{color:inherit;text-decoration:none}
 .band--ink .beat{border-color:oklch(97% .008 95 / .22)}
 @media(min-width:820px){.beat{grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);
   gap:clamp(32px,5vw,80px);align-items:baseline}}
-.beat h3{font-size:var(--text-4xl);max-width:14ch}
+.beat h3{font-size:var(--text-4xl);line-height:var(--lead-head);max-width:14ch}
 .beat p{font-size:var(--text-base);line-height:1.6;color:var(--color-ink-2);
   max-width:52ch}
 .band--ink .beat p{color:var(--color-paper-3)}
@@ -204,8 +237,9 @@ a{color:inherit;text-decoration:none}
 .facts{display:grid;gap:var(--space-lg) var(--space-md);margin-top:var(--space-xl)}
 @media(min-width:720px){.facts{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(min-width:1040px){.facts{grid-template-columns:repeat(4,minmax(0,1fr))}}
-.fact__n{font-family:var(--font-display);font-size:var(--text-4xl);line-height:1;
-  letter-spacing:-.03em}
+.fact__n{font-family:var(--font-display);font-size:var(--text-4xl);
+  font-weight:var(--weight-display);line-height:1;letter-spacing:-.022em;
+  font-variant-numeric:lining-nums}
 .fact__t{margin-top:var(--space-2xs);font-size:var(--text-sm);line-height:1.5;
   color:var(--color-ink-2);max-width:26ch}
 
@@ -222,7 +256,7 @@ a{color:inherit;text-decoration:none}
 .foot{background:var(--color-ink);color:var(--color-inverse);
   padding-block:clamp(64px,9vw,128px)}
 .foot__claim{font-family:var(--font-display);font-size:var(--text-display-s);
-  line-height:1.05;letter-spacing:-.02em;max-width:16ch}
+  line-height:var(--lead-claim);letter-spacing:var(--track-claim);max-width:16ch}
 .foot__links{margin-top:var(--space-xl);display:flex;gap:var(--space-md);
   flex-wrap:wrap;padding-top:var(--space-md);
   border-top:var(--rule-hair) solid oklch(97% .008 95 / .22)}
@@ -420,7 +454,7 @@ a{color:inherit;text-decoration:none}
           <source type="image/webp" srcset="img/listen-1400.webp" sizes="(min-width:900px) 52vw, 100vw">
           <img src="img/listen-1400.jpg" alt="陳惠雯 speaking and gesturing in her field while two ReLeaf students listen.">
         </picture>
-        <figcaption><b>陳惠雯</b> walked us through her field and told us when she acts and why.
+        <figcaption><b><span lang="zh-Hant">陳惠雯</span></b> walked us through her field and told us when she acts and why.
         Because of that afternoon the reactor stopped dosing on a wall clock and started dosing
         on the state of the soil.
         <span class="stamp">Her farm · 21 July 2026 · <span class="unproven">verbatim sentence not yet transcribed</span></span></figcaption>
@@ -430,7 +464,7 @@ a{color:inherit;text-decoration:none}
           <source type="image/webp" srcset="img/market-1400.webp" sizes="(min-width:900px) 44vw, 100vw">
           <img src="img/market-1400.jpg" alt="A grower at a farmers market pointing something out to two ReLeaf students, who are listening and smiling.">
         </picture>
-        <figcaption>Growers at the 農民市集, explaining what they actually buy, what it costs
+        <figcaption>Growers at the <span lang="zh-Hant">農民市集</span>, explaining what they actually buy, what it costs
         them and what they throw away.
         <span class="stamp">16 May 2026</span></figcaption>
       </figure>

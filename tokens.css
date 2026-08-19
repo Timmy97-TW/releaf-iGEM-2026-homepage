@@ -18,19 +18,46 @@
   --color-accent-2:   oklch(62.0% 0.155 145);
   --color-focus:      oklch(44.0% 0.098 150);
 
-  /* ── type ── */
-  --font-display: "Didot","Bodoni 72",Georgia,"Iowan Old Style","Noto Serif TC",serif;
-  --font-body:    "Helvetica Neue",Helvetica,Arial,"Noto Sans TC","PingFang TC",sans-serif;
-  --font-util:    ui-monospace,"SF Mono","Courier New",monospace;
+  /* ── type ───────────────────────────────────────────────────────────────
+     THE SOURCE SUPERFAMILY, chosen for one reason no other pairing solves:
+     Source Han Serif TC (思源宋體) embeds Source Serif as its own Latin, and
+     Source Han Sans TC (思源黑體) embeds Source Sans. So 陳惠雯 and
+     "biomanufacturer" are set in faces drawn to sit together, and the fallback
+     chain degrades into harmony instead of into a seam.
+     Register: agricultural bulletin, not fashion magazine. Sturdy old-style
+     serif with real weight, humanist sans beneath it.                       */
+  --font-display: "Source Serif 4","Source Serif Pro","Source Han Serif TC",
+                  "Noto Serif TC","Songti TC",Georgia,serif;
+  --font-body:    "Source Sans 3","Source Sans Pro","Source Han Sans TC",
+                  "Noto Sans TC","PingFang TC",-apple-system,"Helvetica Neue",Arial,sans-serif;
+  --font-util:    "Source Code Pro",ui-monospace,"SF Mono","Courier New",monospace;
 
-  --text-display:   clamp(2.6rem, 7.2vw, 6.4rem);
-  --text-display-s: clamp(2.1rem, 4.6vw, 3.6rem);
-  --text-4xl:       clamp(1.7rem, 3.0vw, 2.5rem);
-  --text-2xl:       clamp(1.28rem, 1.9vw, 1.6rem);
-  --text-lede:      clamp(1.15rem, 1.25vw + .78rem, 1.42rem);
-  --text-base:      clamp(1.02rem, .28vw + .96rem, 1.12rem);
-  --text-sm:        .875rem;
-  --text-xs:        .75rem;
+  /* display runs SemiBold: a 400 serif goes weak over photographs */
+  --weight-display: 600;
+  --weight-body:    400;
+  --weight-bold:    700;
+
+  /* ── scale ──────────────────────────────────────────────────────────────
+     Display caps at 92px, not 102px. "biomanufacturer" is fifteen characters;
+     past ~92px it stops being a headline and starts being a wall, and the
+     photograph underneath it loses.                                         */
+  --text-display:   clamp(2.75rem, 6.4vw, 5.75rem);   /* 44 → 92 */
+  --text-display-s: clamp(1.95rem, 3.6vw, 3.25rem);   /* 31 → 52 */
+  --text-4xl:       clamp(1.5rem, 2.4vw, 2.1rem);     /* 24 → 34 */
+  --text-2xl:       clamp(1.25rem, 1.7vw, 1.5rem);
+  --text-lede:      clamp(1.1875rem, 1.05vw + .8rem, 1.4375rem); /* 19 → 23 */
+  --text-base:      clamp(1.0625rem, .3vw + 1rem, 1.1875rem);    /* 17 → 19 */
+  --text-sm:        .9375rem;                          /* 15 captions */
+  --text-xs:        .75rem;                            /* 12 labels   */
+
+  /* leading + tracking. Latin display wants negative tracking; CJK wants
+     slightly positive and much more leading, because the glyphs are denser. */
+  --lead-display: .98;   --track-display: -.025em;
+  --lead-claim:   1.06;  --track-claim:   -.018em;
+  --lead-head:    1.15;  --track-head:    -.012em;
+  --lead-lede:    1.5;
+  --lead-body:    1.65;
+  --lead-cjk:     1.78;  --track-cjk:      .02em;
 
   /* ── 4pt spacing scale ── */
   --space-3xs: 4px;  --space-2xs: 8px;  --space-xs: 12px;

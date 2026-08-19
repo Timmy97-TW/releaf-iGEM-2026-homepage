@@ -1,1341 +1,549 @@
 <!DOCTYPE html>
-<!--
-  =============================================================================
-  ReLeaf — wiki homepage v0.5 · "THE TURN (輪)" · GEMS-Taiwan 2026
-  -----------------------------------------------------------------------------
-  WHY THIS LOOKS NOTHING LIKE v0.4
-
-  v0.4 was a near-black instrument panel. It read as a laboratory, not as a
-  project about farmers. This build is a WORK LEDGER: a pre-printed form on
-  olive drying-yard concrete that somebody writes their own numbers onto.
-
-  THE PALETTE IS NOT DECORATIVE. Every value traces to a real thing:
-    --yard      曬穀場 concrete gone faintly olive from algae in the joints
-    --straw     threshed rice straw drying in that yard, late afternoon
-    --mud       wet paddy mud on the back of a hand (there is no #000 here)
-    --zinc      the 鐵皮屋 tool shed the reactor is stored in
-    --seal      硃砂 seal paste on a 農會 passbook
-    --canal     irrigation water in the shade of the bank
-    --lamp      the 520 nm LED emission peak, clipped to sRGB
-
-  THE SEAL RULE IS THE WARMTH MECHANISM. --seal appears ONLY where something
-  belongs to a named person: a 10px chop before a real name, or the name
-  itself. Never a fill, button, border, hover or section number. Under 2% ink
-  coverage, accumulating into a repeated moral assertion rather than a mood.
-
-  THE LAMP RULE KEEPS US OUT OF THE OLD BUILD. --lamp may ONLY be painted
-  inside a --mud-filled plate. Green has to earn a dark surround. That is
-  structurally why this page can never drift back into acid-green-on-black.
-
-  DELIBERATELY NOT BRNO 2025 (they won the Grand Prize; this lane is crowded):
-    · no centred farmer facing camera with cupped hands
-    · no chat bubbles, no ROUND portraits (every portrait slot is square)
-    · no confetti between headline words, no frosted glass, no pill nav
-    · no rounded geometric sans, no word-by-word reveal
-    · no PAST/NOW/FUTURE timeline, no us-vs-them comparison table
-  What IS taken from them is the only thing worth taking: real named people
-  carry the argument, and the page argues rather than brochures.
-
-  STRUCTURAL LAW, ENFORCED IN CSS: no border-radius, no box-shadow, no
-  backdrop-filter, no card, no #000, no #fff, no gradient except the LED cone
-  and the dose slot fill. Structure comes from rules, columns and alignment.
-
-  MOTION: exactly two moving things. The LED cone's 6s breath (inside the dark
-  plate) and the crank the visitor drags. Nothing animates on scroll or load.
-
-  .unproven — anything not yet earned. The OPEN ITEMS counter in the imprint
-  strip is COMPUTED from these at runtime, never typed, so it cannot go stale.
-
-  PHOTO SLOTS carry a full typeset shooting brief and are --straw at 35%, so
-  the page stays warm during the weeks before the shoot. Do not let these get
-  quietly swapped for grey boxes under time pressure.
-
-  FONTS: system stack, tuned against Arial Narrow / Georgia / Courier New.
-  Intended self-host later: Barlow Semi Condensed + Literata + Courier Prime.
-  Any value tuned against Barlow's metrics will look wrong on ship day.
-  =============================================================================
--->
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ReLeaf — Own the factory, not the invoice · GEMS-Taiwan 2026</title>
-<meta name="description" content="ReLeaf is a bioprotectant factory small enough for half a hectare, and simple enough that the person who owns it can open it, clean it and fix it.">
+<title>ReLeaf — Every farmer a biomanufacturer · GEMS-Taiwan 2026</title>
+<meta name="description" content="ReLeaf is a bioreactor a farmer can build and own, producing the protein their crop needs, in the field where it is used.">
 <style>
+/* Hallmark · macrostructure: Manifesto · tone: editorial-manifesto · anchor hue: forest-green
+ * theme: Studio · nav: N6 masthead · footer: Ft5 statement
+ * enrichment: real photography (8 frames, team-supplied, dated from filenames)
+ * pre-emit critique: P5 H5 E4 S5 R4 V4
+ * ReLeaf · GEMS-Taiwan · iGEM 2026 Biomanufacturing Village
+ *
+ * THE ARGUMENT THIS PAGE MAKES
+ *   Not "climate change is bad" and not "farmers deserve better margins".
+ *   The claim is narrower and sharper: biomanufacturing is currently gated,
+ *   and the gate is not made of science. Hand over the means of production
+ *   and every farmer becomes a manufacturer of the protein they choose.
+ *
+ * WHY THE BREADBOARD PHOTOGRAPH IS THE CENTRE OF THE PAGE
+ *   A farmer portrait says "we care about farmers", which every agri site
+ *   says. A breadboard on a classroom table next to somebody's bubble tea
+ *   says "the means of production is ordinary", which is the actual claim
+ *   and which almost nobody can show. Do not replace that frame with a
+ *   tidier one. The mess is the evidence.
+ *
+ * PHOTOGRAPHS are real, dated from their own filenames, in /img as WebP
+ * with JPEG fallback. Before wiki freeze they must move to static.igem.wiki.
+ *
+ * .unproven marks anything not yet earned. Nothing on this page invents a
+ * number, a quote, or a result.
+ */
 :root{
-  /* ── ground ── */
-  --yard:#DEE0D4;        /* 曬穀場 concrete, olive from algae. never white.   */
-  --yard-lift:#E7E8DD;   /* where sun bleached it and rain did not stand      */
-  --straw:#C4A05A;       /* threshed rice straw. a gold, not a tan.           */
-  /* ── ink ── */
-  --mud:#2E2620;         /* wet paddy mud. the darkest value on this page.    */
-  --soil-dry:#5C5348;    /* topsoil crust, 3 dry days after irrigation        */
-  --zinc:#B7BCB2;        /* the 鐵皮屋 tool shed. every hairline.             */
-  /* ── rationed ── */
-  --seal:#A53327;        /* 硃砂. ownership only. under 2% coverage.          */
-  --canal:#5C7A73;       /* irrigation water in shade. what was COMMANDED.    */
-  --lamp:#00E85A;        /* 520 nm. only ever inside a --mud plate.           */
+  /* ── paper + ink ── */
+  --color-paper:      oklch(97.2% 0.008 95);
+  --color-paper-2:    oklch(94.0% 0.011 95);
+  --color-paper-3:    oklch(90.5% 0.013 95);
+  --color-ink:        oklch(21.5% 0.014 62);
+  --color-ink-2:      oklch(45.0% 0.012 62);
+  --color-ink-3:      oklch(51.0% 0.010 62);
+  --color-rule:       oklch(86.0% 0.010 95);
+  --color-inverse:    oklch(97.2% 0.008 95);
 
-  --lead:26px;           /* baseline unit. the ruled sheet.                   */
-  --max:1320px;
-  --gut:24px;
-  --pad:clamp(20px,4.2vw,64px);
+  /* ── accent: the leaf, and the 520 nm the device actually emits ── */
+  --color-accent:     oklch(44.0% 0.098 150);
+  --color-accent-2:   oklch(62.0% 0.155 145);
+  --color-focus:      oklch(44.0% 0.098 150);
 
-  --d1:"Arial Narrow","Liberation Sans Narrow","Helvetica Neue Condensed",
-       "Noto Sans TC","PingFang TC",Arial,sans-serif;
-  --ming:"Noto Serif TC","Source Han Serif TC","Songti TC","PMingLiU",serif;
-  --body:"Iowan Old Style",Charter,"Bitstream Charter",Georgia,
-         "Noto Serif TC","Songti TC",serif;
-  --util:"Courier New","Nimbus Mono PS",ui-monospace,Menlo,monospace;
+  /* ── type ── */
+  --font-display: "Didot","Bodoni 72",Georgia,"Iowan Old Style","Noto Serif TC",serif;
+  --font-body:    "Helvetica Neue",Helvetica,Arial,"Noto Sans TC","PingFang TC",sans-serif;
+  --font-util:    ui-monospace,"SF Mono","Courier New",monospace;
 
-  --fs-d1:clamp(2.6rem,5.6vw,5.5rem);
-  --fs-d1-cjk:clamp(1.25rem,2.6vw,2.1rem);
-  --fs-d2:clamp(1.65rem,3.2vw,2.6rem);
-  --fs-d3:clamp(1.25rem,1.8vw,1.55rem);
-  --fs-lede:clamp(1.1875rem,1.15vw + .78rem,1.4375rem);
-  --fs-quote:clamp(1.3125rem,1.5vw + .8rem,1.75rem);
-  --fs-body:clamp(1.0625rem,.32vw + 1rem,1.1875rem);
-  --fs-util:clamp(.78125rem,.12vw + .75rem,.8125rem);
-  --fs-micro:.6875rem;
+  --text-display:   clamp(2.6rem, 7.2vw, 6.4rem);
+  --text-display-s: clamp(2.1rem, 4.6vw, 3.6rem);
+  --text-4xl:       clamp(1.7rem, 3.0vw, 2.5rem);
+  --text-2xl:       clamp(1.28rem, 1.9vw, 1.6rem);
+  --text-lede:      clamp(1.15rem, 1.25vw + .78rem, 1.42rem);
+  --text-base:      clamp(1.02rem, .28vw + .96rem, 1.12rem);
+  --text-sm:        .875rem;
+  --text-xs:        .75rem;
+
+  /* ── 4pt spacing scale ── */
+  --space-3xs: 4px;  --space-2xs: 8px;  --space-xs: 12px;
+  --space-sm: 16px;  --space-md: 24px;  --space-lg: 40px;
+  --space-xl: 64px;  --space-2xl: 96px; --space-3xl: 144px;
+
+  --rule-hair: 1px;
+  --rule-bold: 3px;
+  --radius: 0;
+
+  --ease-out:    cubic-bezier(.16,1,.3,1);
+  --ease-in:     cubic-bezier(.7,0,.84,0);
+  --ease-in-out: cubic-bezier(.65,0,.35,1);
+  --dur-fast: 120ms; --dur-base: 200ms;
+
+  --measure: 62ch;
+  --measure-lede: 46ch;
+  --max: 1280px;
 }
 
-/* ── structural law ─────────────────────────────────────────────────────── */
-*{box-sizing:border-box; border-radius:0}
+*{box-sizing:border-box;margin:0;border-radius:var(--radius)}
 html,body{overflow-x:clip}
-html{-webkit-text-size-adjust:100%; scroll-behavior:smooth; color-scheme:light}
-body{
-  margin:0; background:var(--yard); color:var(--mud);
-  font-family:var(--body); font-size:var(--fs-body); line-height:1.62;
-  -webkit-font-smoothing:antialiased;
-}
-h1,h2,h3,h4{margin:0; font-style:normal; font-weight:700;
-  font-family:var(--d1); letter-spacing:-.015em; line-height:1.02;
-  overflow-wrap:anywhere; min-width:0}
+html{-webkit-text-size-adjust:100%;color-scheme:light;scroll-behavior:smooth}
+body{background:var(--color-paper);color:var(--color-ink);
+  font-family:var(--font-body);font-size:var(--text-base);line-height:1.62;
+  -webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:var(--font-display);font-weight:400;font-style:normal;
+  line-height:1.03;letter-spacing:-.018em;overflow-wrap:anywhere;min-width:0;
+  text-wrap:balance}
 p{margin:0}
-img,svg{display:block; max-width:100%}
-a{color:inherit; text-decoration:none}
-:focus-visible{outline:2px solid var(--mud); outline-offset:3px}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+:focus-visible{outline:2px solid var(--color-focus);outline-offset:3px}
 
-.wrap{max-width:var(--max); margin:0 auto; padding:0 var(--pad)}
+.wrap{max-width:var(--max);margin:0 auto;padding-inline:clamp(20px,4.4vw,64px)}
+.band{padding-block:clamp(64px,9vw,144px)}
+.band--tint{background:var(--color-paper-2)}
+.band--ink{background:var(--color-ink);color:var(--color-inverse)}
 
-/* the ruled work-log grid. this is what makes --yard a FORM, not a pale page. */
-.ruled{
-  background-image:repeating-linear-gradient(to bottom,
-    transparent 0 calc(var(--lead) - 1px),
-    rgba(183,188,178,.42) calc(var(--lead) - 1px) var(--lead));
-}
+.lede{font-size:var(--text-lede);line-height:1.5;max-width:var(--measure-lede)}
+.body{font-size:var(--text-base);line-height:1.65;max-width:var(--measure)}
+.body + .body{margin-top:var(--space-md)}
+.dim{color:var(--color-ink-2)}
+.band--ink .dim{color:var(--color-paper-3)}
 
-/* ── type roles ─────────────────────────────────────────────────────────── */
-.u{font-family:var(--util); font-size:var(--fs-util); letter-spacing:.06em;
-   font-variant-numeric:tabular-nums lining-nums; line-height:1.45}
-.u--head{font-weight:700; text-transform:uppercase}
-.micro{font-family:var(--util); font-size:var(--fs-micro); letter-spacing:.08em;
-   color:var(--soil-dry); line-height:1.4}
-.lede{font-size:var(--fs-lede); line-height:1.5; max-width:52ch}
-.h2{font-size:var(--fs-d2)}
-.h3{font-size:var(--fs-d3); line-height:1.18}
-.dim{color:var(--soil-dry)}
+.label{font-family:var(--font-body);font-size:var(--text-xs);font-weight:700;
+  letter-spacing:.18em;text-transform:uppercase;color:var(--color-accent);
+  display:block;margin-bottom:var(--space-sm)}
+.band--ink .label{color:var(--color-accent-2)}
+.data{font-family:var(--font-util);font-size:var(--text-sm);
+  font-variant-numeric:tabular-nums lining-nums;letter-spacing:.02em}
 
-.straw .unproven{color:var(--mud); border-bottom-color:var(--mud); opacity:.82}
-.straw .micro,.straw .ph__b,.straw .ph__s{color:var(--mud); opacity:.88}
-.straw .entry__role .unproven{opacity:.8}
+/* ── N6 masthead ─────────────────────────────────────────────────────── */
+.mast{border-bottom:var(--rule-hair) solid var(--color-rule);
+  background:var(--color-paper)}
+.mast .wrap{display:flex;align-items:baseline;gap:var(--space-md);
+  padding-block:var(--space-sm);flex-wrap:wrap}
+.mast__id{font-family:var(--font-display);font-size:var(--text-2xl);
+  letter-spacing:-.02em}
+.mast__id b{font-weight:400}
+.mast__sub{font-size:var(--text-xs);letter-spacing:.14em;text-transform:uppercase;
+  color:var(--color-ink-2)}
+.mast__nav{margin-left:auto;display:flex;gap:var(--space-md);flex-wrap:wrap}
+.mast__nav a{font-size:var(--text-xs);letter-spacing:.13em;text-transform:uppercase;
+  font-weight:700;white-space:nowrap;padding-bottom:2px;
+  border-bottom:var(--rule-hair) solid transparent;transition:border-color var(--dur-fast) var(--ease-out)}
+.mast__nav a:hover{border-bottom-color:var(--color-accent)}
+@media(max-width:760px){.mast__nav{display:none}}
 
-/* the chop. ownership, rationed. */
-.chop{display:inline-block; width:10px; height:10px; background:var(--seal);
-  flex:0 0 10px; transform:translateY(-1px)}
-.who{display:flex; align-items:center; gap:10px; flex-wrap:wrap}
-.who b{font-family:var(--util); font-size:var(--fs-util); font-weight:700;
-  letter-spacing:.1em; text-transform:uppercase; color:var(--seal)}
-/* on --straw, --seal fails AA. the chop carries the rule, the name stays mud. */
-.straw .who b{color:var(--mud)}
+/* ── hero ────────────────────────────────────────────────────────────── */
+.hero{position:relative;min-height:min(88svh,860px);display:flex;
+  align-items:flex-end;overflow:hidden;background:var(--color-ink)}
+.hero picture,.hero img{position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;object-position:50% 42%}
+.hero__scrim{position:absolute;inset:0;background:
+  linear-gradient(to top,oklch(18% .012 62 / .92) 0%,oklch(18% .012 62 / .62) 30%,
+  oklch(18% .012 62 / .06) 62%),
+  linear-gradient(to bottom,oklch(18% .012 62 / .34) 0%,transparent 24%)}
+.hero__in{position:relative;z-index:2;width:100%;color:var(--color-inverse);
+  padding-block:clamp(40px,6vw,80px)}
+.hero h1{font-size:var(--text-display);max-width:15ch}
+.hero .lede{margin-top:var(--space-md);color:var(--color-paper-2);
+  max-width:52ch}
+.hero__slug{margin-top:var(--space-lg);font-size:var(--text-xs);font-weight:700;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--color-accent-2);
+  display:flex;align-items:center;gap:var(--space-xs);flex-wrap:wrap}
+.hero__slug::before{content:"";width:32px;height:var(--rule-hair);
+  background:currentColor;flex:0 0 32px}
+.hero__credit{position:absolute;right:clamp(20px,4.4vw,64px);
+  bottom:var(--space-sm);z-index:2;font-family:var(--font-util);
+  font-size:var(--text-xs);color:oklch(97% .008 95 / .58)}
 
-/* anything not yet earned. feeds the live OPEN ITEMS counter. */
-.unproven{font-family:var(--util); font-size:var(--fs-util); letter-spacing:.04em;
-  color:var(--soil-dry); border-bottom:1px dashed var(--soil-dry);
-  padding-bottom:1px; display:inline}
-.blank{display:inline-block; min-width:9ch; border-bottom:1px solid var(--soil-dry);
-  height:1em; vertical-align:-2px}
+/* ── manifesto statement ─────────────────────────────────────────────── */
+.claim{font-family:var(--font-display);font-size:var(--text-display-s);
+  line-height:1.06;letter-spacing:-.02em;max-width:19ch;text-wrap:balance}
+.claim--wide{max-width:26ch}
+.rule{height:var(--rule-bold);background:var(--color-ink);width:clamp(72px,10vw,132px);
+  margin-bottom:var(--space-lg)}
+.band--ink .rule{background:var(--color-accent-2)}
 
-/* ── the heavy rule. ruled by hand against a straightedge, not a border. ─── */
-.heavy{display:block; width:100%; height:9px; overflow:visible}
-.heavy path{stroke:var(--mud); stroke-width:5; fill:none; stroke-linecap:butt}
+/* ── figure ──────────────────────────────────────────────────────────── */
+.fig{margin:0}
+.fig img{width:100%;height:auto}
+.fig--bleed{margin-inline:calc(50% - 50vw);width:100vw;max-width:100vw}
+.fig--tall{display:grid;gap:var(--space-md)}
+@media(min-width:900px){.fig--tall{grid-template-columns:minmax(0,46%) minmax(0,1fr);
+  gap:clamp(32px,5vw,72px);align-items:end}
+  .fig--tall figcaption{margin-top:0;max-width:44ch;font-size:var(--text-base);
+    line-height:1.6}}
+.fig--bleed img{aspect-ratio:21/9;object-fit:cover}
+@media(max-width:760px){.fig--bleed img{aspect-ratio:4/3}}
+.fig figcaption{margin-top:var(--space-sm);font-size:var(--text-sm);
+  line-height:1.55;color:var(--color-ink-2);max-width:56ch}
+.fig--bleed figcaption{max-width:var(--max);margin-inline:auto;
+  padding-inline:clamp(20px,4.4vw,64px)}
+.band--ink figcaption{color:var(--color-paper-3)}
+.fig b{font-weight:700;color:var(--color-ink)}
+.band--ink .fig b{color:var(--color-inverse)}
+.stamp{font-family:var(--font-util);font-size:var(--text-xs);
+  color:var(--color-ink-3);letter-spacing:.04em;display:block;margin-top:var(--space-2xs)}
 
-/* ── nav ────────────────────────────────────────────────────────────────── */
-.head{border-bottom:1px solid var(--zinc); background-color:var(--yard)}
-.head .wrap{display:flex; align-items:center; gap:var(--gut);
-  min-height:56px; flex-wrap:wrap}
-.head__id{font-family:var(--util); font-size:var(--fs-util); font-weight:700;
-  letter-spacing:.08em; text-transform:uppercase; color:var(--mud)}
-.head__nav{margin-left:auto; display:flex; align-items:center}
-.head__nav a{font-family:var(--util); font-size:var(--fs-util); letter-spacing:.08em;
-  text-transform:uppercase; padding:0 12px; border-left:1px solid var(--zinc);
-  white-space:nowrap; line-height:1.2}
-.head__nav a:first-child{border-left:0}
-.head__nav a:hover{text-decoration:underline; text-underline-offset:4px}
-.head__more{display:none}
-@media(max-width:820px){
-  .head__nav{display:none}
-  .head__more{display:block; margin-left:auto; font-family:var(--util);
-    font-size:var(--fs-util); letter-spacing:.08em; text-transform:uppercase}
-}
+/* ── two-column argument ─────────────────────────────────────────────── */
+.duo{display:grid;gap:var(--space-lg)}
+@media(min-width:900px){.duo{grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);
+  gap:clamp(40px,6vw,96px);align-items:start}}
+.duo--tight{align-items:center}
 
-/* ── hero ───────────────────────────────────────────────────────────────── */
-.hero{position:relative; background-color:var(--yard)}
-.hero__top{padding-block:calc(var(--lead)*2.6) calc(var(--lead)*1.4)}
-.hero__grid{display:grid; gap:calc(var(--gut)*1.5)}
-.hero__grid>*,.straw__grid>*,.frame>*,.row>*{min-width:0}
-@media(min-width:1000px){.hero__grid{grid-template-columns:minmax(0,1.35fr) minmax(0,1fr); align-items:start}}
-.hero h1{font-size:var(--fs-d1); line-height:.94; letter-spacing:-.02em; color:var(--mud)}
-.hero__cjk{font-family:var(--ming); font-weight:700; font-size:var(--fs-d1-cjk);
-  line-height:1.2; letter-spacing:.02em; margin-top:20px}
-.hero__deck{margin-top:28px; font-size:var(--fs-lede); line-height:1.5; max-width:52ch}
-.slogan{margin-top:40px; display:flex; align-items:center; gap:10px;
-  font-family:var(--util); font-size:var(--fs-util); font-weight:700;
-  letter-spacing:.14em; text-transform:uppercase; line-height:1.4}
+/* ── list of consequences ────────────────────────────────────────────── */
+.beats{margin-top:var(--space-xl);border-top:var(--rule-hair) solid var(--color-rule)}
+.band--ink .beats{border-color:oklch(97% .008 95 / .22)}
+.beat{border-bottom:var(--rule-hair) solid var(--color-rule);
+  padding-block:var(--space-lg);display:grid;gap:var(--space-sm)}
+.band--ink .beat{border-color:oklch(97% .008 95 / .22)}
+@media(min-width:820px){.beat{grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);
+  gap:clamp(32px,5vw,80px);align-items:baseline}}
+.beat h3{font-size:var(--text-4xl);max-width:14ch}
+.beat p{font-size:var(--text-base);line-height:1.6;color:var(--color-ink-2);
+  max-width:52ch}
+.band--ink .beat p{color:var(--color-paper-3)}
 
-/* ── straw band ─────────────────────────────────────────────────────────── */
-.straw{background-color:var(--straw); color:var(--mud)}
-.straw__in{padding-block:calc(var(--lead)*1.8) calc(var(--lead)*1.6)}
-.straw__grid{display:grid; gap:calc(var(--gut)*1.5)}
-@media(min-width:1000px){.straw__grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
+/* ── evidence ledger ─────────────────────────────────────────────────── */
+.facts{display:grid;gap:var(--space-lg) var(--space-md);margin-top:var(--space-xl)}
+@media(min-width:720px){.facts{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(min-width:1040px){.facts{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.fact__n{font-family:var(--font-display);font-size:var(--text-4xl);line-height:1;
+  letter-spacing:-.03em}
+.fact__t{margin-top:var(--space-2xs);font-size:var(--text-sm);line-height:1.5;
+  color:var(--color-ink-2);max-width:26ch}
 
-/* a ruled entry. our unit of human evidence. no card, ever. */
-.entry{padding-top:14px}
-.entry::before{content:""; display:block; width:64px; height:2px;
-  background:var(--mud); margin-bottom:14px}
-.entry__role{font-family:var(--util); font-size:var(--fs-util); color:var(--mud);
-  opacity:.72; margin-top:8px; letter-spacing:.04em}
-.straw .entry__role{opacity:.9}
-.said{font-family:var(--ming); font-size:var(--fs-quote); line-height:1.4;
-  max-width:34ch; margin-top:18px; font-weight:400}
-.said--en{font-family:var(--util); font-size:var(--fs-util); color:var(--soil-dry);
-  max-width:40ch; margin-top:12px; letter-spacing:.03em}
-.straw .said--en{color:var(--mud); opacity:.9}
+/* ── honesty ─────────────────────────────────────────────────────────── */
+.unproven{border-bottom:1px dashed currentColor;padding-bottom:1px}
+.limit{margin-top:var(--space-sm);padding-left:var(--space-sm);
+  border-left:var(--rule-bold) solid var(--color-accent);
+  font-size:var(--text-base);line-height:1.55;color:var(--color-ink-2);
+  max-width:56ch}
+.limit b{font-weight:700;letter-spacing:.06em;color:var(--color-ink);
+  font-size:var(--text-sm);text-transform:uppercase}
 
-/* ── photo slots. straw at 35% over ground, chalked out. never grey. ────── */
-.ph{position:relative; background:
-    linear-gradient(rgba(196,160,90,.35),rgba(196,160,90,.35)), var(--yard-lift);
-  border:1.5px dashed var(--zinc); padding:34px 14px 14px; min-height:120px}
-.straw .ph{background:
-    linear-gradient(rgba(46,38,32,.10),rgba(46,38,32,.10)), var(--yard-lift)}
-.ph__i{position:absolute; top:10px; left:12px; font-family:var(--util);
-  font-size:var(--fs-util); font-weight:700; letter-spacing:.08em; color:var(--mud)}
-.ph__b{font-family:var(--util); font-size:var(--fs-util); color:var(--soil-dry);
-  line-height:1.5; letter-spacing:.02em}
-.ph__s{margin-top:8px; font-family:var(--util); font-size:var(--fs-micro);
-  color:var(--soil-dry); letter-spacing:.08em}
-.ph{width:100%; max-width:100%}
-.ph--sq,.ph--strip{height:auto}
-@media(max-width:900px){.ph--strip,.ph--sq{aspect-ratio:auto}}
-.ph--sq{aspect-ratio:1}
-.ph--strip{aspect-ratio:16/5}
-.ph--por{aspect-ratio:1; min-height:0; padding:0; display:grid; place-items:center}
-.ph--por .ph__i{position:static}
-.ph--por .ph__b,.ph--por .ph__s{display:none}
+/* ── Ft5 statement footer ────────────────────────────────────────────── */
+.foot{background:var(--color-ink);color:var(--color-inverse);
+  padding-block:clamp(64px,9vw,128px)}
+.foot__claim{font-family:var(--font-display);font-size:var(--text-display-s);
+  line-height:1.05;letter-spacing:-.02em;max-width:16ch}
+.foot__links{margin-top:var(--space-xl);display:flex;gap:var(--space-md);
+  flex-wrap:wrap;padding-top:var(--space-md);
+  border-top:var(--rule-hair) solid oklch(97% .008 95 / .22)}
+.foot__links a{font-size:var(--text-xs);letter-spacing:.13em;text-transform:uppercase;
+  font-weight:700;white-space:nowrap;padding-bottom:2px;
+  border-bottom:var(--rule-hair) solid transparent;transition:border-color var(--dur-fast) var(--ease-out)}
+.foot__links a:hover{border-bottom-color:var(--color-accent-2)}
+.foot__fine{margin-top:var(--space-lg);font-size:var(--text-sm);line-height:1.7;
+  color:var(--color-paper-3);max-width:60ch}
 
-/* ── the crank: dose slot + lag trace + 宜忌 ────────────────────────────── */
-.crank{margin-top:calc(var(--lead)*1.2)}
-.ruler{display:flex; justify-content:space-between; font-family:var(--util);
-  font-size:var(--fs-micro); color:var(--mud); margin-bottom:4px; letter-spacing:.06em}
-.slot{position:relative; height:44px; background:var(--mud); cursor:ew-resize;
-  touch-action:none; overflow:hidden}
-.slot__fill{position:absolute; inset:0 auto 0 0; width:18%;
-  background:linear-gradient(90deg,rgba(0,232,90,.55),var(--lamp))}
-.slot__h{position:absolute; top:0; bottom:0; left:18%; width:28px; margin-left:-14px;
-  background:var(--yard); display:grid; place-items:center; gap:3px;
-  grid-auto-flow:column}
-.slot__h i{display:block; width:1px; height:18px; background:var(--mud)}
-.slot__lab{display:flex; justify-content:space-between; gap:12px; margin-top:8px;
-  font-family:var(--util); font-size:var(--fs-util); color:var(--mud)}
-.trace{margin-top:14px; background:var(--yard-lift); border:1px solid var(--zinc);
-  height:96px; position:relative}
-.trace svg{position:absolute; inset:0; width:100%; height:100%}
-.trace__k{position:absolute; left:10px; top:8px; font-family:var(--util);
-  font-size:var(--fs-micro); letter-spacing:.06em; color:var(--mud)}
-.trace__k i{font-style:normal; display:inline-flex; align-items:center; gap:5px;
-  margin-right:12px}
-.trace__k i::before{content:""; width:13px; height:2px; background:currentColor}
-.k-cmd{color:var(--canal)} .k-tit{color:var(--mud)}
-.trace__n{position:absolute; right:10px; bottom:8px; font-family:var(--util);
-  font-size:var(--fs-micro); color:var(--mud); letter-spacing:.04em; text-align:right}
-
-.yj{margin-top:14px; border-top:1px solid var(--zinc)}
-.yj__r{display:grid; grid-template-columns:52px 1fr; gap:14px; align-items:start;
-  padding:12px 0; border-bottom:1px solid var(--zinc)}
-.yj__g{font-family:var(--ming); font-weight:700; font-size:30px; line-height:1;
-  color:var(--mud); text-align:center}
-.yj__g span{display:block; font-family:var(--util); font-size:var(--fs-micro);
-  letter-spacing:.06em; color:var(--soil-dry); margin-top:5px; font-weight:400}
-.yj__t{font-size:var(--fs-body); line-height:1.45}
-.yj__t b{font-family:var(--util); font-weight:400; font-size:.94em}
-
-/* ── imprint strip ──────────────────────────────────────────────────────── */
-.imprint{background:var(--mud); color:var(--yard)}
-.imprint__in{overflow-x:auto; padding:0 var(--pad)}
-.imprint p{font-family:var(--util); font-size:var(--fs-util); letter-spacing:.08em;
-  white-space:nowrap; padding-block:13px; max-width:var(--max); margin:0 auto}
-.imprint a{border-bottom:1px solid var(--straw); color:var(--straw)}
-.formno{padding:10px 0 0; font-family:var(--util); font-size:var(--fs-micro);
-  color:var(--soil-dry); letter-spacing:.06em}
-
-/* ── sections. 8/4 frame: argument in the eight, conscience in the four. ── */
-.band{padding:calc(var(--lead)*3) 0}
-.band--lift{background-color:var(--yard-lift)}
-.frame{display:grid; gap:calc(var(--gut)*1.5)}
-@media(min-width:960px){.frame{grid-template-columns:minmax(0,2fr) minmax(0,1fr)}}
-.marg{border-top:1px solid var(--zinc); padding-top:12px}
-.marg dl{margin:0; display:grid; gap:12px}
-.marg dt{font-family:var(--util); font-size:var(--fs-micro); letter-spacing:.08em;
-  text-transform:uppercase; color:var(--soil-dry)}
-.marg dd{margin:0 0 10px; font-family:var(--util); font-size:var(--fs-util);
-  color:var(--mud); line-height:1.5; border-left:2px solid var(--canal);
-  padding-left:10px}
-.sec__n{font-family:var(--util); font-size:var(--fs-util); font-weight:700;
-  letter-spacing:.14em; text-transform:uppercase; color:var(--mud); display:block;
-  margin-bottom:12px}
-.rows{margin-top:calc(var(--lead)*1.2); border-top:1px solid var(--zinc)}
-.row{border-bottom:1px solid var(--zinc); padding:calc(var(--lead)*.9) 0;
-  display:grid; gap:16px}
-@media(min-width:900px){.row{grid-template-columns:3.5rem minmax(0,1.15fr) minmax(0,1fr); gap:28px; align-items:start}}
-.row__n{font-family:var(--util); font-size:var(--fs-util); font-weight:700;
-  letter-spacing:.1em; color:var(--mud); padding-top:5px}
-.row__t{font-size:.97rem; line-height:1.58; margin-top:10px; max-width:46ch}
-.spec{margin-top:12px; display:grid; gap:5px; font-family:var(--util);
-  font-size:var(--fs-util); line-height:1.5}
-.spec div{display:flex; gap:10px}
-.spec span:first-child{color:var(--canal); flex:0 0 6.5rem; font-weight:700}
-.ledger{width:100%; border-collapse:collapse; margin-top:calc(var(--lead));
-  font-size:.95rem}
-.ledger th,.ledger td{text-align:left; padding:10px 12px 10px 0;
-  border-bottom:1px solid var(--zinc); vertical-align:top}
-.ledger th{font-family:var(--util); font-size:var(--fs-micro); font-weight:700;
-  letter-spacing:.08em; text-transform:uppercase; color:var(--soil-dry)}
-.ledger td.n{font-family:var(--util); font-variant-numeric:tabular-nums;
-  white-space:nowrap}
-.tscroll{overflow-x:auto}
-.limit{margin-top:10px; padding-left:22px; font-family:var(--util);
-  font-size:var(--fs-body); line-height:1.5; color:var(--mud);
-  border-left:2px solid var(--seal)}
-.limit b{font-weight:700; letter-spacing:.06em}
-
-@media(prefers-reduced-motion:reduce){*{animation:none!important; transition-duration:.01ms!important}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;
+  transition-duration:.01ms!important}}
 </style>
 </head>
 <body>
 
-<header class="head" id="top">
+<header class="mast">
   <div class="wrap">
-    <span class="head__id">GEMS Taiwan · iGEM 2026 · Biomanufacturing Village</span>
-    <nav class="head__nav">
-      <a href="#problem">Problem</a><a href="#solution">Solution</a>
-      <a href="#synbio">Synbio</a><a href="#turn">輪 Human Practices</a>
-      <a href="#ledger">Ledger</a><a href="#future">Future</a>
+    <span class="mast__id"><b>ReLeaf</b></span>
+    <span class="mast__sub">GEMS Taiwan · iGEM 2026</span>
+    <nav class="mast__nav">
+      <a href="#gate">The gate</a><a href="#factory">The factory</a>
+      <a href="#makes">What it makes</a><a href="#people">Who decides</a>
+      <a href="#evidence">Evidence</a><a href="#limits">Limits</a>
     </nav>
-    <a class="head__more" href="#problem">Sections ↓</a>
   </div>
 </header>
 
-<!-- ══════════════════════════════════════════════════════════════════════════
-     HERO. Upper half is --yard carrying the ruled log grid. The heavy rule
-     cuts across. Lower band is --straw. The drawing straddles the rule.
-     ══════════════════════════════════════════════════════════════════════ -->
-<section class="hero ruled">
-  <div class="wrap hero__top">
-    <div class="hero__grid">
-
-      <div>
-        <h1>Own the factory,<br>not the invoice.</h1>
-        <p class="hero__cjk">「擁有工廠，而不是帳單。」</p>
-        <p class="hero__deck">
-          A bioprotectant factory small enough for half a hectare, and simple enough
-          that the person who owns it can open it, clean it, and fix it.
-        </p>
-        <p class="slogan"><span class="chop" aria-hidden="true"></span>
-          Micro-Factories for Micro-Farmers: Democratizing Bio-Production</p>
-      </div>
-
-      <div>
-        <div class="ph ph--sq" data-shot="P-H2" style="aspect-ratio:16/9">
-          <span class="ph__i">P-H2</span>
-          <p class="ph__b">The shelf it lives on. The corner of the tool shed where the
-          reactor sits between runs, on the same shelf as the sprayer, the spanner set
-          and the fertiliser sack. Available light. <b>Do not tidy the shelf.</b></p>
-          <p class="ph__s">35 mm · available light · no flash</p>
-        </div>
-      </div>
-
+<!-- ══ HERO ═══════════════════════════════════════════════════════════ -->
+<section class="hero">
+  <picture>
+    <source type="image/webp" srcset="img/walk-1400.webp 1400w, img/walk-2400.webp 2400w" sizes="100vw">
+    <img src="img/walk-2400.jpg" alt="The ReLeaf team walking into a smallholder's field between bamboo trellises, the farmer ahead of them carrying a basket.">
+  </picture>
+  <div class="hero__scrim"></div>
+  <div class="hero__in">
+    <div class="wrap">
+      <h1>Every farmer a biomanufacturer.</h1>
+      <p class="lede">A bioreactor you build yourself, producing the protein your crop
+      needs, in the field where it is used.</p>
+      <p class="hero__slug">Micro-factories for micro-farmers · Democratizing bio-production</p>
     </div>
   </div>
-
-  <!-- the heavy rule. ruled by hand, so it wanders 1.6px over its length. -->
-  <svg class="heavy" viewBox="0 0 1600 9" preserveAspectRatio="none" aria-hidden="true">
-    <path d="M0 5.2 C 220 4.1, 430 5.9, 640 4.6 S 1080 5.8, 1290 4.4 S 1480 5.5, 1600 4.9"/>
-  </svg>
-
-  <div class="straw">
-    <div class="wrap straw__in">
-      <div class="straw__grid">
-
-        <!-- THE VOICE. Somebody speaks above the fold, and what she changed is
-             on the record even though her verbatim sentence is not yet. -->
-        <div>
-          <div class="entry">
-            <div class="who"><span class="chop" aria-hidden="true"></span><b>陳惠雯 · Chen Hui-wen</b></div>
-            <p class="entry__role">dew-mulch farmer · 訪談日期 <span class="unproven">interview date not yet on record</span></p>
-            <p class="said">她把給藥的時鐘拆了。</p>
-            <p class="said--en">She took the clock out of the dosing schedule. It ran on
-              wall-clock intervals. Because of her it now runs on soil-moisture state.
-              That change is on the record; <span class="unproven">her verbatim sentence is not yet</span>.</p>
-          </div>
-
-          <div class="ph ph--strip" data-shot="P-H1" style="margin-top:calc(var(--lead)*1.3)">
-            <span class="ph__i">P-H1</span>
-            <p class="ph__b"><b>Book this shoot before anything else.</b> Hands only, no
-            faces. Two pairs of hands at the opened reactor on the workbench in the farm's
-            tool shed: one older and calloused holding the fibre cartridge, one younger
-            threading the M4 bolt. Diffuse daylight through the shed's translucent roof
-            panel. Shot down the length of the bench so the spanner set stays in frame.
-            The reactor is open. Nobody looks at the camera. Crop at the wrist.</p>
-            <p class="ph__s">35 mm · f/2.8 · available light · no flash · 40 frames</p>
-          </div>
-        </div>
-
-        <!-- THE DRAWING + THE CRANK -->
-        <div>
-          <svg viewBox="0 0 760 790" role="img"
-               aria-label="Exploded elevation of the ReLeaf hollow-fibre bioreactor, showing the permeate port, fibre bundle, culture chamber holding retained B. subtilis, the 520 nm LED array, and the base."
-               style="width:100%;height:auto">
-            <defs>
-              <clipPath id="chamber"><rect x="165" y="294" width="170" height="200"/></clipPath>
-              <linearGradient id="cone" x1="0" y1="1" x2="0" y2="0">
-                <stop offset="0" stop-color="#00E85A" stop-opacity=".85"/>
-                <stop offset="1" stop-color="#00E85A" stop-opacity="0"/>
-              </linearGradient>
-            </defs>
-            <g stroke="#2E2620" fill="none" stroke-width="1" vector-effect="non-scaling-stroke">
-
-              <!-- exploded centre axis, dash-dot -->
-              <line x1="250" y1="22" x2="250" y2="726" stroke="#5C5348"
-                    stroke-dasharray="12 4 2 4"/>
-
-              <!-- 1 · cap / port block -->
-              <rect x="190" y="44" width="120" height="42" stroke-width="2"/>
-              <rect x="236" y="24" width="28" height="20"/>
-              <line x1="310" y1="65" x2="452" y2="65"/>
-
-              <!-- 2 · hollow-fibre bundle -->
-              <rect x="175" y="124" width="150" height="130" stroke-width="2"/>
-              <g stroke="#2E2620">
-                <line x1="185" y1="124" x2="185" y2="254"/><line x1="195" y1="124" x2="195" y2="254"/>
-                <line x1="205" y1="124" x2="205" y2="254"/><line x1="215" y1="124" x2="215" y2="254"/>
-                <line x1="225" y1="124" x2="225" y2="254"/><line x1="235" y1="124" x2="235" y2="254"/>
-                <line x1="245" y1="124" x2="245" y2="254"/><line x1="255" y1="124" x2="255" y2="254"/>
-                <line x1="265" y1="124" x2="265" y2="254"/><line x1="275" y1="124" x2="275" y2="254"/>
-                <line x1="285" y1="124" x2="285" y2="254"/><line x1="295" y1="124" x2="295" y2="254"/>
-                <line x1="305" y1="124" x2="305" y2="254"/><line x1="315" y1="124" x2="315" y2="254"/>
-              </g>
-              <line x1="325" y1="189" x2="452" y2="189"/>
-
-              <!-- 3 · THE CULTURE CHAMBER. the one filled shape, and the only
-                   place on this page --lamp is allowed to exist. -->
-              <rect x="165" y="294" width="170" height="200" fill="#2E2620" stroke-width="2"/>
-              <g clip-path="url(#chamber)">
-                <polygon points="250,528 322,294 178,294" fill="url(#cone)" stroke="none">
-                  <animate attributeName="opacity" values=".18;.55;.18" dur="6s"
-                           calcMode="spline" keySplines=".4 0 .6 1;.4 0 .6 1"
-                           repeatCount="indefinite"/>
-                </polygon>
-                <!-- fibre lumens crossing the chamber -->
-                <g stroke="#DEE0D4" stroke-width="1" opacity=".62">
-                  <line x1="200" y1="294" x2="200" y2="494"/>
-                  <line x1="250" y1="294" x2="250" y2="494"/>
-                  <line x1="300" y1="294" x2="300" y2="494"/>
-                </g>
-                <!-- engineered cells: retained, never on a lumen -->
-                <g fill="#DEE0D4" stroke="none">
-                  <circle cx="178" cy="312" r="2.2"/><circle cx="216" cy="306" r="2.2"/>
-                  <circle cx="264" cy="316" r="2.2"/><circle cx="286" cy="304" r="2.2"/>
-                  <circle cx="322" cy="318" r="2.2"/><circle cx="188" cy="336" r="2.2"/>
-                  <circle cx="228" cy="330" r="2.2"/><circle cx="272" cy="338" r="2.2"/>
-                  <circle cx="312" cy="332" r="2.2"/><circle cx="176" cy="358" r="2.2"/>
-                  <circle cx="212" cy="364" r="2.2"/><circle cx="238" cy="352" r="2.2"/>
-                  <circle cx="282" cy="360" r="2.2"/><circle cx="326" cy="354" r="2.2"/>
-                  <circle cx="192" cy="384" r="2.2"/><circle cx="224" cy="392" r="2.2"/>
-                  <circle cx="266" cy="382" r="2.2"/><circle cx="308" cy="390" r="2.2"/>
-                  <circle cx="180" cy="410" r="2.2"/><circle cx="234" cy="416" r="2.2"/>
-                  <circle cx="276" cy="408" r="2.2"/><circle cx="318" cy="414" r="2.2"/>
-                  <circle cx="206" cy="436" r="2.2"/><circle cx="240" cy="442" r="2.2"/>
-                  <circle cx="288" cy="434" r="2.2"/><circle cx="324" cy="440" r="2.2"/>
-                  <circle cx="184" cy="460" r="2.2"/><circle cx="220" cy="466" r="2.2"/>
-                  <circle cx="268" cy="458" r="2.2"/><circle cx="310" cy="464" r="2.2"/>
-                  <circle cx="196" cy="482" r="2.2"/><circle cx="258" cy="486" r="2.2"/>
-                  <circle cx="296" cy="480" r="2.2"/><circle cx="330" cy="472" r="2.2"/>
-                </g>
-                <!-- protectant: small, inside the lumens, on its way out -->
-                <g fill="#DEE0D4" stroke="none" opacity=".9">
-                  <circle cx="200" cy="330" r="1.2"/><circle cx="200" cy="378" r="1.2"/>
-                  <circle cx="200" cy="446" r="1.2"/><circle cx="250" cy="312" r="1.2"/>
-                  <circle cx="250" cy="366" r="1.2"/><circle cx="250" cy="430" r="1.2"/>
-                  <circle cx="250" cy="474" r="1.2"/><circle cx="300" cy="344" r="1.2"/>
-                  <circle cx="300" cy="400" r="1.2"/><circle cx="300" cy="462" r="1.2"/>
-                </g>
-              </g>
-              <line x1="335" y1="394" x2="452" y2="394"/>
-
-              <!-- 4 · 520 nm LED array -->
-              <rect x="180" y="528" width="140" height="14" stroke-width="2"/>
-              <g fill="#2E2620" stroke="none">
-                <circle cx="200" cy="535" r="2.6"/><circle cx="220" cy="535" r="2.6"/>
-                <circle cx="240" cy="535" r="2.6"/><circle cx="260" cy="535" r="2.6"/>
-                <circle cx="280" cy="535" r="2.6"/><circle cx="300" cy="535" r="2.6"/>
-              </g>
-              <line x1="320" y1="535" x2="452" y2="535"/>
-
-              <!-- 5 · base, stake mount, perfusion loop -->
-              <rect x="185" y="580" width="130" height="38" stroke-width="2"/>
-              <path d="M240 618 L250 700 L260 618"/>
-              <path d="M185 600 C 140 600, 140 660, 185 660" />
-              <line x1="315" y1="599" x2="452" y2="599"/>
-              <line x1="315" y1="646" x2="452" y2="646"/>
-              <!-- an M4 bolt at true relative size. scale stated by drawing. -->
-              <rect x="348" y="576" width="9" height="6" stroke-width="1"/>
-              <rect x="350" y="582" width="5" height="13" stroke-width="1"/>
-
-              <!-- dimension line: the whole object is 310 mm tall -->
-              <line x1="86" y1="44" x2="86" y2="700"/>
-              <line x1="78" y1="44" x2="94" y2="44"/><line x1="78" y1="700" x2="94" y2="700"/>
-              <!-- 100 mm scale bar -->
-              <line x1="86" y1="752" x2="298" y2="752" stroke-width="2"/>
-              <line x1="86" y1="746" x2="86" y2="758"/><line x1="298" y1="746" x2="298" y2="758"/>
-            </g>
-
-            <g font-family="Courier New, monospace" font-size="13" fill="#2E2620">
-              <text x="462" y="69">permeate out · protein only</text>
-              <text x="462" y="185">hollow-fibre bundle</text>
-              <text x="462" y="202" fill="#5C5348">every cell stays inside</text>
-              <text x="462" y="390">B. subtilis · retained</text>
-              <text x="462" y="407" fill="#5C5348">never leaves the housing</text>
-              <text x="462" y="531">520 nm array</text>
-              <text x="462" y="548" fill="#5C5348">brightness is dose</text>
-              <text x="462" y="603">M4 × 6 · hand tools only</text>
-              <text x="462" y="650">medium in · 1.2 mL min⁻¹</text>
-              <text x="76" y="380" transform="rotate(-90 76 380)" text-anchor="middle">310 mm</text>
-              <text x="86" y="774" fill="#5C5348">100 mm</text>
-            </g>
-          </svg>
-
-          <!-- THE CRANK. one interactive object. green lives in the dark slot. -->
-          <div class="crank">
-            <div class="ruler" aria-hidden="true">
-              <span>0</span><span>20</span><span>40</span><span>60</span><span>80</span><span>100</span>
-            </div>
-            <div class="slot" id="slot" role="slider" tabindex="0"
-                 aria-valuemin="0" aria-valuemax="100" aria-valuenow="18"
-                 aria-label="520 nm light intensity, percent">
-              <span class="slot__fill" id="slotFill"></span>
-              <span class="slot__h" id="slotH"><i></i><i></i></span>
-            </div>
-            <div class="slot__lab">
-              <span>520 nm drive · <b id="slotV">18</b>%</span>
-              <span id="slotMode">auto · modelled day</span>
-            </div>
-
-            <div class="trace">
-              <svg viewBox="0 0 600 190" preserveAspectRatio="none" aria-hidden="true">
-                <defs>
-                  <pattern id="hatch" width="7" height="7" patternTransform="rotate(45)"
-                           patternUnits="userSpaceOnUse">
-                    <line x1="0" y1="0" x2="0" y2="7" stroke="#B7BCB2" stroke-width="1.4"/>
-                  </pattern>
-                </defs>
-                <polygon id="gap" fill="url(#hatch)" points=""/>
-                <polyline id="cmd" fill="none" stroke="#5C7A73" stroke-width="2"
-                          vector-effect="non-scaling-stroke" points=""/>
-                <polyline id="tit" fill="none" stroke="#2E2620" stroke-width="2"
-                          vector-effect="non-scaling-stroke" points=""/>
-              </svg>
-              <div class="trace__k"><i class="k-cmd">commanded</i><i class="k-tit">made</i></div>
-              <p class="trace__n">t½ = 105 min<br>this gap is why it predicts</p>
-            </div>
-
-            <!-- 宜 / 忌. the machine's standing orders for the day. -->
-            <div class="yj">
-              <div class="yj__r">
-                <div class="yj__g">宜<span>SUITABLE</span></div>
-                <p class="yj__t">22:00 起照光 40%，持續 2.4 小時<br>
-                  <b>light at 40% from 22:00, for 2.4 h</b></p>
-              </div>
-              <div class="yj__r">
-                <div class="yj__g">忌<span>AVOID</span></div>
-                <p class="yj__t">開艙、離線逾 6 小時<br>
-                  <b>opening the chamber · going offline more than 6 h</b></p>
-              </div>
-            </div>
-            <p class="formno">ReLeaf 工作日誌 · FORM RL-02 · 第二聯（農民收執）· second copy, retained by the farmer</p>
-          </div>
-        </div>
-
-      </div>
-    </div>
-  </div>
-
-  <div class="imprint">
-    <div class="imprint__in">
-      <p><i>B. subtilis</i> 168 · CcaS/CcaR → P<sub>cpcG2</sub> · 520 nm · hollow fibre ·
-        ESP32 + 3-day forecast · t½ 105 min ·
-        <a href="#future">OPEN ITEMS <b id="openN">—</b></a></p>
-    </div>
-  </div>
+  <p class="hero__credit">21 July 2026</p>
 </section>
 
-<!-- ══ 2 · THE PROBLEM, FROM THE FARMER'S SIDE ═════════════════════════ -->
-<section class="band ruled" id="problem">
+<!-- ══ THE GATE ═══════════════════════════════════════════════════════ -->
+<section class="band" id="gate">
   <div class="wrap">
-    <div class="frame">
+    <div class="rule"></div>
+    <div class="duo">
       <div>
-        <span class="sec__n">Problem · 01</span>
-        <h2 class="h2">Stress arrives as a slow curve.<br>Help arrives as a sack.</h2>
-        <p class="lede" style="margin-top:20px">
-          Heat, drought and disease pressure build across hours and days. A farmer watching
-          that build has one decision point and one product: whatever was bought at the start
-          of the season, applied once, at a dose fixed before anyone knew what the weather
-          would do.
-        </p>
-        <p class="lede" style="margin-top:16px">
-          A sack is a number. Stress is a curve. Fitting a number to a curve is where the
-          agronomy fails, long before the biology does.
-        </p>
+        <span class="label">The problem is not the science</span>
+        <h2 class="claim">Today you cannot make a protein. You can only buy one.</h2>
       </div>
-      <aside class="marg">
-        <dl>
-          <dt>Salt-affected soil</dt>
-          <dd>1.38 billion ha, about 10.7% of global land area. FAO, first global assessment
-            in 50 years, 2024.</dd>
-          <dt>Who absorbs drought loss</dt>
-          <dd>83% of all economic loss from drought lands on agriculture. FAO.</dd>
-          <dt>Farm size</dt>
-          <dd>84% of the world's 570 million farms are under two hectares, and they grow about
-            a third of the world's food. FAO · Our World in Data.</dd>
-        </dl>
-      </aside>
-    </div>
-
-    <div class="rows">
-      <article class="row">
-        <div class="row__n">01</div>
-        <div>
-          <div class="who"><span class="chop" aria-hidden="true"></span><b>陳惠雯 · Chen Hui-wen</b></div>
-          <p class="entry__role">dew-mulch farmer · <span class="unproven">township, hectares and crop not yet on record</span></p>
-        </div>
-        <div>
-          <p class="row__t" style="margin-top:0">Changed the dosing schedule from wall-clock
-          intervals to soil-moisture state. The device now waits for the ground rather than
-          for the hour.</p>
-        </div>
-      </article>
-      <article class="row">
-        <div class="row__n">02</div>
-        <div>
-          <div class="who"><span class="chop" aria-hidden="true"></span><b>Field interviews</b></div>
-          <p class="entry__role">two to four more entries belong here</p>
-        </div>
-        <div>
-          <p class="row__t" style="margin-top:0"><span class="unproven">Interviews conducted
-          but not yet transcribed into this ledger.</span> Each entry needs a name, a township,
-          a hectarage, a date, one verbatim sentence, and the exact line of the design it moved.
-          An entry without a design change is a photograph of a meeting, not human practices.</p>
-        </div>
-      </article>
-    </div>
-  </div>
-</section>
-
-<!-- ══ 3 · THE LOGISTICS PROBLEM. one column, one figure, no table. ═════ -->
-<section class="band band--lift">
-  <div class="wrap">
-    <div class="frame">
       <div>
-        <span class="sec__n">Problem · 02</span>
-        <h2 class="h2">The science already works.<br>The logistics do not.</h2>
-        <p class="lede" style="margin-top:20px">
-          Microbial bioprotectants are one of the most active areas in crop science, and the
-          mechanisms are open literature. ACC deaminase has been published since the 1990s.
-          Nothing about the biology is proprietary.
-        </p>
-        <p class="lede" style="margin-top:16px">
-          What is proprietary is everything between the fermenter and the field. A living
-          product is manufactured once, in one place, then formulated, dried, chilled, shipped,
-          warehoused, and only then applied. Every stage is a place where the viable count
-          drops. Peat, the best-performing carrier anyone has found, still gives under six
-          months. Transit above 40 °C can kill the culture outright. Gram-negative PGPR do not
-          sporulate, so drying kills them too.
-        </p>
-        <p class="lede" style="margin-top:16px">
-          Then the dossier. Only a company with global sales can amortise a registration, which
-          means the barrier to entry sits downstream of every good idea a lab has ever had. The
-          moat is not made of science.
-        </p>
-
-        <svg viewBox="0 0 900 150" style="width:100%;height:auto;margin-top:34px"
-             role="img" aria-label="A cold chain running from a central plant to a field, with the required 2 to 8 degree window decaying along its length until it fails before arrival.">
-          <g font-family="Courier New, monospace" font-size="13" fill="#2E2620">
-            <text x="0" y="14">CENTRAL PLANT</text>
-            <text x="900" y="14" text-anchor="end">HALF A HECTARE</text>
-            <text x="0" y="118" fill="#5C5348">formulate</text>
-            <text x="200" y="118" fill="#5C5348">dry</text>
-            <text x="360" y="118" fill="#5C5348">chill</text>
-            <text x="520" y="118" fill="#5C5348">ship</text>
-            <text x="680" y="118" fill="#5C5348">warehouse</text>
-            <text x="900" y="118" text-anchor="end" fill="#A53327">applied</text>
-            <text x="0" y="143" fill="#5C5348">required window 2–8 °C · required at application 10⁷ viable cells g⁻¹</text>
-          </g>
-          <g fill="none" stroke-width="2" vector-effect="non-scaling-stroke">
-            <line x1="0" y1="88" x2="900" y2="88" stroke="#B7BCB2"/>
-            <path d="M0 40 L160 44 L320 52 L480 64 L640 76 L780 84 L900 88" stroke="#5C7A73"/>
-            <g stroke="#B7BCB2" stroke-width="1">
-              <line x1="160" y1="40" x2="160" y2="96"/><line x1="320" y1="40" x2="320" y2="96"/>
-              <line x1="480" y1="40" x2="480" y2="96"/><line x1="640" y1="40" x2="640" y2="96"/>
-              <line x1="780" y1="40" x2="780" y2="96"/>
-            </g>
-          </g>
-          <circle cx="900" cy="88" r="4" fill="#A53327"/>
-        </svg>
-        <p class="micro" style="margin-top:10px">Viability against distance. The line does not
-          arrive; it meets the floor before it gets there.</p>
+        <p class="body">Making a useful protein takes three things: a fermenter, a cold chain,
+        and a registration dossier. None of them is a scientific problem. All three are owned
+        by a small number of companies, and none of them can be paid off across half a hectare.</p>
+        <p class="body">So the result is not that smallholders get served badly. It is that
+        they are structurally not served at all. Nobody has to behave badly for this to happen.
+        It is arithmetic.</p>
+        <p class="body">The mechanisms themselves are open. ACC deaminase has been in the
+        literature since the 1990s. What is proprietary is everything between the fermenter
+        and the field.</p>
       </div>
-
-      <aside class="marg">
-        <dl>
-          <dt>EU registration</dt>
-          <dd>Roughly 5 to 10 years and £3–5 million per biopesticide. Bionema industry
-            analysis. <span class="unproven">Not re-checked against 2026 figures.</span></dd>
-          <dt>US registration</dt>
-          <dd>Roughly US$300–400k. Same source, same caveat.</dd>
-          <dt>Why this matters here</dt>
-          <dd>Fixed cost is the whole argument. A cold chain and a dossier cannot amortise
-            across half a hectare, so the market does not fail smallholders out of malice.
-            It fails them by arithmetic.</dd>
-        </dl>
-      </aside>
     </div>
   </div>
 </section>
 
-<!-- ══ 4 · THE SOLUTION AND ITS THREE ELEMENTS ═════════════════════════ -->
-<section class="band ruled" id="solution">
+<!-- ══ THE FACTORY ════════════════════════════════════════════════════ -->
+<section class="band band--tint" id="factory">
   <div class="wrap">
-    <div class="frame">
+    <div class="rule"></div>
+    <span class="label">The handover</span>
+    <h2 class="claim claim--wide">So we stopped designing a product and started designing a factory small enough to give away.</h2>
+  </div>
+
+  <div class="wrap" style="margin-top:var(--space-xl)">
+    <figure class="fig fig--tall">
+      <picture>
+        <source type="image/webp" srcset="img/bench-1400.webp 1400w, img/bench-2400.webp 2400w"
+                sizes="(min-width:900px) 46vw, 100vw">
+        <img src="img/bench-1400.jpg" alt="A breadboard wired with jumper leads, a power module, a printed rack and component bags on a classroom table, beside a cup of bubble tea.">
+      </picture>
+      <figcaption><b>This is the entire control system.</b> A breadboard, a power module, a
+      printed rack, jumper wire, and somebody's bubble tea. Nothing in this frame is specialist
+      equipment and nothing in it needs a cleanroom. That is the claim, photographed rather
+      than asserted.
+      <span class="stamp">Classroom table · 27 May 2026</span></figcaption>
+    </figure>
+  </div>
+
+  <div class="wrap" style="margin-top:var(--space-2xl)">
+    <div class="duo">
       <div>
-        <span class="sec__n">The solution</span>
-        <h2 class="h2">Move the factory, not the product.</h2>
-        <p class="lede" style="margin-top:20px">
-          A perfusion hollow-fibre membrane bioreactor, small enough and cheap enough to sit
-          where the crop is. <i>B. subtilis</i> grows in it continuously. The membrane lets the
-          protectant out and keeps every cell in. Because the reactor is on site, the dose is
-          decided on the day rather than in a previous season.
-        </p>
+        <p class="body">A reactor assembled from parts a workshop can source is a reactor that
+        can be repaired where it stands. That matters more than it sounds. Decentralised
+        production is worthless if the thing breaks and the owner has to wait for a company to
+        come and fix it. <b>Ownership without repairability is just a slower kind of
+        dependence.</b></p>
+        <p class="body">So the bill of materials, the CAD and the firmware are published. A unit
+        can be rebuilt without us, which is the only version of this that survives us
+        graduating.</p>
       </div>
-      <aside class="marg">
-        <dl>
-          <dt>Deployment unit</dt>
-          <dd>Per plot for a smallholder; per irrigation line for a cooperative; racked for a
-            vertical farm. The unit that makes economic sense is the line, not the plant.</dd>
-          <dt>Cost per unit</dt>
-          <dd><span class="unproven">Not yet totalled from a real bill of materials.</span>
-            Until it is, every affordability claim on this page is a hypothesis.</dd>
-        </dl>
-      </aside>
-    </div>
-
-    <div class="rows">
-      <article class="row">
-        <div class="row__n">EL. 1</div>
-        <div>
-          <h3 class="h3">A microbe that answers to a machine</h3>
-          <p class="row__t">The interface is light. An optogenetic switch turns LED intensity
-          into transcription rate, so brightness is dose, and the response is graded rather
-          than switched. On the machine side, a controller fuses an online forecast with a
-          local soil and air sensor and predicts stress before the plant shows it.</p>
-          <p class="row__t"><b>Prediction, not reaction.</b> Expression lags by roughly 105
-          minutes. A controller that waits for visible damage has already lost.</p>
-        </div>
-        <div class="spec">
-          <div><span>reads</span><span>soil moisture, EC, temperature</span></div>
-          <div><span>reads</span><span>rolling weather forecast</span></div>
-          <div><span>predicts</span><span>extreme heat event</span></div>
-          <div><span>predicts</span><span>drought onset</span></div>
-          <div><span>predicts</span><span>pathogen-favourable conditions</span></div>
-          <div><span>open</span><span class="unproven">prediction model not validated against a field season</span></div>
-        </div>
-      </article>
-
-      <article class="row">
-        <div class="row__n">EL. 2</div>
-        <div>
-          <h3 class="h3">A reactor you can open yourself</h3>
-          <p class="row__t">Think printer, not fermenter. The reactor is assembled from parts a
-          workshop can source, and the medium is a consumable you refill. Bill of materials,
-          CAD and firmware are published so a unit can be rebuilt without us.</p>
-          <p class="row__t">Decentralised production only counts if the thing is repairable
-          where it stands. <b>Ownership without repairability is abandonment.</b></p>
-        </div>
-        <div class="spec">
-          <div><span>fasteners</span><span>M4 × 6 · hand tools only</span></div>
-          <div><span>published</span><span>BOM · CAD · firmware</span></div>
-          <div><span>consumable</span><span>medium, refilled on site</span></div>
-          <div><span>open</span><span class="unproven">no BOM cost, so no affordability claim</span></div>
-        </div>
-      </article>
-
-      <article class="row">
-        <div class="row__n">EL. 3</div>
-        <div>
-          <h3 class="h3">Containment is what makes field use legal</h3>
-          <p class="row__t">The membrane is not only a separation step. It draws a regulatory
-          line: the engineered organism never leaves the device, and what reaches the soil is
-          protein.</p>
-          <p class="row__t">That is the difference between contained use and deliberate release
-          of a GMO, which in most jurisdictions are different regulatory classes entirely.
-          <b>The membrane is what lets a GMO-derived protectant reach a field at all.</b></p>
-        </div>
-        <div class="spec">
-          <div><span>retained</span><span>engineered <i>B. subtilis</i>, all of it</span></div>
-          <div><span>released</span><span>the protectant only, in permeate</span></div>
-          <div><span>open</span><span class="unproven">membrane cutoff unresolved: 0.2 µm and 50 kDa both appear in our own notes</span></div>
-          <div><span>open</span><span class="unproven">contained-use classification not yet confirmed by a Taiwan regulator</span></div>
-        </div>
-      </article>
-    </div>
-  </div>
-</section>
-
-<!-- ══ 5 · SYNBIO ══════════════════════════════════════════════════════ -->
-<section class="band band--lift" id="synbio">
-  <div class="wrap">
-    <div class="frame">
       <div>
-        <span class="sec__n">Synthetic biology</span>
-        <h2 class="h2">A factory you retune,<br>not a product you replace.</h2>
-        <p class="lede" style="margin-top:20px">
-          The reactor is one half. The other half is a chassis whose output can change without
-          changing the hardware. Standardised assembly means the expression cassette is a slot
-          rather than a rebuild, so any gene <i>B. subtilis</i> can express drops into the same
-          architecture.
-        </p>
-
-        <svg viewBox="0 0 620 300" style="width:100%;height:auto;margin-top:34px"
-             role="img" aria-label="Designed transfer function: 520 nm light intensity on the x axis against transcription rate on the y axis, drawn as a graded curve. No measured points are plotted, because we have not measured our own.">
-          <g stroke="#B7BCB2" stroke-width="1" fill="none">
-            <line x1="60" y1="20" x2="60" y2="240"/>
-            <line x1="60" y1="240" x2="580" y2="240"/>
-            <line x1="60" y1="185" x2="580" y2="185" stroke-dasharray="3 4"/>
-            <line x1="60" y1="130" x2="580" y2="130" stroke-dasharray="3 4"/>
-            <line x1="60" y1="75" x2="580" y2="75" stroke-dasharray="3 4"/>
-          </g>
-          <path d="M60 240 C 170 236, 236 200, 292 140 S 400 48, 580 36"
-                fill="none" stroke="#5C7A73" stroke-width="2.5" vector-effect="non-scaling-stroke"/>
-          <g font-family="Courier New, monospace" font-size="13" fill="#2E2620">
-            <text x="60" y="266">0</text>
-            <text x="580" y="266" text-anchor="end">520 nm intensity →</text>
-            <text x="52" y="244" text-anchor="end">0</text>
-            <text x="52" y="30" text-anchor="end">max</text>
-            <text x="18" y="130" transform="rotate(-90 18 130)" text-anchor="middle">transcription rate</text>
-            <text x="60" y="292" fill="#5C5348">graded, not switched: the curve is the whole claim</text>
-          </g>
-        </svg>
-        <p class="micro" style="margin-top:8px">
-          <span class="unproven">Designed curve, drawn from published parameters for a different
-          organism at a different wavelength. We have not measured our own. When we do, measured
-          points go on this axis in solid ink and this caption is deleted.</span>
-        </p>
+        <p class="body">Inside, a hollow-fibre membrane does the work that would otherwise
+        require a downstream purification plant. Engineered <i>B. subtilis</i> grows in the
+        chamber and never leaves it. What crosses the membrane is protein.</p>
+        <p class="body">That boundary is also a legal one. The organism stays contained, so what
+        reaches the soil is a molecule rather than a living modified organism, which in most
+        jurisdictions is an entirely different regulatory class.</p>
+        <p class="body dim"><span class="unproven">Membrane cutoff is still unresolved in our
+        own notes, and the contained-use classification has not been confirmed by a Taiwan
+        regulator.</span></p>
       </div>
-
-      <aside class="marg">
-        <dl>
-          <dt>Chassis</dt>
-          <dd>Engineered <i>B. subtilis</i> 168, retained inside the membrane at all times.</dd>
-          <dt>Input</dt>
-          <dd>One: 520 nm light, converted to transcription rate by the optogenetic switch.
-            Dose is changed in software, not in hardware.</dd>
-          <dt>Output</dt>
-          <dd>Any protectant or biostimulant the chassis can secrete, including designs that do
-            not exist yet. <span class="unproven">Our own designed protectant: sequence and
-            assay not yet reported.</span></dd>
-        </dl>
-      </aside>
     </div>
   </div>
 </section>
 
-<!-- ══ 6 · THE LEDGER. what is already true, and the open balance. ═════ -->
-<section class="band ruled" id="ledger">
+<!-- ══ WHAT IT MAKES ══════════════════════════════════════════════════ -->
+<section class="band" id="makes">
   <div class="wrap">
-    <div class="frame">
+    <div class="rule"></div>
+    <div class="duo duo--tight">
       <div>
-        <span class="sec__n">Evidence</span>
-        <h2 class="h2">What is already true today</h2>
-        <p class="lede" style="margin-top:20px">
-          None of the claims above are worth anything without instruments to test them, and we
-          had to build those first. This is a work ledger, so it closes on a stated balance.
-        </p>
-        <div class="tscroll">
-          <table class="ledger">
-            <thead><tr><th>Entry</th><th>Result</th></tr></thead>
-            <tbody>
-              <tr><td>Unbroken OD600 logging inside the reactor, by an instrument we built</td>
-                  <td class="n">3 weeks</td></tr>
-              <tr><td>Design, build, test, learn cycles across reactor, photometer and LED array</td>
-                  <td class="n">15 cycles</td></tr>
-              <tr><td>Instruments built from nothing: perfusion reactor, in-line photometer,
-                  dual-wavelength array</td><td class="n">3 built</td></tr>
-              <tr><td>Our photometer caught the cross-flow pump dying before any of us did</td>
-                  <td class="n">1 failure</td></tr>
-            </tbody>
-          </table>
-        </div>
-        <p class="micro" style="margin-top:14px">
-          Open balance carried to the foot of this page. Every open item is counted live in the
-          imprint strip at the top.
-        </p>
+        <span class="label">The point of a factory</span>
+        <h2 class="claim">You choose what it makes.</h2>
+        <p class="body" style="margin-top:var(--space-md)">A product decides for you. A factory
+        does not. The chassis is <i>B. subtilis</i>, the input is 520 nm light, and the
+        expression cassette is a slot rather than a rebuild, so any gene the chassis can express
+        drops into the same architecture.</p>
+        <p class="body">Light intensity sets transcription rate, which means the dose is graded
+        rather than switched. The reactor answers how much, not merely whether.</p>
+        <p class="body">The machine does not care which protein it is producing. That is what
+        makes it a platform instead of a product, and it is why this outlives any single
+        molecule we happen to have chosen this year.</p>
       </div>
-      <aside class="marg">
-        <div class="ph ph--sq" data-shot="P-03">
-          <span class="ph__i">P-03</span>
-          <p class="ph__b">The perfusion reactor on the bench, mid-run, tubing connected.
-            Available light. Do not tidy the bench.</p>
-        </div>
-      </aside>
+      <figure class="fig">
+        <picture>
+          <source type="image/webp" srcset="img/reactor-1400.webp" sizes="(min-width:900px) 44vw, 100vw">
+          <img src="img/reactor-1400.jpg" alt="A student in a lab coat tending the bioreactor growth test inside a controlled cabinet, with medium bottle, tubing and pump visible.">
+        </picture>
+        <figcaption>First growth test of <i>B. subtilis</i> in the reactor.
+        <span class="stamp">6 June 2026</span></figcaption>
+      </figure>
     </div>
   </div>
 </section>
 
-<!-- ══ 7 · 輪 THE TURN. the second straw band, and the warmest passage. ═ -->
-<section class="straw" id="turn">
-  <div class="wrap straw__in">
-    <span class="sec__n">輪 · Integrated human practices</span>
-    <h2 class="h2" style="max-width:22ch">The people who changed the spec</h2>
-    <p class="lede" style="margin-top:20px; max-width:56ch">
-      輪 is the turn a wheel takes and the turn in 輪灌, the rotation by which a shared
-      irrigation channel is allotted between farms. Nobody owns the water. Everybody owns their
-      turn. This section is our record of whose turn it was to change the design.
-    </p>
-    <p class="lede" style="margin-top:16px; max-width:56ch">
-      Photographs of meetings prove attendance. So here is the change log instead: who said what,
-      on what date, and the exact line of the design it moved.
-    </p>
-
-    <div class="rows" style="border-top-color:rgba(46,38,32,.28)">
-
-      <article class="row" style="border-bottom-color:rgba(46,38,32,.28)">
-        <div>
-          <div class="ph ph--por" data-shot="P-21" style="width:72px"><span class="ph__i">P-21</span></div>
-          <div class="who" style="margin-top:12px"><span class="chop" aria-hidden="true"></span><b>Dr. Pak K. Yuet</b></div>
-          <p class="entry__role">Dean of Research · 18 Apr 2026</p>
-        </div>
-        <div>
-          <p class="said" style="font-family:var(--body); margin-top:0; max-width:38ch">
-            &ldquo;Bioreactor design is a huge topic, so there is probably no need to come up
-            with something revolutionary. If we can focus on how to adapt the common, existing
-            designs to our specific needs, light signal transmission, protectant release, that
-            itself would be an impressive achievement.&rdquo;</p>
-        </div>
-        <div class="spec">
-          <div><span>was</span><span>goal: novel reactor architecture</span></div>
-          <div><span>now</span><span>goal: adapt hollow fibre for light delivery and protectant separation</span></div>
-          <div><span>owed</span><span class="unproven">he recommended packed-bed; we chose hollow fibre and owe the written justification</span></div>
-        </div>
-      </article>
-
-      <article class="row" style="border-bottom-color:rgba(46,38,32,.28)">
-        <div>
-          <div class="ph ph--por" data-shot="P-21" style="width:72px"><span class="ph__i">P-21</span></div>
-          <div class="who" style="margin-top:12px"><span class="chop" aria-hidden="true"></span><b>Dr. Pak K. Yuet</b></div>
-          <p class="entry__role">on scale-up · 16 Jul 2026</p>
-        </div>
-        <div>
-          <p class="said" style="font-family:var(--body); margin-top:0; max-width:38ch">
-            Scale on Reynolds number and the tube widens, velocity drops, wall shear falls, and
-            fouling gets worse. You cannot hold every group at once. &ldquo;This is in fact a
-            challenging engineering problem, and that&rsquo;s what research is about.&rdquo;</p>
-        </div>
-        <div class="spec">
-          <div><span>was</span><span>scale-up: hold geometric similarity</span></div>
-          <div><span>now</span><span>hold wall shear and flux below critical; replicate fixed modules</span></div>
-          <div><span>now</span><span>declare the sacrificed group: whole-system geometric similarity</span></div>
-        </div>
-      </article>
-
-      <article class="row" style="border-bottom-color:rgba(46,38,32,.28)">
-        <div>
-          <div class="ph ph--por" data-shot="P-37" style="width:72px"><span class="ph__i">P-37</span></div>
-          <div class="who" style="margin-top:12px"><span class="chop" aria-hidden="true"></span><b>Dr. Paul Verslues</b></div>
-          <p class="entry__role">plant abiotic stress · <span class="unproven">date not on record</span></p>
-        </div>
-        <div>
-          <p class="said" style="font-family:var(--body); margin-top:0; max-width:38ch">
-            <span class="unproven">Verbatim not yet transcribed.</span> The point to capture is
-            his test of what counts as a real stress phenotype, and whether our readout measures
-            stress or measures the plant's own signalling.</p>
-        </div>
-        <div class="spec">
-          <div><span>owed</span><span class="unproven">fill this change from the meeting notes before freeze</span></div>
-        </div>
-      </article>
-
-      <article class="row" style="border-bottom-color:rgba(46,38,32,.28)">
-        <div>
-          <div class="ph ph--por" data-shot="P-37" style="width:72px"><span class="ph__i">P-37</span></div>
-          <div class="who" style="margin-top:12px"><span class="chop" aria-hidden="true"></span><b>Prof. Cheng · Prof. Huang</b></div>
-          <p class="entry__role">expert consultation · <span class="unproven">dates not on record</span></p>
-        </div>
-        <div>
-          <p class="said" style="font-family:var(--body); margin-top:0; max-width:38ch">
-            <span class="unproven">Two separate conversations, two separate changes.</span>
-            Split this into two entries once the notes are transcribed. Do not merge two experts
-            into one voice.</p>
-        </div>
-        <div class="spec">
-          <div><span>owed</span><span class="unproven">split into two entries and fill both changes</span></div>
-        </div>
-      </article>
-
-      <article class="row" style="border-bottom-color:rgba(46,38,32,.28)">
-        <div>
-          <div class="ph ph--por" data-shot="P-38" style="width:72px"><span class="ph__i">P-38</span></div>
-          <div class="who" style="margin-top:12px"><span class="chop" aria-hidden="true"></span><b>CH Biotech · 源鮮 YesHealth</b></div>
-          <p class="entry__role">field and facility visits · <span class="unproven">dates not on record</span></p>
-        </div>
-        <div>
-          <p class="said" style="font-family:var(--body); margin-top:0; max-width:38ch">
-            <span class="unproven">Operator's own words not yet on record.</span> What each site
-            told us that a paper could not: how a protectant is really stored and applied at
-            commercial scale, and where a vertical farm would put our unit.</p>
-        </div>
-        <div class="spec">
-          <div><span>owed</span><span class="unproven">record which deployment unit each site validated: per plot, per line, or racked</span></div>
-        </div>
-      </article>
-
-      <article class="row" style="border-bottom-color:rgba(46,38,32,.28)">
-        <div>
-          <div class="ph ph--por" data-shot="P-37" style="width:72px"><span class="ph__i">P-37</span></div>
-          <div class="who" style="margin-top:12px"><span class="chop" aria-hidden="true"></span><b>Public forum</b></div>
-          <p class="entry__role">open session, farmers and students · <span class="unproven">date not on record</span></p>
-        </div>
-        <div>
-          <p class="said" style="font-family:var(--body); margin-top:0; max-width:38ch">
-            <span class="unproven">Attendance and objections not yet recorded.</span> The entry
-            that matters is the objection from the floor we did not expect, and what changed
-            because of it. If nothing changed, say so and say why.</p>
-        </div>
-        <div class="spec">
-          <div><span>owed</span><span class="unproven">fill from the forum record</span></div>
-        </div>
-      </article>
-
-    </div>
-  </div>
-</section>
-
-<!-- ══ 8 · FIVE PILLARS ════════════════════════════════════════════════ -->
-<section class="band ruled">
+<!-- ══ WHAT STOPS MATTERING ═══════════════════════════════════════════ -->
+<section class="band band--ink">
   <div class="wrap">
-    <span class="sec__n">What the device is for</span>
-    <h2 class="h2" style="max-width:24ch">Five things a sack of inoculant cannot do</h2>
-    <div class="rows">
-      <article class="row">
-        <div class="row__n">01</div>
-        <div><h3 class="h3">On site, on demand</h3></div>
-        <div><p class="row__t" style="margin-top:0">Made a metre from the root, on the day the
-          forecast calls for it. No cold chain, because nothing travels.</p>
-          <p class="spec" style="margin-top:10px"><span style="color:var(--canal);font-weight:700">evidence</span>
-          <span style="margin-left:10px">reactor runs continuously on the bench, 3 weeks logged</span></p></div>
+    <div class="rule"></div>
+    <span class="label">Move the factory and these stop existing</span>
+    <h2 class="claim claim--wide">Three problems that only exist because the protein has to travel.</h2>
+
+    <div class="beats">
+      <article class="beat">
+        <h3>Shelf life</h3>
+        <p>A living inoculant is formulated, dried, chilled, warehoused and only then applied,
+        and viable count falls at every stage. Peat, the best carrier anyone has found, still
+        gives under six months. Make the protein on the day it is used and the clock never
+        starts.</p>
       </article>
-      <article class="row">
-        <div class="row__n">02</div>
-        <div><h3 class="h3">Sustainable</h3></div>
-        <div><p class="row__t" style="margin-top:0">Continuous culture, no packaging, no shipped
-          biomass. The consumable is medium, not product.</p>
-          <p class="spec" style="margin-top:10px"><span style="color:var(--canal);font-weight:700">evidence</span>
-          <span style="margin-left:10px" class="unproven">no lifecycle comparison run against a shipped inoculant</span></p></div>
+      <article class="beat">
+        <h3>The cold chain</h3>
+        <p>Transit above 40 °C can inactivate a culture outright, and Gram-negative PGPR do not
+        sporulate, so drying kills them too. A cold chain is an expensive answer to a question
+        that disappears when nothing is shipped.</p>
       </article>
-      <article class="row">
-        <div class="row__n">03</div>
-        <div><h3 class="h3">Precision agriculture</h3></div>
-        <div><p class="row__t" style="margin-top:0">Dose tracks a predicted curve instead of a
-          calendar, and the output is graded, so it answers how bad rather than only whether.</p>
-          <p class="spec" style="margin-top:10px"><span style="color:var(--canal);font-weight:700">evidence</span>
-          <span style="margin-left:10px" class="unproven">graded response designed, not yet measured in our own strain</span></p></div>
-      </article>
-      <article class="row">
-        <div class="row__n">04</div>
-        <div><h3 class="h3">Biosecurity</h3></div>
-        <div><p class="row__t" style="margin-top:0">The organism stays inside the membrane. Only
-          protein reaches the soil, which is what makes field use tractable at all.</p>
-          <p class="spec" style="margin-top:10px"><span style="color:var(--canal);font-weight:700">evidence</span>
-          <span style="margin-left:10px" class="unproven">retention not yet demonstrated by plate count on permeate</span></p></div>
-      </article>
-      <article class="row">
-        <div class="row__n">05</div>
-        <div><h3 class="h3">Built by the person who owns it</h3></div>
-        <div><p class="row__t" style="margin-top:0">Open bill of materials, CAD and firmware, so
-          a workshop can build and repair a unit without us.</p>
-          <p class="spec" style="margin-top:10px"><span style="color:var(--canal);font-weight:700">evidence</span>
-          <span style="margin-left:10px" class="unproven">no cost per unit, so no affordability claim yet</span></p></div>
+      <article class="beat">
+        <h3>Distance</h3>
+        <p>Every kilometre between the fermenter and the root is loss, cost and delay that the
+        farmer pays for and does not control. Ours is a metre, and it runs on the day the
+        forecast says the crop will need it.</p>
       </article>
     </div>
   </div>
 </section>
 
-<!-- ══ 9 · FUTURE, AND THE LIMITS. sequential, never side by side. ═════ -->
-<section class="band band--lift" id="future">
+<!-- ══ WHO DECIDES ════════════════════════════════════════════════════ -->
+<section class="band" id="people">
   <div class="wrap">
-    <div class="frame">
+    <div class="rule"></div>
+    <span class="label">Who decides what it makes</span>
+    <h2 class="claim claim--wide">A factory is only handed over if somebody else gets to set it running.</h2>
+    <p class="body" style="margin-top:var(--space-md)">We did not design this and then go
+    looking for farmers to approve it. The order was the other way round, and the design still
+    carries their fingerprints.</p>
+
+    <div class="duo" style="margin-top:var(--space-xl)">
+      <figure class="fig">
+        <picture>
+          <source type="image/webp" srcset="img/listen-1400.webp" sizes="(min-width:900px) 52vw, 100vw">
+          <img src="img/listen-1400.jpg" alt="陳惠雯 speaking and gesturing in her field while two ReLeaf students listen.">
+        </picture>
+        <figcaption><b>陳惠雯</b> walked us through her field and told us when she acts and why.
+        Because of that afternoon the reactor stopped dosing on a wall clock and started dosing
+        on the state of the soil.
+        <span class="stamp">Her farm · 21 July 2026 · <span class="unproven">verbatim sentence not yet transcribed</span></span></figcaption>
+      </figure>
+      <figure class="fig">
+        <picture>
+          <source type="image/webp" srcset="img/market-1400.webp" sizes="(min-width:900px) 44vw, 100vw">
+          <img src="img/market-1400.jpg" alt="A grower at a farmers market pointing something out to two ReLeaf students, who are listening and smiling.">
+        </picture>
+        <figcaption>Growers at the 農民市集, explaining what they actually buy, what it costs
+        them and what they throw away.
+        <span class="stamp">16 May 2026</span></figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ══ EVIDENCE ═══════════════════════════════════════════════════════ -->
+<section class="band band--tint" id="evidence">
+  <div class="wrap">
+    <div class="rule"></div>
+    <span class="label">What is already true</span>
+    <h2 class="claim claim--wide">None of this is worth anything without instruments, so we built those first.</h2>
+
+    <div class="facts">
       <div>
-        <span class="sec__n">Future goal · self-audit</span>
-        <h2 class="h2">One device, then one irrigation line</h2>
-        <p class="lede" style="margin-top:20px">
-          The 2026 unit is a feasibility proof at single-plant scale, and costed per plant it
-          would be absurd. That is the wrong denominator. The unit that makes economic sense is
-          the irrigation line, and the owner is the cooperative.
-        </p>
-        <p class="lede" style="margin-top:16px">
-          Taiwan already organises agriculture this way. Farmers' associations, 產銷班 and shared
-          machinery teams own equipment collectively, the way a village owns a well or a rice
-          mill. A shared reactor is not a new social form here. It is an existing one, and 輪灌
-          is already the rule for taking turns.
-        </p>
-
-        <h3 class="h3" style="margin-top:calc(var(--lead)*1.6)">Every claim, with its own limit</h3>
-        <div class="rows" style="margin-top:16px">
-          <article class="row" style="grid-template-columns:1fr">
-            <div><p class="row__t" style="margin-top:0;max-width:60ch">The optogenetic switch
-              gives a graded, analogue response, so dose can track severity.</p>
-              <p class="limit"><b>NOT YET SHOWN —</b> <span class="unproven">we have not measured
-              our own transfer function. The parameters we designed against are published values
-              from a different organism at a different wavelength.</span></p></div>
-          </article>
-          <article class="row" style="grid-template-columns:1fr">
-            <div><p class="row__t" style="margin-top:0;max-width:60ch">The reactor sustains a
-              continuous culture that can be driven by light.</p>
-              <p class="limit"><b>NOT YET SHOWN —</b> <span class="unproven">cells do not grow
-              inside the fibre lumen. Oxygen, feed, shear and temperature are all still
-              candidates and we have no root cause.</span></p></div>
-          </article>
-          <article class="row" style="grid-template-columns:1fr">
-            <div><p class="row__t" style="margin-top:0;max-width:60ch">The membrane contains the
-              engineered organism, so only protein reaches the field.</p>
-              <p class="limit"><b>NOT YET SHOWN —</b> <span class="unproven">the second
-              containment layer does not exist. We were told in July to build one and we have
-              not. Membrane cutoff is also unresolved in our own notes.</span></p></div>
-          </article>
-          <article class="row" style="grid-template-columns:1fr">
-            <div><p class="row__t" style="margin-top:0;max-width:60ch">The protectant is
-              delivered to the root zone.</p>
-              <p class="limit"><b>NOT YET SHOWN —</b> <span class="unproven">delivery stops at a
-              reservoir. The permeate pump is unspecified and the root-zone interface is
-              deferred.</span></p></div>
-          </article>
-          <article class="row" style="grid-template-columns:1fr">
-            <div><p class="row__t" style="margin-top:0;max-width:60ch">The controller predicts
-              heat, drought and pathogen-favourable conditions before damage appears.</p>
-              <p class="limit"><b>NOT YET SHOWN —</b> <span class="unproven">no field season has
-              tested whether forecast and sensor fusion actually call any of the three
-              correctly.</span></p></div>
-          </article>
-        </div>
+        <p class="fact__n">3 weeks</p>
+        <p class="fact__t">of unbroken OD600 logging inside the reactor, by an instrument we built ourselves</p>
       </div>
-
-      <aside class="marg">
-        <dl>
-          <dt>What we do not claim</dt>
-          <dd>ReLeaf does not solve hunger. Hunger is mostly a failure of distribution and
-            politics, not of yield. What this addresses is narrower and testable: yield
-            instability under chronic abiotic stress, on farms too small for a centralised
-            input market to reach.</dd>
-          <dt>Latency</dt>
-          <dd>About 105 minutes to half-maximum. This is a device for creeping stress, not for
-            a shock, and the whole control strategy follows from that one number.</dd>
-          <dt>Scale-up rule</dt>
-          <dd>Replicate the fibre module at constant wall shear and constant flux. Keep the
-            physics at the membrane identical and let only the area grow.</dd>
-        </dl>
-      </aside>
-    </div>
-  </div>
-</section>
-
-<!-- ══ 10 · TEAM ═══════════════════════════════════════════════════════ -->
-<section class="band ruled" id="team">
-  <div class="wrap">
-    <div class="frame">
       <div>
-        <span class="sec__n">Team</span>
-        <h2 class="h2">GEMS Taiwan, 2026</h2>
-        <p class="lede" style="margin-top:20px">
-          A high-school team that built three instruments from nothing: a perfusion reactor, an
-          in-line photometer and a dual-wavelength LED array. Everyone here is listed beside the
-          thing they actually made. Nobody appears as decoration.
-        </p>
-        <p class="micro" style="margin-top:18px">
-          <span class="unproven">Roster not yet reconciled: three internal sources disagree on
-          the head count. Pick one before freeze.</span>
-        </p>
+        <p class="fact__n">15 cycles</p>
+        <p class="fact__t">design, build, test, learn, across the reactor, the photometer and the LED array</p>
       </div>
-      <aside class="marg">
-        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px">
-          <div class="ph ph--por" data-shot="P-23"><span class="ph__i">·</span></div>
-          <div class="ph ph--por" data-shot="P-24"><span class="ph__i">·</span></div>
-          <div class="ph ph--por" data-shot="P-23"><span class="ph__i">·</span></div>
-          <div class="ph ph--por" data-shot="P-24"><span class="ph__i">·</span></div>
-        </div>
-        <p class="micro" style="margin-top:10px">Square, not round. Round portraits are Brno's.</p>
-      </aside>
+      <div>
+        <p class="fact__n">3 instruments</p>
+        <p class="fact__t">built from nothing: perfusion reactor, in-line photometer, dual-wavelength array</p>
+      </div>
+      <div>
+        <p class="fact__n">1 failure</p>
+        <p class="fact__t">our own photometer caught the cross-flow pump dying before any of us noticed</p>
+      </div>
+    </div>
+
+    <figure class="fig" style="margin-top:var(--space-2xl);max-width:820px">
+      <picture>
+        <source type="image/webp" srcset="img/firmware-1400.webp" sizes="(min-width:900px) 64vw, 100vw">
+        <img src="img/firmware-1400.jpg" alt="A student writing Arduino firmware for the spectrophotometer, the code displayed on a large screen in a warmly lit room after school.">
+      </picture>
+      <figcaption>Writing the photometer firmware after school. If a farmer is going to own
+      this, somebody has to be able to read every line of it.
+      <span class="stamp">28 May 2026</span></figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ══ LIMITS ═════════════════════════════════════════════════════════ -->
+<section class="band" id="limits">
+  <div class="wrap">
+    <div class="rule"></div>
+    <div class="duo">
+      <div>
+        <span class="label">What we do not claim</span>
+        <h2 class="claim">The honest size of this.</h2>
+      </div>
+      <div>
+        <p class="body">ReLeaf does not solve hunger. Hunger is mostly a failure of distribution
+        and politics, not of yield, and a page that implies otherwise should not be trusted on
+        anything else it says.</p>
+        <p class="body">What this addresses is narrower and testable: the fact that a smallholder
+        cannot obtain a living bioprotectant on terms that make sense, and cannot make one
+        either. Every claim above has a limit, and here they are.</p>
+
+        <p class="limit"><b>Not yet shown</b><br>We have not measured our own transfer function.
+        The parameters we designed against are published values from a different organism at a
+        different wavelength.</p>
+        <p class="limit"><b>Not yet shown</b><br>Cells do not grow inside the fibre lumen yet.
+        Oxygen, feed, shear and temperature are all still candidates and we have no root cause.</p>
+        <p class="limit"><b>Not yet shown</b><br>Containment rests on one membrane. The second
+        layer we were told in July to build does not exist.</p>
+        <p class="limit"><b>Not yet costed</b><br>There is no bill of materials total, so every
+        affordability claim on this page is a hypothesis rather than a result.</p>
+      </div>
     </div>
   </div>
 </section>
 
-<footer class="imprint" style="padding:calc(var(--lead)*1.6) 0">
+<!-- ══ TEAM ═══════════════════════════════════════════════════════════ -->
+<section class="band band--tint">
   <div class="wrap">
-    <p style="font-family:var(--util);font-size:var(--fs-util);letter-spacing:.06em;line-height:1.9;white-space:normal">
-      ReLeaf · GEMS Taiwan · iGEM 2026 Biomanufacturing Village<br>
-      Micro-Factories for Micro-Farmers: Democratizing Bio-Production<br>
-      <span style="color:var(--zinc)">Prototype homepage. Dashed areas are photo slots, see
-      PHOTO_SHOTLIST.md. Every dashed underline is an open item, counted live at the top of
-      this page.</span>
-    </p>
+    <div class="rule"></div>
+    <div class="duo duo--tight">
+      <div>
+        <span class="label">Who built it</span>
+        <h2 class="claim">A high-school team in Taiwan.</h2>
+        <p class="body" style="margin-top:var(--space-md)">We are not a company and we are not
+        a lab with a budget. That turns out to matter, because a machine designed by people who
+        had to source every part themselves ends up being a machine other people can source too.</p>
+      </div>
+      <figure class="fig">
+        <picture>
+          <source type="image/webp" srcset="img/team-1400.webp" sizes="(min-width:900px) 44vw, 100vw">
+          <img src="img/team-1400.jpg" alt="The GEMS Taiwan iGEM 2026 team photographed together.">
+        </picture>
+        <figcaption>GEMS Taiwan, iGEM 2026.<span class="stamp">19 July 2026</span></figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ══ Ft5 STATEMENT FOOTER ═══════════════════════════════════════════ -->
+<footer class="foot">
+  <div class="wrap">
+    <p class="foot__claim">Every farmer a biomanufacturer.</p>
+    <nav class="foot__links">
+      <a href="#">Project</a><a href="#">Hardware</a><a href="#">Engineering</a>
+      <a href="#">Human practices</a><a href="#">Parts</a><a href="#">Measurement</a>
+      <a href="#">Safety</a><a href="#">Team</a>
+    </nav>
+    <p class="foot__fine">ReLeaf · GEMS Taiwan · iGEM 2026 Biomanufacturing Village.<br>
+    Photographs are our own, dated as shown. Dashed underlines mark claims we have not yet
+    earned; they are deliberate, and they should get fewer between now and the wiki freeze.</p>
   </div>
 </footer>
 
-<script>
-/* ═══════════════════════════════════════════════════════════════════════════
-   THE CRANK — one state model, three consumers, real first-order lag.
-
-   cmd  what the controller commanded. instant.  drawn --canal
-   tit  what the biology actually made. lags cmd through a one-pole filter
-        standing in for the ~105 min half-time.  drawn --mud
-
-   Dragging the handle makes the light jump while the titre crawls. The hatched
-   gap between the two curves IS the reason the system has to predict rather
-   than react, felt in five seconds instead of read in a paragraph.
-
-   AUTO replays a modelled day. Swap autoDay() for the real sensor + forecast
-   log and this becomes genuinely our data.
-   ═══════════════════════════════════════════════════════════════════════════ */
-(function(){
-  var reduce = matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var slot=document.getElementById('slot'), fill=document.getElementById('slotFill'),
-      handle=document.getElementById('slotH'), val=document.getElementById('slotV'),
-      mode=document.getElementById('slotMode');
-  var cmdL=document.getElementById('cmd'), titL=document.getElementById('tit'),
-      gapP=document.getElementById('gap');
-  if(!slot||!cmdL) return;
-
-  var TAU=2.4, PERIOD=16, N=140;
-  var manual=false, mv=.18, resumeAt=0, touched=false;
-  var cmd=.18, tit=.18, bufC=[], bufT=[], last=null, acc=0;
-
-  function autoDay(t){
-    /* normalise into [0,1): prefill runs from t0-PERIOD, which is negative a
-       few seconds after load, and Math.pow(negative, 2.2) is NaN. */
-    var p=((t/PERIOD)%1+1)%1;
-    return Math.max(0,Math.min(1,.12+.8*Math.pow(Math.sin(Math.PI*p),2.2)));
-  }
-  function paint(v){
-    var pct=(v*100).toFixed(1)+'%';
-    fill.style.width=pct; handle.style.left=pct;
-    slot.setAttribute('aria-valuenow',Math.round(v*100));
-    val.textContent=Math.round(v*100);
-  }
-  function pts(buf){
-    var o=[],i;
-    for(i=0;i<buf.length;i++) o.push((600*i/(N-1)).toFixed(1)+','+(178-158*buf[i]).toFixed(1));
-    return o.join(' ');
-  }
-  /* commanded forward, made backward, so the band closes on itself */
-  function draw(){
-    var pc=pts(bufC);
-    cmdL.setAttribute('points',pc);
-    titL.setAttribute('points',pts(bufT));
-    gapP.setAttribute('points', pc+' '+pts(bufT.slice().reverse()).split(' ').map(function(s){
-      var xy=s.split(','); return (600-parseFloat(xy[0])).toFixed(1)+','+xy[1];
-    }).join(' '));
-  }
-
-  function step(now){
-    var t=now/1000, dt = last===null ? .016 : Math.min(.05,t-last);
-    last=t;
-    if(manual) cmd=mv;
-    else if(!resumeAt || t>=resumeAt){
-      cmd=autoDay(t);
-      if(resumeAt){ resumeAt=0; mode.textContent='auto · modelled day'; }
-    }
-    tit += (cmd-tit)*(dt/(TAU+dt));
-    if(!manual) paint(cmd);
-
-    acc+=dt;
-    if(acc>=PERIOD/N){
-      acc=0;
-      bufC.push(cmd); bufT.push(tit);
-      if(bufC.length>N){ bufC.shift(); bufT.shift(); }
-      draw();
-    }
-  }
-
-  function fromX(x){ var r=slot.getBoundingClientRect();
-    return Math.max(0,Math.min(1,(x-r.left)/r.width)); }
-  function grab(e){
-    manual=true; touched=true; resumeAt=0;
-    mode.textContent='manual · you are driving';
-    mv=fromX(e.clientX); paint(mv);
-    slot.setPointerCapture && slot.setPointerCapture(e.pointerId);
-  }
-  slot.addEventListener('pointerdown',grab);
-  slot.addEventListener('pointermove',function(e){ if(manual){ mv=fromX(e.clientX); paint(mv); } });
-  function release(){
-    if(!manual) return;
-    manual=false; resumeAt=(performance.now()/1000)+2.5;
-    mode.textContent='holding · auto resumes';
-  }
-  slot.addEventListener('pointerup',release);
-  slot.addEventListener('pointercancel',release);
-  slot.addEventListener('keydown',function(e){
-    var d=e.key==='ArrowRight'?.06:e.key==='ArrowLeft'?-.06:0;
-    if(!d) return;
-    e.preventDefault(); touched=true; manual=true;
-    mv=Math.max(0,Math.min(1,mv+d)); paint(mv);
-    mode.textContent='manual · you are driving';
-    clearTimeout(slot._k); slot._k=setTimeout(release,900);
-  });
-
-  paint(mv);
-
-  /* prefill one full loop so the trace arrives complete, not drawing itself in */
-  (function(){
-    var t0=performance.now()/1000, dt=PERIOD/N, c=autoDay(t0-PERIOD), x=c;
-    for(var i=0;i<N;i++){
-      c=autoDay(t0-PERIOD+i*dt);
-      x+=(c-x)*(dt/(TAU+dt));
-      bufC.push(c); bufT.push(x);
-    }
-    cmd=c; tit=x;
-    draw();
-  })();
-
-  if(reduce){ return; }
-  var live=true;
-  new IntersectionObserver(function(e){ live=e[0].isIntersecting; },{threshold:0}).observe(slot);
-  (function loop(ts){ if(live) step(ts); else last=null; requestAnimationFrame(loop); })(0);
-})();
-
-/* ── the OPEN ITEMS counter. computed, never typed, so it cannot go stale. ─ */
-(function(){
-  var n=document.querySelectorAll('.unproven').length,
-      out=document.getElementById('openN');
-  if(out) out.textContent=n;
-  var first=document.querySelector('.unproven');
-  if(first && !first.id) first.id='open-1';
-})();
-</script>
 </body>
 </html>

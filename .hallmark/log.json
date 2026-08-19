@@ -1,0 +1,5 @@
+[
+  { "date": "2026-08-18", "macrostructure": "Manifesto", "theme": "Studio", "enrichment": "real photography (8 frames)", "brief": "ReLeaf · every farmer a biomanufacturer" },
+  { "date": "2026-08-18", "macrostructure": "Work Ledger (custom)", "theme": "custom", "theme_axes": "mid / condensed-sans / warm-gold", "enrichment": "inline SVG elevation", "brief": "ReLeaf v0.5 The Turn — rejected" },
+  { "date": "2026-08-18", "macrostructure": "Instrument Hero (custom)", "theme": "custom", "theme_axes": "dark / grotesk / chromatic-green", "enrichment": "CSS bloom + rig", "brief": "ReLeaf v0.4 — rejected, too tech" }
+]
